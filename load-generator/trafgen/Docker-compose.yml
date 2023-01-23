@@ -1,4 +1,6 @@
 services:
   app:
     image: wazo-trafgen:0.0.1
-    command: sh -c " /trafgen/xivo-load-tester/load-tester"
+    command: sh -c " /trafgen/xivo-load-tester/load-tester -d /trafgen/logs/"
+    volumes:
+      - ./logs:/trafgen/logs

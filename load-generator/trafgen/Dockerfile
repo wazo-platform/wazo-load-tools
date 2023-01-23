@@ -1,7 +1,7 @@
-From python:3.11.1-bullseye
+FROM python:3.11.1-bullseye
 
 RUN apt-get update && apt-get install -y git
-RUN mkdir /trafgen 
+RUN mkdir -p /trafgen/logs
 
 WORKDIR /trafgen
 

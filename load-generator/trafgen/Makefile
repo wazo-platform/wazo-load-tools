@@ -1,8 +1,7 @@
-IMAGE = wazo-trafgen
-TAG = 0.0.1
-DOCKERFILE := Dockerfile
-build: $(DOCKERFILE)
-	.PHONY: build
+.PHONY: build prereqs
+
+prereqs:
+	-mkdir logs
 
 build: build-trafgen
 
@@ -14,7 +13,7 @@ build-trafgen: $(TRAFGENFILE)
 
 .PHONY: run halt
 DOCKERCOMPOSE_FILE := ./Docker-compose.yml
-run: $(DOCKERCOMPOSE_FILE)
+run: prereqs $(DOCKERCOMPOSE_FILE)
 	docker-compose -f $(DOCKERCOMPOSE_FILE) up
 
 halt: $(DOCKERCOMPOSE_FILE)
