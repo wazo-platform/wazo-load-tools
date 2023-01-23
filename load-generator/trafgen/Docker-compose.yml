@@ -1,0 +1,4 @@
+services:
+  app:
+    image: wazo-trafgen:0.0.1
+    command: sh -c " /trafgen/xivo-load-tester/load-tester"
