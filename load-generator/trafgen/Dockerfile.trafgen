@@ -1,0 +1,9 @@
+FROM wazo-trafgen-sipp:0.0.1
+
+RUN apt-get update && apt-get install -y git 
+
+WORKDIR /trafgen
+
+RUN  git clone https://github.com/wazo-platform/xivo-load-tester.git
+
+WORKDIR /
