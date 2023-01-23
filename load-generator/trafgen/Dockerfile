@@ -1,8 +1,14 @@
 FROM python:3.11.1-bullseye
 
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git wget cmake make libsctp-dev libpcap-dev
 RUN mkdir -p /trafgen/logs
 
 WORKDIR /trafgen
-
+RUN wget https://github.com/SIPp/sipp/releases/download/v3.6.1/sipp-3.6.1.tar.gz && \
+    tar xvzf sipp-3.6.1.tar.gz && \
+    cd sipp-3.6.1 && \
+    cmake . -DUSE_SSL=1 -DUSE_SCTP=1 -DUSE_PCAP=1 -DUSE_GSL=1 && \
+    make
 RUN  git clone https://github.com/wazo-platform/xivo-load-tester.git
+
+WORKDIR /
