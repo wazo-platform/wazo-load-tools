@@ -1,6 +1,8 @@
 services:
   app:
     image: wazo-trafgen:0.0.1
-    command: sh -c " /trafgen/xivo-load-tester/load-tester -d /trafgen/logs/"
+    container_name: trafgen
+    network_mode: "host"
+    command: sh -c "sleep infinity"
     volumes:
       - ./logs:/trafgen/logs
