@@ -17,10 +17,14 @@ TRAFGENFILE := Dockerfile.trafgen
 build-trafgen: $(TRAFGENFILE)
 	docker build -t $(TRAFGEN_IMAGE):$(TAG) -f $(TRAFGENFILE) .
 
-.PHONY: run halt
+.PHONY: run halt load_test load_configure
 DOCKERCOMPOSE_FILE := ./Docker-compose.yml
 run: prereqs $(DOCKERCOMPOSE_FILE)
-	docker-compose -f $(DOCKERCOMPOSE_FILE) up
+	docker-compose -f $(DOCKERCOMPOSE_FILE) up &
 
 halt: $(DOCKERCOMPOSE_FILE)
 	docker-compose -f $(DOCKERCOMPOSE_FILE) down
+
+
+load_test: trafgen.env
+	docker exec -it --env-file trafgen.env trafgen bash -c "/trafgen/load-tests.sh"
