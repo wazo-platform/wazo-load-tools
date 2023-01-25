@@ -18,6 +18,7 @@ apt-get install -y \
 	curl \
 	wget \
 	git \
+	jq \
 	vim \
 	docker-ce \
 	docker-ce-cli \

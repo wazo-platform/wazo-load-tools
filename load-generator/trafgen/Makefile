@@ -28,3 +28,17 @@ halt: $(DOCKERCOMPOSE_FILE)
 
 load_test: trafgen.env
 	docker exec -it --env-file trafgen.env trafgen bash -c "/trafgen/load-tests.sh"
+
+.PHONY: usergen500 usergen1000 usergen5000
+USERGEN_SCRIPT := ./usergen.sh
+USER_TEMPLATE := ./user.json.tpl
+PARAMS_FILE := ./usergen_params.json
+
+usergen500: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
+	@for i in $$(seq 1 500); do ./usergen.sh $$i $(PARAMS_FILE); done
+
+usergen1000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
+	@for i in $$(seq 1 1000); do ./usergen.sh $$i $(PARAMS_FILE); done
+
+usergen5000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
+	@for i in $$(seq 1 5000); do ./usergen.sh $$i $(PARAMS_FILE); done
