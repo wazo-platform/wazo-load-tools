@@ -5,4 +5,4 @@ services:
     network_mode: host
     command: sh -c "sleep infinity"
     volumes:
-      - ./logs:/trafgen/logs
+      - ./trafgen/logs:/trafgen/logs

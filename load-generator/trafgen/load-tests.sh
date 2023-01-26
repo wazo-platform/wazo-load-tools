@@ -9,7 +9,7 @@ COMMAND="$BIN -d $LOG_DIR"
 # which is sourced by the docker exec command to export these variables
 # to the script environment.
 if [ "$CONFIG_LOAD" == "true" ]; then
-    cp /trafgen/xivo-load-tester/etc/conf.py.sample /trafgen/xivo-load-tester/etc/conf.py
+    cp /trafgen/config.py /trafgen/xivo-load-tester/etc/conf.py
     sed -i "s/skaro-load/$REMOTE_HOST/"g /trafgen/xivo-load-tester/etc/conf.py
     sed -i "s/192.168.32.241/$SOURCE_IP/"g /trafgen/xivo-load-tester/etc/conf.py
 fi

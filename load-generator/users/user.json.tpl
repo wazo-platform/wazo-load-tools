@@ -1,7 +1,7 @@
 {
    "firstname": "User",  
    "lastname": "__SEQUENCE__",  
-   "email": "pcm+user__SEQUENCE__%40wazo.io",  
+   "email": "pcm+user__SEQUENCE__@wazo.io",  
    "timezone": null,  
    "language": null,  
    "description": null,  

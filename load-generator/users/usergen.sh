@@ -10,21 +10,21 @@ fi
 # user_gen is aimed to create the json file representing a user.
 user_gen () {
     local SEQUENCE=$1
-    local USERNAME=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 5)
-    local PASSWORD=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 5)
+    local USERNAME=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 7)
+    local PASSWORD=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 6)
     local EXTENSION=$(echo 1000+$SEQUENCE|bc)
-    local USERS_CSV=users/users.csv
+    local USERS_CSV=user-files/users.csv
 
     echo "$USERNAME;$PASSWORD;$EXTENSION" >> $USERS_CSV
 
-    cp user.json.tpl users/$EXTENSION.json
+    cp user.json.tpl user-files/$EXTENSION.json
 
-    sed  -i "s/__SEQUENCE__/$SEQUENCE/g" users/$EXTENSION.json
-    sed  -i "s/__USERNAME__/$USERNAME/g" users/$EXTENSION.json
-    sed  -i "s/__PASSWORD__/$PASSWORD/g" users/$EXTENSION.json
-    sed  -i "s/__EXTENSION__/$EXTENSION/g" users/$EXTENSION.json
+    sed  -i "s/__SEQUENCE__/$SEQUENCE/g" user-files/$EXTENSION.json
+    sed  -i "s/__USERNAME__/$USERNAME/g" user-files/$EXTENSION.json
+    sed  -i "s/__PASSWORD__/$PASSWORD/g" user-files/$EXTENSION.json
+    sed  -i "s/__EXTENSION__/$EXTENSION/g" user-files/$EXTENSION.json
 
-    echo users/$EXTENSION.json
+    echo user-files/$EXTENSION.json
 }
 
 # push_users is aimed to create the user into a specific stack by calling the API
