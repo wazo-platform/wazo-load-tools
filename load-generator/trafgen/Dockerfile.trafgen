@@ -10,4 +10,5 @@ WORKDIR /trafgen
 RUN  git clone https://github.com/wazo-platform/xivo-load-tester.git
 COPY load-tests.sh load-tests.sh
 COPY config.py config.py
+RUN ls -lisa /trafgen
 WORKDIR /

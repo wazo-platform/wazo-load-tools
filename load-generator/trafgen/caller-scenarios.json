@@ -1,0 +1,9 @@
+[
+    "send-sip-register",
+    "ring-then-wait-cancel",
+    "call-then-wait",
+    "call-then-wait-tel",
+    "call-the-wait-decline",
+    "call-then-hangup",
+    "all-then-cancel-on-ringing"
+]

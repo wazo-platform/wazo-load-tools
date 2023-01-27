@@ -1,8 +1,17 @@
 services:
-  app:
+  caller:
     image: wazo-trafgen:0.0.1
-    container_name: trafgen
+    container_name: trafgen-caller
     network_mode: host
     command: sh -c "sleep infinity"
+    env_file: ./trafgen/trafgen.env
     volumes:
-      - ./trafgen/logs:/trafgen/logs
+      - ./trafgen/logs/caller:/trafgen/logs
+  callee:
+    image: wazo-trafgen:0.0.1
+    container_name: trafgen-callee
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: ./trafgen/trafgen.env
+    volumes:
+      - ./trafgen/logs/callee:/trafgen/logs

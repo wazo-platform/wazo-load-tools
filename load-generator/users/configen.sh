@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 USER_FILE=${1:-user-files/users.csv}
 TEMPLATE=${2:-config.py.tpl}
 CONFIG=${3:-config.generated.py}
