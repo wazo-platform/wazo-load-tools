@@ -1,0 +1,26 @@
+#!/bin/bash
+DB_NAME = $1
+DB_ACCOUNT = $2
+DB_PASSWORD = $3
+
+cat <<EOF >/etc/systemd/system/postgres_exporter.service
+[Unit]
+Description=Postgresql Exporter
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull quay.io/prometheuscommunity/postgres-exporter
+
+ExecStart=docker run --net=host -e DATA_SOURCE_NAME="postgresql://$DB_ACCOUNT:$DB_PASSWORD@localhost:5432/$DB_NAME?sslmode=disable" quay.io/prometheuscommunity/postgres-exporter &
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable postgres_exporter
+systemctl start postgres_exporter

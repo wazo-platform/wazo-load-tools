@@ -1,0 +1,43 @@
+#!/bin/bash
+
+cat <<EOF >>/etc/nginx/sites-enabled/wazo
+server {
+    listen 8080 default_server;
+    server_name status.localhost;
+    keepalive_timeout 0;
+
+    access_log off;
+
+    allow 127.0.0.1;
+    deny all;
+
+    location /status {
+        stub_status on;
+    }
+}
+EOF
+
+nginx -s reload
+
+cat <<EOF >/etc/systemd/system/nginx_exporter.service
+[Unit]
+Description=Nginx Exporter
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull nginx/nginx-prometheus-exporter:0.10.0
+
+ExecStart=docker run --net=host nginx/nginx-prometheus-exporter:0.10.0 -nginx.scrape-uri=http://127.0.0.1:8080/status &
+
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable nginx_exporter
+systemctl start nginx_exporter

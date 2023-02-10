@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cat <<EOF >/etc/systemd/system/rabbitmq_exporter.service
+[Unit]
+Description=Rabbitmq Exporter
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull kbudde/rabbitmq-exporter
+
+ExecStart=docker run -d --net=host kbudde/rabbitmq-exporter &
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable rabbitmq_exporter
+systemctl start rabbitmq_exporter
