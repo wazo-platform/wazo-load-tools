@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 cat <<EOF >/etc/systemd/system/process_exporter.service
 [Unit]
 Description=Process Exporter
@@ -13,7 +12,7 @@ Restart=always
 ExecStartPre=-/usr/bin/docker stop %n
 ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull ncabatoff/process-exporter
-ExecStart=docker run -d --rm -p 9256:9256 --privileged -v /proc:/host/proc -v `pwd`:/config ncabatoff/process-exporter --procfs /host/proc -config.path /config/filename.yml
+ExecStart=docker run -d --rm -p 9256:9256 --privileged -v /proc:/host/proc -v `pwd`:/config ncabatoff/process-exporter --procfs /host/proc -config.path /config/process.yml
 
 [Install]
 WantedBy=multi-user.target

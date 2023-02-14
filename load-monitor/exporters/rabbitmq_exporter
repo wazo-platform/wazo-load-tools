@@ -13,7 +13,7 @@ ExecStartPre=-/usr/bin/docker stop %n
 ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull kbudde/rabbitmq-exporter
 
-ExecStart=docker run -d --net=host kbudde/rabbitmq-exporter &
+ExecStart=docker run -d --net=host kbudde/rabbitmq-exporter 
 
 [Install]
 WantedBy=multi-user.target
