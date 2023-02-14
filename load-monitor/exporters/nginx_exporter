@@ -1,21 +1,7 @@
 #!/bin/bash
 
-cat <<EOF >>/etc/nginx/sites-enabled/wazo
-server {
-    listen 8080 default_server;
-    server_name status.localhost;
-    keepalive_timeout 0;
-
-    access_log off;
-
-    allow 127.0.0.1;
-    deny all;
-
-    location /status {
-        stub_status on;
-    }
-}
-EOF
+cp nginx-metrics /etc/nginx/sites-available/nginx-metrics && 
+ln -s /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics 
 
 nginx -s reload
 
