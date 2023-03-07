@@ -1,4 +1,5 @@
 #!/bin/bash 
+START_SEQ=${1:-2000}
 
 if [ $# -ne 2 ]; then
     echo "missing sequence parameter"
@@ -12,7 +13,7 @@ user_gen () {
     local SEQUENCE=$1
     local USERNAME=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 7)
     local PASSWORD=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 6)
-    local EXTENSION=$(echo 1000+$SEQUENCE|bc)
+    local EXTENSION=$(echo $START_SEQ+$SEQUENCE|bc)
     local USERS_CSV=user-files/users.csv
 
     echo "$USERNAME;$PASSWORD;$EXTENSION" >> $USERS_CSV
@@ -37,13 +38,14 @@ push_users () {
     local stack_ip=$3
     local user_file=$4
 
-    curl -k -v -X POST "https://$stack_ip:443/api/confd/1.1/users" \
+    STATUS=$(curl -k -v -X POST "https://$stack_ip:443/api/confd/1.1/users" \
+        -w "%{http_code}" -s -o /dev/null \
         --header "Content-Type: application/json" \
         --header "Accept: application/json" \
         --header "Wazo-Tenant: $tenant_uuid" \
         --header "X-Auth-Token: $token" \
-        --data @$user_file  
-        
+        --data @$user_file) 
+    echo $STATUS        
 }
 
 SEQ=$1
@@ -53,4 +55,11 @@ TOKEN=$(jq -r .token $PARAMS)
 STACK_IP=$(jq  -r .ip $PARAMS)
 
 JSON=$(user_gen $SEQ)
-push_users $UUID $TOKEN $STACK_IP $JSON
+
+mkdir user-files/err
+RETURN_CODE=$(push_users $UUID $TOKEN $STACK_IP $JSON)
+if [ $RETURN_CODE -ne 200 ]; then
+    USERNAME=$(echo $JSON | jq -r .lines[].name)
+    echo "$USERNAME; STATUS CODE: $RETURN_CODE" >> user-files/users.err
+    mv $JSON user-files/err/ 
+fi
