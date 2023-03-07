@@ -1,0 +1,5 @@
+process_names:
+  - comm:
+    - postgres
+    - nginx
+    - /usr/sbin/asterisk
