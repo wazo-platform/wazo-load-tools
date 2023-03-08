@@ -15,3 +15,11 @@ services:
     env_file: ./trafgen/trafgen.env
     volumes:
       - ./trafgen/logs/callee:/trafgen/logs
+  websocket-subscriber:
+    image: wazo-ws-client:0.0.1
+    container_name: wazo-ws-subscriber
+    command: sh -c "runner.py"
+    volumes:
+      - type: bind
+      source: /etc/users.csv
+      target: /users.csv
