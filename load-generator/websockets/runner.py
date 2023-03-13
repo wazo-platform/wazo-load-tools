@@ -6,16 +6,17 @@ import sys
 
 def run(script, host, user, passwd):
     try:
-        return  subprocess.check_output([sys.executable, script], shell=True,
+        return  subprocess.Popen([sys.executable, script], 
                                 env={
                                         "HOST_IP":host,
                                         "AUTH_USER":user,
                                         "AUTH_PASSWD":passwd
                                     }, 
-                                stderr=subprocess.PIPE).decode('utf-8').strip()
+                                stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
         raise ValueError(
             f"Error running {cmd}. stdout: '{e.stdout}'. stderr: '{e.stderr}'")
+
 
 def process_accounts(accounts):
     with open(accounts, "r") as f:

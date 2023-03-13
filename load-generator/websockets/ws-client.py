@@ -52,7 +52,8 @@ if __name__== "__main__":
     c, api = configure(host, user, passwd)
     register(api)
 
-    c.on('user_outgoing_call_created', callback)
+    c.on('*', callback)
 
     print("App started")
-    c.run()
+    c.subscribe('*')
+    c._start()
