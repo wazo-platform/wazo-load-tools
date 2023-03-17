@@ -1,0 +1,13 @@
+[Unit]
+Description=prometheus stack
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+
+ExecStart=start-prometheus.sh
+
+[Install]
+WantedBy=multi-user.target
+ 
