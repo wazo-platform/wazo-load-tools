@@ -1,0 +1,21 @@
+options {
+    directory "/var/cache/bind";
+
+    allow-recursion { any; };
+    allow-query { any; };
+    allow-query-cache { any; };
+    #recursion yes;
+    listen-on { any; };
+    #allow-query { any; };
+    #allow-recursion { any; };
+    #allow-query-cache { any; };
+    #additional-from-auth no;
+    #additional-from-cache no;
+    #minimal-responses yes;
+
+    forwarders {
+            8.8.8.8;
+            4.4.4.4;
+    };
+};
+
