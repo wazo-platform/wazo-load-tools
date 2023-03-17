@@ -1,0 +1,181 @@
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  # external_labels:
+  #  monitor: 'codelab-monitor'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  - job_name: 'node_exporter_metrics'
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.43.79:9090']
+
+  - job_name: 'process_exporter'
+    static_configs:
+      - targets: ['172.16.43.10:9256']
+        labels:
+          ip: '172.16.43.10'
+
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['172.16.43.10:9100']
+        labels:
+          ip: '172.16.43.10'
+
+  - job_name: 'asterisk_exporter'
+    static_configs:
+      - targets: ['172.16.43.10:5039']
+        labels:
+          ip: '172.16.43.10'
+
+  - job_name: 'rabbitmq_exporter'
+    static_configs:
+      - targets: ['172.16.43.10:9419']
+        labels:
+          ip: '172.16.43.10'
+
+  - job_name: 'nginx_exporter'
+    static_configs:
+      - targets: ['172.16.43.10:9113']
+        labels:
+          ip: '172.16.43.10'
+
+  - job_name: 'postgres_exporter'
+    static_configs:
+      - targets: ['172.16.43.10:9187']
+        labels:
+          ip: '172.16.43.10'
+
+  - job_name: 'dird_exporter'
+    metrics_path: /api/dird/0.1/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['172.16.43.10:443']
+        labels:
+          ip: '172.16.43.10'
+          service: 'dird'
+
+  - job_name: 'calld_exporter'
+    metrics_path: /api/calld/1.0/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['172.16.43.10:443']
+        labels:
+          ip: '172.16.43.10'
+          service: 'calld'
+
+  - job_name: 'auth_exporter'
+    metrics_path: /api/auth/0.1/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['172.16.43.10:443']
+        labels:
+          ip: '172.16.43.10'
+          service: 'auth'
+
+  - job_name: 'chatd_exporter'
+    metrics_path: /api/chatd/1.0/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['172.16.43.10:443']
+        labels:
+          ip: '172.16.43.10'
+          service: 'chatd'
+
+  - job_name: 'process_exporter_lt'
+    static_configs:
+      - targets: ['172.16.43.33:9256']
+        labels:
+          ip: '172.16.43.33'
+
+  - job_name: 'node_exporter_lt'
+    static_configs:
+      - targets: ['172.16.43.33:9100']
+        labels:
+          ip: '172.16.43.33'
+
+  - job_name: 'asterisk_exporter_lt'
+    static_configs:
+      - targets: ['172.16.43.33:5039']
+        labels:
+          ip: '172.16.43.33'
+
+  - job_name: 'rabbitmq_exporter_lt'
+    static_configs:
+      - targets: ['172.16.43.33:9419']
+        labels:
+          ip: '172.16.43.33'
+
+  - job_name: 'nginx_exporter_lt'
+    static_configs:
+      - targets: ['172.16.43.33:9113']
+        labels:
+          ip: '172.16.43.33'
+
+  - job_name: 'postgres_exporter_lt'
+    static_configs:
+      - targets: ['172.16.43.33:9187']
+        labels:
+          ip: '172.16.43.33'
+
+  - job_name: 'dird_exporter_lt'
+    metrics_path: /api/dird/0.1/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['172.16.43.33:443']
+        labels:
+          ip: '172.16.43.33'
+          service: 'dird_lt'
+
+  - job_name: 'calld_exporter_lt'
+    metrics_path: /api/calld/1.0/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['172.16.43.33:443']
+        labels:
+          ip: '172.16.43.33'
+          service: 'calld_lt'
+
+  - job_name: 'auth_exporter_lt'
+    metrics_path: /api/auth/0.1/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['172.16.43.33:443']
+        labels:
+          ip: '172.16.43.33'
+          service: 'auth_lt'
+
+  - job_name: 'chatd_exporter_lt'
+    metrics_path: /api/chatd/1.0/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['172.16.43.33:443']
+        labels:
+          ip: '172.16.43.33'
+          service: 'chatd_lt'
+
+  # Example job for cadvisor
+  # - job_name: 'cadvisor'
+  #   static_configs:
+  #     - targets: ['cadvisor:8080']
