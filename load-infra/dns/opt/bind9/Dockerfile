@@ -8,10 +8,6 @@ RUN apt update \
   mariadb-server \
   net-tools
 
-# Copy configuration files
-#COPY configuration/named.conf.options /etc/bind/
-#COPY configuration/named.conf.local /etc/bind/
-#COPY configuration/db.load.wazo.io /etc/bind/zones/
 
 # Expose Ports
 EXPOSE 53/tcp
