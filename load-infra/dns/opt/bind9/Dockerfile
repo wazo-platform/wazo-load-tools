@@ -16,4 +16,3 @@ EXPOSE 953/tcp
 
 # Start the Name Service
 CMD ["/usr/sbin/named","-d", "1", "-g", "-c", "/etc/bind/named.conf", "-u", "bind"]
-

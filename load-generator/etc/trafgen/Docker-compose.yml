@@ -1,0 +1,36 @@
+services:
+  caller:
+    image: wazo-trafgen:0.0.1
+    container_name: trafgen-caller
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/caller:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  callee:
+    image: wazo-trafgen:0.0.1
+    container_name: trafgen-callee
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  websocket-subscriber:
+    image: wazo-ws-client:0.0.1
+    container_name: wazo-ws-subscriber
+    command: sh -c "sleep infinity"
+    env_file: /etc/ws-client/ws.env
+    volumes:
+      - /opt/ws:/opt
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
