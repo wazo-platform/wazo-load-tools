@@ -8,6 +8,7 @@ RUN apt update \
   mariadb-server \
   net-tools
 
+COPY bind.sh /usr/local/bin/bind.sh
 
 # Expose Ports
 EXPOSE 53/tcp
@@ -15,4 +16,4 @@ EXPOSE 53/udp
 EXPOSE 953/tcp
 
 # Start the Name Service
-CMD ["/usr/sbin/named","-d", "1", "-g", "-c", "/etc/bind/named.conf", "-u", "bind"]
+CMD ["/usr/local/bin/bind.sh"]

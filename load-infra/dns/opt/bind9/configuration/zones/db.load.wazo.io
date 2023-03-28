@@ -10,12 +10,12 @@ $TTL    1d ; default expiration time (in seconds) of all RRs without their own T
 @           IN      NS      ns1.load.wazo.io.
 
 ; name servers - A records
-ns1.load.wazo.io.                    IN      A      172.16.43.79
-registry.load.wazo.io.               IN      A      172.16.43.79
-trafgen1.load.wazo.io.               IN      A      172.16.43.25
-trafgen2.load.wazo.io.               IN      A      172.16.43.236
-trafgen3.load.wazo.io.               IN      A      172.16.43.218
-grafana.load.wazo.io.                IN      A      172.16.43.33
+ns1.load.wazo.io.                    IN      A      192.68.0.192
+registry.load.wazo.io.               IN      A      192.68.0.192
+trafgen1.load.wazo.io.               IN      A      192.168.0.171
+trafgen2.load.wazo.io.               IN      A      192.168.0.171
+trafgen3.load.wazo.io.               IN      A      192.168.0.171
+grafana.load.wazo.io.                IN      A      192.68.0.192
 wazo-500.load.wazo.io.               IN      A      172.16.43.10
 wazo-1000.load.wazo.io.        	     IN      A      172.16.43.95
 wazo-1000-extra.load.wazo.io.        IN      A      172.16.43.42

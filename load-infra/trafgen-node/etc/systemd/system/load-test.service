@@ -9,23 +9,6 @@ ExecStartPre=docker-compose -f /etc/trafgen/Docker-compose.yml down
 ExecStartPre=/usr/bin/docker pull registry.load.wazo.io:5000/wazo-trafgen:0.0.1
 ExecStartPre=/usr/bin/docker pull registry.load.wazo.io:5000/wazo-ws-client:0.0.1
 
-ExecStart=docker-compose -f /etc/trafgen/Docker-compose.yml
-
-[Install]
-WantedBy=multi-user.target
-root@trafgen:~# vim /etc/systemd/system/load-test.service
-root@trafgen:~# cat /etc/systemd/system/load-test.service
-[Unit]
-Description=load tester framework
-After=docker.service
-Requires=docker.service
-
-[Service]
-TimeoutStartSec=0
-ExecStartPre=docker-compose -f /etc/trafgen/Docker-compose.yml down
-ExecStartPre=/usr/bin/docker pull registry.load.wazo.io:5000/wazo-trafgen:0.0.1
-ExecStartPre=/usr/bin/docker pull registry.load.wazo.io:5000/wazo-ws-client:0.0.1
-
 ExecStart=docker-compose -f /etc/trafgen/Docker-compose.yml up &
 
 [Install]

@@ -1,4 +1,6 @@
 #!/bin/bash -x
+docker stop ddns-master
+docker rm ddns-master
 
 docker run -d --rm --name=ddns-master \
     --net=host \
