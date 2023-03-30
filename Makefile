@@ -43,3 +43,11 @@ tar-registry:
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/registry.tar etc && \
 	tar -rvf $(INFRA)/registry.tar usr 
+
+tar-controller:
+	cd $(INFRA)/controller && \
+	tar -cvf  $(INFRA)/controller.tar usr && \
+	tar -rvf $(INFRA)/controller.tar etc && \
+	cd $(INFRA)/all-nodes && \
+	tar -rvf $(INFRA)/controller.tar etc && \
+	tar -rvf $(INFRA)/controller.tar usr 
