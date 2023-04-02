@@ -21,28 +21,57 @@ class remoteControl():
         transport = client.get_transport()
         self.channel = transport.open_session()
 
-    def run(self):
+    def run(self, command):
         #self.channel.exec_command('python script.py > /dev/null 2>&1 &')
-        self.channel.exec_command(self.command)
+        self.channel.exec_command(command)
         self.channel.close()
 
-class commandFactory():
-    def __init__(self, container, scenario):
+from abc import ABC, abstractmethod
+
+class Command(ABC):
+    @abstractmethod
+    def execute(self):
+        pass
+
+class DockerComposeStart(Command):
+    def __init__(self, container, scenario, rControl):
         self.container = container
         self.scenario = scenario
+        self.remoteControle = rControl
 
-    def start(self):
-        return f"docker-compose start {self.container}"
+    def execute(self):
+        command = f"docker-compose start {self.container}"
+        self.remoteControle(command)
 
-    def stop(self):
-        return f"docker-compose stop {self.container}"
+class DockerComposeStop(Command):
+    def __init__(self, container, scenario, rControl):
+        self.container = container
+        self.scenario = scenario
+        self.remoteControle = rControl
 
-    def restart(self):
-        return f"docker-compose restart {self.container}"
+    def execute(self):
+        command =  f"docker-compose stop {self.container}"
+        self.remoteControle(command)
 
-    def exec_sip_load(self):
-        return f'docker exec -d {self.container} bash -c "export SCENARIO={self.scenario} /trafgen/load.sh" > /dev/null 2>&1 &'
+class DockerComposeRetart(Command):
+    def __init__(self, container, scenario, rControl):
+        self.container = container
+        self.scenario = scenario
+        self.remoteControle = rControl
 
+    def execute(self):
+        command = f"docker-compose restart {self.container}"
+        self.remoteControle(command)
+
+class ExecSipLoad(Command):
+    def __init__(self, container, scenario, rControl):
+        self.container = container
+        self.scenario = scenario
+        self.remoteControle = rControl
+
+    def execute(self):
+        command =  f'docker exec -d {self.container} bash -c "export SCENARIO={self.scenario} /trafgen/load.sh" > /dev/null 2>&1 &'
+        self.remoteControle(command)
 
 
 async def process_node(node, ttl, channel):
