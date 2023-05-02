@@ -6,19 +6,25 @@ import paramiko
 import sys
 from abc import ABC, abstractmethod
 
-
+mock = False
 
 class RemoteControl():
     def __init__(self, host, keyFile):
         self.host = host
-        self.keyfile = keyFile
+        self.keyFile = keyFile
+
         self.channel = None
 
     def connect(self):
-        client = paramiko.SSHClient()
-        client.connect(self.host, username='root', pkey=self.keyfile, timeout=5)
-        transport = client.get_transport()
-        self.channel = transport.open_session()
+        try:
+            client = paramiko.SSHClient()
+            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            client.connect(self.host, username='root', key_filename=self.keyFile, timeout=5)
+            transport = client.get_transport()
+            self.channel = transport.open_session()
+            print("====================================================")
+        except Exception as e:
+            raise Exception(e)
 
     def run(self, command):
         #self.channel.exec_command('python script.py > /dev/null 2>&1 &')
@@ -27,7 +33,6 @@ class RemoteControl():
     def disconnect(self):
         self.channel.close()
 
-from abc import ABC, abstractmethod
 
 class Command(ABC):
     """Abstract class for command factory"""
@@ -43,8 +48,10 @@ class Command(ABC):
 
 class DockerComposeStart(Command):
     """Command used to start a specific container that belongs to the load farmework."""
-    def __init__(self, host, container, keyFile):
+    def __init__(self, host, container, compose, keyFile):
         self.container = container
+        self.compose = compose
+        self.command = f"docker-compose -f {self.compose} start {self.container}"
         self.remoteControl = RemoteControl(host, keyFile)
 
     def connect(self):
@@ -54,14 +61,15 @@ class DockerComposeStart(Command):
         self.remoteControl.disconnect()
 
     def execute(self):
-        command = f"docker-compose start {self.container}"
-        self.remoteControl.run(command)
+        self.remoteControl.run(self.command)
 
 
 class DockerComposeStop(Command):
     """Command used to stop a specific container that belongs to the load farmework."""
-    def __init__(self, host, container, keyFile):
+    def __init__(self, host, container, compose, keyFile):
         self.container = container
+        self.compose = compose
+        self.command = f"docker-compose -f {self.compose} stop {self.container}"
         self.remoteControl = RemoteControl(host, keyFile)
 
     def connect(self):
@@ -71,13 +79,14 @@ class DockerComposeStop(Command):
         self.remoteControl.disconnect()
 
     def execute(self):
-        command =  f"docker-compose stop {self.container}"
-        self.remoteControl.run(command)
+        self.remoteControl.run(self.command)
 
 class DockerComposeRetart(Command):
     """Command used to restart a specific container that belongs to the load farmework."""
-    def __init__(self, host, container, keyFile):
+    def __init__(self, host, container, compose, keyFile):
         self.container = container
+        self.compose = compose
+        self.command = f"docker-compose -f {self.compose} restart {self.container}"
         self.remoteControl = RemoteControl(host, keyFile)
 
     def connect(self):
@@ -87,30 +96,15 @@ class DockerComposeRetart(Command):
         self.remoteControl.disconnect()
 
     def execute(self):
-        command = f"docker-compose restart {self.container}"
-        self.remoteControl.run(command)
+        self.remoteControl.run(self.command)
 
-class ExecSipLoad(Command):
-    """Command used to execute a sip scenario."""
-    def __init__(self, host, container, scenario, keyFile):
-        self.container = container
-        self.scenario = scenario
-        self.remoteControl = RemoteControl(host, keyFile)
 
-    def connect(self):
-        self.remoteControl.connect()
-
-    def disconnect(self):
-        self.remoteControl.disconnect()
-
-    def execute(self):
-        command =  f'docker exec -d {self.container} bash -c "export SCENARIO={self.scenario} /trafgen/load.sh" > /dev/null 2>&1 &'
-        self.remoteControl.run(command)
-
-class WsClients(Command):
+class ExecCmd(Command):
     """Command used to start websocket clients to subscribe RabbitMQ events"""
-    def __init__(self, host, container, keyFile):
+    def __init__(self, host, container, cmd, keyFile):
         self.container = container
+        self.command =  f'docker exec -d {self.container} bash -c \'{cmd}\' > /dev/null 2>&1 &'
+        print(f"CMD: {self.command}")
         self.remoteControl = RemoteControl(host, keyFile)
 
     def connect(self):
@@ -120,23 +114,57 @@ class WsClients(Command):
         self.remoteControl.disconnect()
 
     def execute(self):
-        command =  f'docker exec -d {self.container} bash -c "/usr/local/bin/runner.py" > /dev/null 2>&1 &'
-        self.remoteControl.run(command)
+        self.remoteControl.run(self.command)
+class MockCmd(Command):
+    """Command used as a mock command that prints infosuvicorn main:app --reload."""
+
+    def __init__(self, host, container, cmd, keyFile):
+        self.container = container
+        self.command =  cmd
+        self.host =  host
+
+    def connect(self):
+        pass
+
+    def disconnect(self):
+        pass
+
+    def execute(self):
+        print(f"HOST:      {self.host}")
+        print(f"CONTAINER: {self.container}")
+        print(f"CMD:       {self.command}")
+
+def get_command(node, keyFile):
+
+    if 'host' not in node:
+        raise KeyError('Missing required key "host"')
+    host = node['host']
+
+    if 'container' not in node:
+        raise KeyError('Missing required key "container"')
+    container = node['container']
+
+    if 'cmd' not in node:
+        raise KeyError('Missing required key "cmd"')
+    command = node['cmd']
+
+    if mock:
+        return MockCmd(host, container, command, keyFile)
+    
+    return ExecCmd(host, container, command, keyFile)
 
 
-
-async def process_node(node, ttl, channel, keyFile):
+async def process_node(node, ttl, compose, forever, channel, keyFile):
     """
-    Coroutine that connects, processes end disconnect from the remote host. Connection duration 
+    Coroutine that connects, processes and disconnect from the remote host. Connection duration 
     is based on the TTL
     """
+    if 'host' not in node:
+        raise KeyError('Missing required key "host"')
     host = node['host']
+    if 'container' not in node:
+        raise KeyError('Missing required key "container"')
     container = node['container']
-    scenario = node['scenario']
-    #config = node.get('config')
-    #script = node.get('script')
-    #cmd = node.get('cmd')
-
 
     msg = "started"
     if container == "callee":
@@ -145,8 +173,8 @@ async def process_node(node, ttl, channel, keyFile):
         print(f"quitting due to receiving: {msg}")
         return
 
+    cmd = get_command(node, keyFile)
     # Connection to the remote host 
-    cmd = ExecSipLoad(host, container, scenario, keyFile)
     cmd.connect()
 
     if container == "caller":
@@ -161,19 +189,24 @@ async def process_node(node, ttl, channel, keyFile):
     # Await on the TTL
     await asyncio.sleep(ttl)
 
-    # restart the container to end the running tests
-    cmd = DockerComposeRetart(host, container, keyFile)
-    cmd.connect()
-    cmd.execute()
-    cmd.disconnect()
+    if not forever: 
+        # restart the container to end the running tests
+        cmd = DockerComposeRetart(host, container, compose, keyFile)
+        cmd.connect()
+        cmd.execute()
+        cmd.disconnect()
 
 
 async def process_load(load, keyFile):
     """
     Coroutine that processes a workload by creating a process_node coroutine for each node.
+    This coroutine setup an additional queue that could be used for node coroutines
+    to synchrinize.
     """
-    nodes = load['load']
-    ttl = load['ttl']
+    nodes = load.get('load')
+    ttl = load.get('ttl')
+    compose = load.get('compose')
+    forever = load.get('forever')
     coroutines = []
 
     # create a queue that will allow coroutine to send status.
@@ -181,7 +214,7 @@ async def process_load(load, keyFile):
 
     # Loop for creating a coroutine for each node in the workload.
     for node in nodes:
-        coroutine = asyncio.create_task(process_node(node, ttl, q, keyFile))
+        coroutine = asyncio.create_task(process_node(node, ttl, compose, forever, q, keyFile))
         coroutines.append(coroutine)
 
     # The coroutine is waiting for all coroutines terminate
@@ -189,7 +222,9 @@ async def process_load(load, keyFile):
 
 async def orchestrator(queue, keyFile):
     """
-    This coroutine consumes a queue containing the workload
+    This coroutine consumes a queue containing the workload.
+    When the orchestrator dequeue a load it sends it to the coroutine
+    in charge of processing the load.
     """
     while True:
         # Waiting for a workload
@@ -206,6 +241,10 @@ async def orchestrator(queue, keyFile):
 
 
 def parse_config(yml):
+    """
+    parse_config takes the config yaml file as argument.
+    It processes each load and put them into the queue.
+    """
     q = queue.Queue()
     try:
         with open(yml, "r") as f:
@@ -228,9 +267,16 @@ def main(loads_file, keyFile):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
+    if len(sys.argv) == 3:
         loads_file = sys.argv[1]
         keyFile = sys.argv[2]
         main(loads_file, keyFile)
+    elif len(sys.argv) == 4:
+        loads_file = sys.argv[1]
+        keyFile = sys.argv[2]
+        if "mock" == sys.argv[3]:
+            mock = True
+        main(loads_file, keyFile)
+
     else:
         main("trafgen.yml", "~/.ssh/id_rsa.pub")

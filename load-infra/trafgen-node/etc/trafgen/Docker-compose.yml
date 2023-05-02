@@ -1,0 +1,157 @@
+services:
+  caller:
+    image: wazo-trafgen:0.0.3
+    container_name: trafgen-caller
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/caller:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  callee:
+    image: wazo-trafgen:0.0.3
+    container_name: trafgen-callee
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http1:
+    image: wazo-trafgen:0.0.3
+    container_name: http1
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http2:
+    image: wazo-trafgen:0.0.3
+    container_name: http2
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http3:
+    image: wazo-trafgen:0.0.3
+    container_name: http3
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http4:
+    image: wazo-trafgen:0.0.3
+    container_name: http4
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http5:
+    image: wazo-trafgen:0.0.3
+    container_name: http5
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http6:
+    image: wazo-trafgen:0.0.3
+    container_name: http6
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http7:
+    image: wazo-trafgen:0.0.3
+    container_name: http7
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http8:
+    image: wazo-trafgen:0.0.3
+    container_name: http8
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http9:
+    image: wazo-trafgen:0.0.3
+    container_name: http9
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  http10:
+    image: wazo-trafgen:0.0.3
+    container_name: http10
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  curl1:
+    image: wazo-trafgen:0.0.3
+    container_name: curl1
+    network_mode: host
+    command: sh -c "sleep infinity"
+    env_file: /etc/trafgen/trafgen.env
+    volumes:
+      - /opt/callee:/trafgen/logs
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+  websocket-subscriber:
+    image: wazo-trafgen:0.0.3
+    container_name: wazo-ws-subscriber
+    command: sh -c "sleep infinity"
+    env_file: /etc/ws-client/ws.env
+    volumes:
+      - /opt/ws:/opt
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
