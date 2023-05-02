@@ -1,5 +1,23 @@
 #!/bin/bash
 
+rabbitmq-plugins -n rabbit@localhost enable rabbitmq_management
+cat <<EOF >/etc/rabbitmq/rabbitmq.config 
+[
+    {rabbit, [
+                    {disk_free_limit, 100000000},
+                    {tcp_listeners, [{"0.0.0.0", 5672}]},
+                    {heartbeat, 0}
+             ]
+    },
+ {rabbitmq_management,
+  [
+   {listener, [{port,     15671},
+               {ssl,      false}]
+   }]
+  }
+].
+EOF
+
 cat <<EOF >/etc/systemd/system/rabbitmq_exporter.service
 [Unit]
 Description=Rabbitmq Exporter
@@ -8,15 +26,16 @@ Requires=docker.service
 
 [Service]
 TimeoutStartSec=0
-ExecStartPre=-/usr/bin/docker stop rabbitmq-exporter
-ExecStartPre=-/usr/bin/docker rm rabbitmq-exporter
+#ExecStartPre=-/usr/bin/docker stop rabbitmq-exporter
+#ExecStartPre=-/usr/bin/docker rm rabbitmq-exporter
 ExecStartPre=/usr/bin/docker pull kbudde/rabbitmq-exporter
 
-ExecStart=docker run -d --rm --name rabbitmq-exporter -e RABBIT_URL=http://127.0.0.1:5672/ kbudde/rabbitmq-exporter
+ExecStart=docker run -d --rm --name rabbitmq-exporter --net=host -e RABBIT_USER=guest -e RABBIT_PASSWORD=guest -e RABBIT_URL=http://127.0.0.1:15671 kbudde/rabbitmq-exporter
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
+systemctl restart rabbitmq-server.service
 systemctl enable rabbitmq_exporter
 systemctl start rabbitmq_exporter

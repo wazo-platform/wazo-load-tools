@@ -1,0 +1,12 @@
+[Unit]
+Description=docker registry
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+
+ExecStart=start-registry.sh
+
+[Install]
+WantedBy=multi-user.target

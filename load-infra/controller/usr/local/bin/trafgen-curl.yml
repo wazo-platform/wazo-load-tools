@@ -1,0 +1,17 @@
+loads:
+  - load:
+    - node:
+      host: trafgen1.load.wazo.io
+      container: curl1
+      cmd: 'while : ; do timestamp=$(date +%s); line=$(curl -w "@/etc/curl-format" -o /dev/null -A wazo-load-agent -s -k -XGET -H "X-Auth-Token: aa647dde-ba1e-4d11-ae2e-b5baf0e8d21a"  "https://172.16.43.10/api/calld/1.0/status"); echo $timestamp,$line>>/opt/curl/curl.report ; sleep 3;  done'
+    - node:
+      host: trafgen2.load.wazo.io
+      container: curl1
+      cmd: 'while : ; do timestamp=$(date +%s); line=$(curl -w "@/etc/curl-format" -o /dev/null -A wazo-load-agent -s -k -XGET -H "X-Auth-Token: aa647dde-ba1e-4d11-ae2e-b5baf0e8d21a"  "https://172.16.43.10/api/calld/1.0/status"); echo $timestamp,$line>>/opt/curl/curl.report ; sleep 3;  done'
+    - node:
+      host: trafgen3.load.wazo.io
+      container: curl1
+      cmd: 'while : ; do timestamp=$(date +%s); line=$(curl -w "@/etc/curl-format" -o /dev/null -A wazo-load-agent -s -k -XGET -H "X-Auth-Token: aa647dde-ba1e-4d11-ae2e-b5baf0e8d21a"  "https://172.16.43.10/api/calld/1.0/status"); echo $timestamp,$line>>/opt/curl/curl.report ; sleep 3;  done'
+    ttl: 0
+    forever: True
+    tag: curl

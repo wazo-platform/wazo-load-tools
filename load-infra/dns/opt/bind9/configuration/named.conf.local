@@ -1,0 +1,4 @@
+zone "load.wazo.io" {
+    type master;
+    file "/etc/bind/zones/db.load.wazo.io";
+};
