@@ -51,3 +51,11 @@ tar-controller:
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/controller.tar etc && \
 	tar -rvf $(INFRA)/controller.tar usr 
+
+tar-elk:
+	cd $(INFRA)/elk && \
+	tar -cvf  $(INFRA)/elk.tar usr && \
+	tar -rvf $(INFRA)/elk.tar etc && \
+	cd $(INFRA)/all-nodes && \
+	tar -rvf $(INFRA)/elk.tar etc && \
+	tar -rvf $(INFRA)/elk.tar usr 
