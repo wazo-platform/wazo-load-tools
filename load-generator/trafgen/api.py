@@ -11,20 +11,6 @@ from pydantic import BaseModel
 class Command(BaseModel):
     cmd: str
 
-app = FastAPI()
-app.add_middleware(GZipMiddleware)
-
-@app.get("/date")
-async def date():
-    cmd = "date"
-    result = run(cmd, hide=True, warn=True)
-    if result.ok:
-        return {"date": f"{result.stdout}"}
-    else:
-        raise HTTPException(
-            status_code=500,
-            detail=f'{result.stderr}',
-        )
     
 
 @app.get("/status")
@@ -34,7 +20,6 @@ async def status():
 @app.post("/shell/")
 async def shell(cmd: Command):
     cmd_dict = cmd.dict()
-    #print(cmd_dict)
     command = cmd_dict.get("cmd")
     result = run(command, hide=True, warn=True)
     if result.ok:
@@ -49,16 +34,6 @@ async def shell(cmd: Command):
             detail=f'{result.stderr}',
         )
     
-
-
-class User(BaseModel):
-    name: str
-    age: int
-    email: str
-
-@app.post("/users/")
-async def create_user(user: User):
-    return {"user": user}
 
 
 @app.exception_handler(422)
