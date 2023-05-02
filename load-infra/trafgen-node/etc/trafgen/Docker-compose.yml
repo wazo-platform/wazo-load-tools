@@ -142,6 +142,9 @@ services:
       - type: bind
         source: /etc/resolv.conf
         target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
   websocket-subscriber:
     image: wazo-trafgen:0.0.3
     container_name: wazo-ws-subscriber
