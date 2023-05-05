@@ -123,7 +123,7 @@ class ExecWda(Command):
         if not env:
             raise Exception("Missing env variables")
 
-        self.command =  f'docker exec -e SERVER={env["SERVER"]} -e LOGIN={env["LOGIN"]} -e PASSWORD={env["PASSWORD"]} -e SESSION_DURATION={env["SESSION_DURATION"]} -d {self.container} bash -c \'{cmd}\' > /dev/null 2>&1 &'
+        self.command =  f' echo docker exec -e SERVER={env["SERVER"]} -e LOGIN={env["LOGIN"]} -e PASSWORD={env["PASSWORD"]} -e SESSION_DURATION={env["SESSION_DURATION"]} -d {self.container} bash -c \'{cmd}\' > /dev/null 2>&1 &'
         self.remoteControl = RemoteControl(host, keyFile)
 
     def connect(self):
