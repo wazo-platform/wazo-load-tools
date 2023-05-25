@@ -142,6 +142,9 @@ services:
       - type: bind
         source: /etc/resolv.conf
         target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
   websocket-subscriber:
     image: wazo-trafgen:0.0.3
     container_name: wazo-ws-subscriber
@@ -149,6 +152,136 @@ services:
     env_file: /etc/ws-client/ws.env
     volumes:
       - /opt/ws:/opt
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda1:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test1
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda2:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test2
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda3:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test3
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda4:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test4
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda5:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test5
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda6:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test6
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda7:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test7
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda8:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test8
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda9:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test9
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+      - type: bind
+        source: /etc/users.csv
+        target: /users.csv
+  wda10:
+    image: wda-load-testing:0.0.1
+    container_name: wda-load-test10
+    command: sh -c "sleep infinity"
+    environment:
+    - AUTH_LINE=1
+    volumes:
       - type: bind
         source: /etc/resolv.conf
         target: /etc/resolv.conf

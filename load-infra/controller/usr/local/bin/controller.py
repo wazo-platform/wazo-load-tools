@@ -7,6 +7,7 @@ import sys
 from abc import ABC, abstractmethod
 
 mock = False
+wda = False
 
 class RemoteControl():
     def __init__(self, host, keyFile):
@@ -22,7 +23,6 @@ class RemoteControl():
             client.connect(self.host, username='root', key_filename=self.keyFile, timeout=5)
             transport = client.get_transport()
             self.channel = transport.open_session()
-            print("====================================================")
         except Exception as e:
             raise Exception(e)
 
@@ -115,13 +115,36 @@ class ExecCmd(Command):
 
     def execute(self):
         self.remoteControl.run(self.command)
+
+class ExecWda(Command):
+    """Command used to start websocket clients to subscribe RabbitMQ events"""
+    def __init__(self, host, container, cmd, keyFile, env=None):
+        self.container = container
+        if not env:
+            raise Exception("Missing env variables")
+
+        self.command =  f' echo docker exec -e SERVER={env["SERVER"]} -e LOGIN={env["LOGIN"]} -e PASSWORD={env["PASSWORD"]} -e SESSION_DURATION={env["SESSION_DURATION"]} -d {self.container} bash -c \'{cmd}\' > /dev/null 2>&1 &'
+        self.remoteControl = RemoteControl(host, keyFile)
+
+    def connect(self):
+        self.remoteControl.connect()
+
+    def disconnect(self):
+        self.remoteControl.disconnect()
+
+    def execute(self):
+        self.remoteControl.run(self.command)
 class MockCmd(Command):
     """Command used as a mock command that prints infosuvicorn main:app --reload."""
 
-    def __init__(self, host, container, cmd, keyFile):
+    def __init__(self, host, container, cmd, keyFile, env=None):
         self.container = container
-        self.command =  cmd
+        if not env:
+            raise Exception("Missing env variables")
+
+        self.command =  f' echo docker exec -e SERVER={env["SERVER"]} -e LOGIN={env["LOGIN"]} -e PASSWORD={env["PASSWORD"]} -e SESSION_DURATION={env["SESSION_DURATION"]} -d {self.container} bash -c \'{cmd}\' > /dev/null 2>&1 &'
         self.host =  host
+        
 
     def connect(self):
         pass
@@ -148,8 +171,12 @@ def get_command(node, keyFile):
         raise KeyError('Missing required key "cmd"')
     command = node['cmd']
 
+    env = node.get("env")
+
     if mock:
-        return MockCmd(host, container, command, keyFile)
+        return MockCmd(host, container, command, keyFile, env)
+    if wda:
+        return ExecWda(host, container, command, keyFile, env)
     
     return ExecCmd(host, container, command, keyFile)
 
@@ -276,6 +303,8 @@ if __name__ == "__main__":
         keyFile = sys.argv[2]
         if "mock" == sys.argv[3]:
             mock = True
+        if "wda" == sys.argv[3]:
+            wda = True
         main(loads_file, keyFile)
 
     else:
