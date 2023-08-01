@@ -27,6 +27,10 @@
    "subscription_type": 0,  
    "enabled": true,  
    "call_permissions": [],  
+   "auth": {
+      "username": "pcm+user__SEQUENCE__@wazo.io",
+      "password": "superpass"
+   },
    "fallbacks": {  
      "noanswer_destination": null,  
      "busy_destination": null,  
