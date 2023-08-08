@@ -18,3 +18,5 @@ prefix=
 servername=Wazo PBX
 sessionlimit=1000
 EOF
+
+systemctl restart asterisk.service
