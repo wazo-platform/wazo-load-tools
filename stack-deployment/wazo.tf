@@ -53,7 +53,6 @@ resource "openstack_compute_floatingip_associate_v2" "fip_1" {
   count       = var.instance_nb
   floating_ip = openstack_networking_floatingip_v2.fip_1[count.index].address
   instance_id = openstack_compute_instance_v2.wazo-stack-test[count.index].id
-  #fixed_ip    = openstack_compute_instance_v2.wazo-stack-test[count.index].network.0.fixed_ip_v4
 }
 
 
