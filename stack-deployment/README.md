@@ -1,5 +1,7 @@
 # Automated stack deployment for load testing
 
+These tools will deploy a VM, install wazo stack EUC and populate it with 5000 users.
+
 It uses terraform with openstack provider. If you need another cloud provider you'll have to adapt
 the *.tf files.
 
@@ -36,3 +38,5 @@ you can use the make file to run the 2 steps above in one command
 ```
 make all
 ```
+
+Once the stack is deployed and populated with the users, you can integrate it into your prometheus instance.
