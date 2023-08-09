@@ -1,5 +1,5 @@
 #!/bin/bash 
-START_SEQ=${1:-2000}
+START_SEQ=0
 
 if [ $# -ne 2 ]; then
     echo "missing sequence parameter"
@@ -11,10 +11,12 @@ fi
 # user_gen is aimed to create the json file representing a user.
 user_gen () {
     local SEQUENCE=$1
-    local USERNAME=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 7)
-    local PASSWORD=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 6)
+    local PASSWORD=superpass
     local EXTENSION=$(echo $START_SEQ+$SEQUENCE|bc)
+    local USERNAME=user$EXTENSION@wazo.io
     local USERS_CSV=user-files/users.csv
+    local WEBRTC_UUID=$(jq -r .webrtc_uuid $PARAMS)
+    local CONTEXT=$(jq -r .context $PARAMS)
 
     echo "$USERNAME;$PASSWORD;$EXTENSION" >> $USERS_CSV
 
@@ -24,6 +26,8 @@ user_gen () {
     sed  -i "s/__USERNAME__/$USERNAME/g" user-files/$EXTENSION.json
     sed  -i "s/__PASSWORD__/$PASSWORD/g" user-files/$EXTENSION.json
     sed  -i "s/__EXTENSION__/$EXTENSION/g" user-files/$EXTENSION.json
+    sed  -i "s/__WEBRTC_UUID__/$WEBRTC_UUID/g" user-files/$EXTENSION.json
+    sed  -i "s/__CONTEXT__/$CONTEXT/g" user-files/$EXTENSION.json
 
     echo user-files/$EXTENSION.json
 }
@@ -54,11 +58,12 @@ UUID=$(jq  -r .uuid $PARAMS)
 TOKEN=$(jq -r .token $PARAMS)
 STACK_IP=$(jq  -r .ip $PARAMS)
 
+
 JSON=$(user_gen $SEQ)
 
-mkdir user-files/err
+mkdir -p  user-files/err
 RETURN_CODE=$(push_users $UUID $TOKEN $STACK_IP $JSON)
-if [ $RETURN_CODE -ne 200 ]; then
+if [ $RETURN_CODE -ne 201 ]; then
     USERNAME=$(echo $JSON | jq -r .lines[].name)
     echo "$USERNAME; STATUS CODE: $RETURN_CODE" >> user-files/users.err
     mv $JSON user-files/err/ 
