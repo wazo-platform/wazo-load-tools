@@ -11,7 +11,7 @@ fi
 # user_gen is aimed to create the json file representing a user.
 user_gen () {
     local SEQUENCE=$1
-    local PASSWORD=superpass
+    local PASSWORD=htegrnadf
     local EXTENSION=$(echo $START_SEQ+$SEQUENCE|bc)
     local USERNAME=user$EXTENSION@wazo.io
     local USERS_CSV=user-files/users.csv

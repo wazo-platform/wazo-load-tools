@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash -x 
 
 source ./setup.env
 STACK_IP=$(jq -r '.resources[] | select(.type == "openstack_networking_floatingip_v2") | .instances[0].attributes.address' terraform.tfstate)
@@ -82,24 +82,29 @@ WEBRTC_UUID=$(jq -r .items[].uuid werbrtc_sip_uuid.json)
 
 # Create the internal tenant's context
 CONTEXT_JSON=context.json
-CONTEXT_ID=$(tr -dc A-Za-z0-9 < /dev/urandom|head -c 5)
-CONTEXT=internal-$CONTEXT_ID
+LABEL=internal
+START=1000
+END=9999
 curl -s -o $CONTEXT_JSON -X POST \
   --header 'Content-Type: application/json' \
   --header 'Accept: application/json' \
   --header "Wazo-Tenant: $TENANT_UUID" \
   --header "X-Auth-Token: $INITIAL_TOKEN" \
-  -d "{\"name\": \"$CONTEXT\", \"enabled\": true, \"label\": \"$CONTEXT\", \"type\": \"internal\", \"user_ranges\": [{\"end\": \"9999\", \"start\": \"1000\"}]}" \
+  -d "{\"enabled\": true, \"label\": \"$LABEL\", \"type\": \"internal\", \"user_ranges\": [{\"end\": \"$END\", \"start\": \"$START\"}]}" \
   "https://$STACK_IP:$STACK_PORT/api/confd/1.1/contexts" -k
 
+if [ -z $CONTEXT_JSON ]; then
+  echo "context file is missing, can't continue"
+fi
+CONTEXT=$(jq -r .name $CONTEXT_JSON)
 cd ../load-generator/users/
 cat <<EOF >usergen_params.json
 {
-	"uuid":"$TENANT_UUID",
-	"token":"$INITIAL_TOKEN",
-	"ip":"$STACK_IP",
-    "webrtc_uuid":"$WEBRTC_UUID",
-    "context":"$CONTEXT"
+  "uuid":"$TENANT_UUID",
+  "token":"$INITIAL_TOKEN",
+  "ip":"$STACK_IP",
+  "webrtc_uuid":"$WEBRTC_UUID",
+  "context":"$CONTEXT"
 }
 EOF
 make usergen5000
