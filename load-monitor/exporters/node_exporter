@@ -1,13 +1,13 @@
-#!/bin/bash
+#!/bin/bash -x
 
-curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest| grep browser_download_url|grep linux-amd64|cut -d '"' -f 4|wget -qi -
-tar xvzf node_exporter-1.5.0.linux-amd64.tar.gz 
+TAR=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest| grep browser_download_url|grep linux-amd64|cut -d '"' -f 4)
+wget $TAR
+filename=$(echo "$TAR" | sed 's/.*\///')
+
+tar xvzf $filename
+
 mv node_exporter-*.linux-amd64/node_exporter /usr/local/bin/
 useradd -rs /bin/false node_exporter
-
-cp nginx.conf /etc/nginx/nginx.conf
-nginx -t
-systemctl restart nginx
 
 cat <<EOF >/etc/systemd/system/node_exporter.service
 [Unit]

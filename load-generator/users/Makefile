@@ -10,7 +10,10 @@ usergen1000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
 	@for i in $$(seq 1 1001); do ./usergen.sh $$i $(PARAMS_FILE); done
 
 usergen5000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
-	@for i in $$(seq 1 5001); do ./usergen.sh $$i $(PARAMS_FILE); done
+	@for i in $$(seq 1000 6000); do ./usergen.sh $$i $(PARAMS_FILE); done
+
+usergen10000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
+	@for i in $$(seq 10000 20000); do ./usergen.sh $$i $(PARAMS_FILE); done
 
 .PHONY: confgen
 USERS_CSV ?= user-files/users.csv

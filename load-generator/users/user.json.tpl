@@ -1,7 +1,7 @@
 {
    "firstname": "User",  
    "lastname": "__SEQUENCE__",  
-   "email": "pcm+user__SEQUENCE__@wazo.io",  
+   "email": "user__SEQUENCE__@wazo.io",  
    "timezone": null,  
    "language": null,  
    "description": null,  
@@ -43,20 +43,21 @@
      {  
        "name": "__USERNAME__",  
        "endpoint_sip": {  
-         "label": "__USERNAME__",  
-         "name": "__USERNAME__",  
+         "label": "__EXTENSION__",  
+         "name": "__EXTENSION__",  
          "auth_section_options": [  
            ["username", "__USERNAME__"],  
            ["password", "__PASSWORD__"]  
          ]  
        },  
+       "templates": [{"uuid": "__WEBRTC_UUID__"}],
        "extensions": [  
          {  
            "exten": "__EXTENSION__",  
-           "context": "default-key-BAkQW-internal"  
+           "context": "__CONTEXT__"  
          }  
        ],  
-       "context": "default-key-BAkQW-internal"  
+       "context": "__CONTEXT__"  
      }  
    ],  
    "forwards": {  
