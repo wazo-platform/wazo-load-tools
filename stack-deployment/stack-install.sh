@@ -1,4 +1,6 @@
 #!/bin/bash -x 
+# Copyright 2023 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 source ./setup.env
 STACK_IP=$(jq -r '.resources[] | select(.type == "openstack_networking_floatingip_v2") | .instances[0].attributes.address' terraform.tfstate)
@@ -11,7 +13,7 @@ fi
 CODE=500
 while [ $CODE -ne 200 ]
 do
-    CODE=$(curl -s -o /dev/null -w "%{http_code}"  -k https://$STACK_IP)
+    CODE=$(curl -s -o /dev/null -w "%{http_code}" -k https://$STACK_IP)
     sleep 30
 done
 
@@ -85,6 +87,7 @@ CONTEXT_JSON=context.json
 LABEL=internal
 START=1000
 END=9999
+INCALL_PREFIX=123456
 curl -s -o $CONTEXT_JSON -X POST \
   --header 'Content-Type: application/json' \
   --header 'Accept: application/json' \
@@ -97,6 +100,22 @@ if [ -z $CONTEXT_JSON ]; then
   echo "context file is missing, can't continue"
 fi
 CONTEXT=$(jq -r .name $CONTEXT_JSON)
+
+# Create the incoming call context
+INCALL_CONTEXT_JSON=incall_context.json
+curl -s -o $INCALL_CONTEXT_JSON -X POST \
+  --header 'Content-Type: application/json' \
+  --header 'Accept: application/json' \
+  --header "Wazo-Tenant: $TENANT_UUID" \
+  --header "X-Auth-Token: $INITIAL_TOKEN" \
+  -d "{\"enabled\": true, \"label\": \"$LABEL\", \"type\": \"incall\", \"incall_ranges\": [{\"end\": \"${INCALL_PREFIX}${END}\", \"start\": \"${INCALL_PREFIX}${START}\"}]}" \
+  "https://$STACK_IP:$STACK_PORT/api/confd/1.1/contexts" -k
+
+if [ -z $INCALL_CONTEXT_JSON ]; then
+  echo "context file is missing, can't continue"
+fi
+INCALL_CONTEXT=$(jq -r .name $INCALL_CONTEXT_JSON)
+
 cd ../load-generator/users/
 cat <<EOF >usergen_params.json
 {
@@ -104,7 +123,9 @@ cat <<EOF >usergen_params.json
   "token":"$INITIAL_TOKEN",
   "ip":"$STACK_IP",
   "webrtc_uuid":"$WEBRTC_UUID",
-  "context":"$CONTEXT"
+  "context":"$CONTEXT",
+  "incall_context": "$INCALL_CONTEXT",
+  "incall_prefix": "$INCALL_PREFIX"
 }
 EOF
 make usergen5000

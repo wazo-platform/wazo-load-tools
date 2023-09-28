@@ -1,4 +1,7 @@
-#!/bin/bash 
+#!/bin/bash
+# Copyright 2023 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 START_SEQ=0
 
 if [ $# -ne 2 ]; then
@@ -17,6 +20,8 @@ user_gen () {
     local USERS_CSV=user-files/users.csv
     local WEBRTC_UUID=$(jq -r .webrtc_uuid $PARAMS)
     local CONTEXT=$(jq -r .context $PARAMS)
+    local INCALL_CONTEXT=$(jq -r .incall_context $PARAMS)
+    local INCALL_PREFIX=$(jq -r .incall_prefix $PARAMS)
 
     echo "$USERNAME;$PASSWORD;$EXTENSION" >> $USERS_CSV
 
@@ -28,6 +33,8 @@ user_gen () {
     sed  -i "s/__EXTENSION__/$EXTENSION/g" user-files/$EXTENSION.json
     sed  -i "s/__WEBRTC_UUID__/$WEBRTC_UUID/g" user-files/$EXTENSION.json
     sed  -i "s/__CONTEXT__/$CONTEXT/g" user-files/$EXTENSION.json
+    sed  -i "s/__INCALL_CONTEXT__/$INCALL_CONTEXT/g" user-files/$EXTENSION.json
+    sed  -i "s/__INCALL_PREFIX__/$INCALL_PREFIX/g" user-files/$EXTENSION.json
 
     echo user-files/$EXTENSION.json
 }

@@ -38,7 +38,16 @@
      "fail_destination": null  
    },  
    "groups": [],  
-   "incalls": [],
+   "incalls": [
+    {
+      "extensions": [
+        {
+          "exten": "__INCALL_PREFIX____EXTENSION__",
+          "context": "__INCALL_CONTEXT__"
+        }
+      ]
+    }
+   ],
    "lines": [
      {
        "name": "__EXTENSION__",
