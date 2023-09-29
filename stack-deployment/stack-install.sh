@@ -2,8 +2,34 @@
 # Copyright 2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+PARAMS=""
+
+while (( $# )); do
+  case "$1" in
+    --stack)
+      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+        STACK_IP=$2
+        shift 2
+      else
+        echo "Error: Argument for $1 is missing" >&2
+        exit 1
+      fi
+      ;;
+    *)
+      PARAMS="$PARAMS $1"
+      shift
+      ;;
+  esac
+done
+
+eval set -- "$PARAMS"
+
+
 source ./setup.env
-STACK_IP=$(jq -r '.resources[] | select(.type == "openstack_networking_floatingip_v2") | .instances[0].attributes.address' terraform.tfstate)
+if [ -z $STACK_IP ]; then
+  STACK_IP=$(jq -r '.resources[] | select(.type == "openstack_networking_floatingip_v2") | .instances[0].attributes.address' terraform.tfstate)
+fi
+
 if [ -z $STACK_IP ];then
     echo "missing stack ip. check the terraform.state file"
     exit 1
