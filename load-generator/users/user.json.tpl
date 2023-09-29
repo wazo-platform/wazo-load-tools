@@ -24,7 +24,7 @@
    "ring_seconds": 30,  
    "simultaneous_calls": 5,  
    "call_permission_password": null,  
-   "subscription_type": 0,  
+   "subscription_type": 1,
    "enabled": true,  
    "call_permissions": [],  
    "auth": {
