@@ -1,4 +1,4 @@
-#!/bin/bash -x 
+#!/bin/bash -x
 # Copyright 2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,8 +13,7 @@ fi
 CODE=500
 while [ $CODE -ne 200 ]
 do
-    CODE=$(curl -s -o /dev/null -w "%{http_code}" -k https://$STACK_IP)
-    sleep 30
+    CODE=$(curl -s -o /dev/null -w "%{http_code}" -k https://$STACK_IP/api/confd/1.1/wizard)
 done
 
 
