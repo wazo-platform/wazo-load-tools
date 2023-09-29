@@ -73,13 +73,20 @@ TENANT_UUID=$(jq -r .uuid $TENANT_JSON)
 
 
 # Create the webrtc UUID
-WEBRTC_UUID_JSON=werbrtc_sip_uuid.json
-curl -s -X GET -o $WEBRTC_UUID_JSON \
-  --header 'Accept: application/json' \
-  --header "Wazo-Tenant: $TENANT_UUID" \
-  --header "X-Auth-Token: $INITIAL_TOKEN" \
-  "https://$STACK_IP:$STACK_PORT/api/confd/1.1/endpoints/sip/templates?search=webrtc" -k
-WEBRTC_UUID=$(jq -r .items[].uuid werbrtc_sip_uuid.json)
+for n in $(seq 5); do
+  WEBRTC_UUID_JSON=werbrtc_sip_uuid.json
+  curl -s -X GET -o $WEBRTC_UUID_JSON \
+    --header 'Accept: application/json' \
+    --header "Wazo-Tenant: $TENANT_UUID" \
+    --header "X-Auth-Token: $INITIAL_TOKEN" \
+    "https://$STACK_IP:$STACK_PORT/api/confd/1.1/endpoints/sip/templates?search=webrtc" -k
+  WEBRTC_UUID=$(jq -r .items[].uuid werbrtc_sip_uuid.json)
+  if [ -z "$WEBRTC_UUID" ]; then
+    sleep 1
+  else
+    break
+  fi
+done
 
 # Create the internal tenant's context
 CONTEXT_JSON=context.json
