@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 PARAMS=""
+NO_WIZARD=0
 
 while (( $# )); do
   case "$1" in
@@ -14,6 +15,10 @@ while (( $# )); do
         echo "Error: Argument for $1 is missing" >&2
         exit 1
       fi
+      ;;
+    --no-wizard)
+      NO_WIZARD=1
+      shift
       ;;
     *)
       PARAMS="$PARAMS $1"
@@ -42,39 +47,40 @@ do
     CODE=$(curl -s -o /dev/null -w "%{http_code}" -k https://$STACK_IP/api/confd/1.1/wizard)
 done
 
+if [ $NO_WIZARD -eq "0" ]; then
+  CONFD_JSON=confd.json
+  curl -s -X GET \
+    --header 'Accept: application/json' \
+    -k -o $CONFD_JSON "https://$STACK_IP:$STACK_PORT/api/confd/1.1/wizard/discover"
 
-CONFD_JSON=confd.json
-curl -s -X GET \
-  --header 'Accept: application/json' \
-  -k -o $CONFD_JSON "https://$STACK_IP:$STACK_PORT/api/confd/1.1/wizard/discover"
+  STACK_PRIVATE_IP=$(jq -r '.interfaces[0].ip_address' $CONFD_JSON)
+  if [ -z $STACK_PRIVATE_IP ];then
+      echo "missing private ip. check the result of GET 'https://$STACK_IP:$STACK_PORT/api/confd/1.1/wizard/discover'"
+      exit 1
+  fi
 
-STACK_PRIVATE_IP=$(jq -r '.interfaces[0].ip_address' $CONFD_JSON)
-if [ -z $STACK_PRIVATE_IP ];then
-    echo "missing private ip. check the result of GET 'https://$STACK_IP:$STACK_PORT/api/confd/1.1/wizard/discover'"
-    exit 1
+  # Generate the setup file from the template
+  template_file="./setup.json.tpl"
+  output_file="./setup.json"
+  sed -e "s/__ENGINE_PASSWORD__/\"$ENGINE_PASSWORD\"/" \
+      -e "s/__STACK_IP__/\"$STACK_IP\"/" \
+      -e "s/__STACK_PORT__/$STACK_PORT/" \
+      -e "s/__PORTAL_FQDN__/\"$PORTAL_FQDN\"/" \
+      -e "s/__NAME_INSTANCE__/\"$NAME_INSTANCE\"/" \
+      -e "s/__PORTAL_PORT__/$PORTAL_PORT/" \
+      -e "s/__PORTAL_ID__/\"$PORTAL_ID\"/" \
+      -e "s/__PORTAL_PASSWORD__/\"$PORTAL_PASSWORD\"/" \
+      -e "s/__STACK_PRIVATE_IP__/\"$STACK_PRIVATE_IP\"/" \
+      "$template_file" > "$output_file"
+
+  # Pause before continuing stack configuration. The stack needs a bit of time to get ready  !
+  DELAY=400
+  sleep $DELAY
+  # Setup the stack
+  curl -s -k -XPOST https://$STACK_IP:$STACK_PORT/api/setupd/1.0/setup \
+    -H "Content-Type: application/json" \
+    -d @$output_file
 fi
-
-# Generate the setup file from the template
-template_file="./setup.json.tpl"
-output_file="./setup.json"
-sed -e "s/__ENGINE_PASSWORD__/\"$ENGINE_PASSWORD\"/" \
-    -e "s/__STACK_IP__/\"$STACK_IP\"/" \
-    -e "s/__STACK_PORT__/$STACK_PORT/" \
-    -e "s/__PORTAL_FQDN__/\"$PORTAL_FQDN\"/" \
-    -e "s/__NAME_INSTANCE__/\"$NAME_INSTANCE\"/" \
-    -e "s/__PORTAL_PORT__/$PORTAL_PORT/" \
-    -e "s/__PORTAL_ID__/\"$PORTAL_ID\"/" \
-    -e "s/__PORTAL_PASSWORD__/\"$PORTAL_PASSWORD\"/" \
-    -e "s/__STACK_PRIVATE_IP__/\"$STACK_PRIVATE_IP\"/" \
-    "$template_file" > "$output_file"
-
-# Pause before continuing stack configuration. The stack needs a bit of time to get ready
-DELAY=400
-sleep $DELAY 
-# Setup the stack
-curl -s -k -XPOST https://$STACK_IP:$STACK_PORT/api/setupd/1.0/setup \
-  -H "Content-Type: application/json" \
-  -d @$output_file
 
 # Create the required token
 TOKEN_JSON=token.json
