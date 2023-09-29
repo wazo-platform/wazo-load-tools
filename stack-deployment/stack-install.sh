@@ -66,7 +66,7 @@ TENANT_JSON=tenant.json
 curl -s -o $TENANT_JSON -X POST \
   --header 'Content-Type: application/json' \
   --header 'Accept: application/json' \
-  -d '{}' "https://$STACK_IP:$STACK_PORT/api/auth/0.1/tenants" \
+  -d '{"name": "load"}' "https://$STACK_IP:$STACK_PORT/api/auth/0.1/tenants" \
   -k -H "X-Auth-Token: $INITIAL_TOKEN"
 
 TENANT_UUID=$(jq -r .uuid $TENANT_JSON)
