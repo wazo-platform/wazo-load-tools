@@ -38,16 +38,16 @@
      "fail_destination": null  
    },  
    "groups": [],  
-   "incalls": [],  
-   "lines": [  
-     {  
-       "name": "__USERNAME__",  
-       "endpoint_sip": {  
-         "label": "__EXTENSION__",  
-         "name": "__EXTENSION__",  
-         "auth_section_options": [  
-           ["username", "__USERNAME__"],  
-           ["password", "__PASSWORD__"]  
+   "incalls": [],
+   "lines": [
+     {
+       "name": "__EXTENSION__",
+       "endpoint_sip": {
+         "label": "__EXTENSION__",
+         "name": "__EXTENSION__",
+         "auth_section_options": [
+           ["username", "__EXTENSION__"],
+           ["password", "__EXTENSION__"]
          ]  
        },  
        "templates": [{"uuid": "__WEBRTC_UUID__"}],
