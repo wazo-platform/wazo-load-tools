@@ -45,12 +45,12 @@
        "endpoint_sip": {
          "label": "__EXTENSION__",
          "name": "__EXTENSION__",
+         "templates": [{"uuid": "__WEBRTC_UUID__"}],
          "auth_section_options": [
            ["username", "__EXTENSION__"],
            ["password", "__EXTENSION__"]
          ]  
        },  
-       "templates": [{"uuid": "__WEBRTC_UUID__"}],
        "extensions": [  
          {  
            "exten": "__EXTENSION__",  
