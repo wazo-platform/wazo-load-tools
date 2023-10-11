@@ -13,7 +13,7 @@ In order to get figures for scalability work, we need a flexible load tester fra
 
 ### Prerequistes
 
-In order to use this framework you ned to setup an operational wazo stack. You'll need to collect some informations and credentials
+In order to use this framework you need to setup an operational wazo stack. You'll need to collect some informations and credentials
 for this stack such as the tenant ID, generate a token that will allow the framework to create accounts as well.
 
 ### how to use the framework
