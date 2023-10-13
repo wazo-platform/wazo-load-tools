@@ -95,10 +95,13 @@ INITIAL_TOKEN=$(jq -r .data.token token.json)
 
 # Create the tenant uuid
 TENANT_JSON=tenant.json
+TENANT_NAME_SUFFIX=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 10 ; echo '')
+TENANT_NAME="Load-${TENANT_NAME_SUFFIX}"
 curl -s -o $TENANT_JSON -X POST \
   --header 'Content-Type: application/json' \
   --header 'Accept: application/json' \
-  -d '{"name": "load"}' "https://$STACK_IP:$STACK_PORT/api/auth/0.1/tenants" \
+  -d "$(jq -Mcn '$ARGS.named' --arg name $TENANT_NAME)" \
+  "https://$STACK_IP:$STACK_PORT/api/auth/0.1/tenants" \
   -k -H "X-Auth-Token: $INITIAL_TOKEN"
 
 TENANT_UUID=$(jq -r .uuid $TENANT_JSON)
