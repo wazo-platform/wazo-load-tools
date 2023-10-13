@@ -48,15 +48,38 @@ push_users () {
     local token=$2
     local stack_ip=$3
     local user_file=$4
+    local call_permission_id_1=$5
+    local call_permission_id_2=$6
+    local output_file=user_output.json
 
     STATUS=$(curl -k -v -X POST "https://$stack_ip:443/api/confd/1.1/users" \
-        -w "%{http_code}" -s -o /dev/null \
+        -w "%{http_code}" -s -o $output_file \
         --header "Content-Type: application/json" \
         --header "Accept: application/json" \
         --header "Wazo-Tenant: $tenant_uuid" \
         --header "X-Auth-Token: $token" \
-        --data @$user_file) 
-    echo $STATUS        
+        --data @$user_file)
+    if [ $STATUS -ne 201 ]; then
+        USERNAME=$(echo $user_file | jq -r .lines[].name)
+        echo "$USERNAME; STATUS CODE: $status" >> user-files/users.err
+        mv $user_file user-files/err/
+        return -1
+    fi
+
+    user_uuid=$(jq -r .uuid $output_file)
+    curl -skv -X PUT "https://$stack_ip:443/api/confd/1.1/users/${user_uuid}/callpermissions/${call_permission_id_1}" \
+        --header "Content-Type: application/json" \
+        --header "Accept: application/json" \
+        --header "Wazo-Tenant: $tenant_uuid" \
+        --header "X-Auth-Token: $token"
+
+    curl -skv -X PUT "https://$stack_ip:443/api/confd/1.1/users/${user_uuid}/callpermissions/${call_permission_id_2}" \
+        --header "Content-Type: application/json" \
+        --header "Accept: application/json" \
+        --header "Wazo-Tenant: $tenant_uuid" \
+        --header "X-Auth-Token: $token"
+
+    echo $STATUS
 }
 
 SEQ=$1
@@ -65,13 +88,10 @@ UUID=$(jq  -r .uuid $PARAMS)
 TOKEN=$(jq -r .token $PARAMS)
 STACK_IP=$(jq  -r .ip $PARAMS)
 
+GLOBAL_CALL_PERMISSION_ID=$(jq -r .global_call_permission_id $PARAMS)
+EMERGENCY_CALL_PERMISSION_ID=$(jq -r .emergency_call_permission_id $PARAMS)
 
 JSON=$(user_gen $SEQ)
 
 mkdir -p  user-files/err
-RETURN_CODE=$(push_users $UUID $TOKEN $STACK_IP $JSON)
-if [ $RETURN_CODE -ne 201 ]; then
-    USERNAME=$(echo $JSON | jq -r .lines[].name)
-    echo "$USERNAME; STATUS CODE: $RETURN_CODE" >> user-files/users.err
-    mv $JSON user-files/err/ 
-fi
+push_users $UUID $TOKEN $STACK_IP $JSON $GLOBAL_CALL_PERMISSION_ID $EMERGENCY_CALL_PERMISSION_ID

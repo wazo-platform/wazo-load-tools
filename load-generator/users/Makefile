@@ -1,7 +1,10 @@
-.PHONY: usergen500 usergen1000 usergen5000
+.PHONY: usergen10 usergen500 usergen1000 usergen5000
 USERGEN_SCRIPT ?= ./usergen.sh
 USER_TEMPLATE ?= ./user.json.tpl
 PARAMS_FILE ?= ./usergen_params.json
+
+usergen10: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
+	@for i in $$(seq 1000 1009); do ./usergen.sh $$i $(PARAMS_FILE); done
 
 usergen500: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
 	@for i in $$(seq 1 501); do ./usergen.sh $$i $(PARAMS_FILE); done

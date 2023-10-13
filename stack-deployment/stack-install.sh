@@ -154,6 +154,34 @@ if [ -z $INCALL_CONTEXT_JSON ]; then
 fi
 INCALL_CONTEXT=$(jq -r .name $INCALL_CONTEXT_JSON)
 
+# Create a global call permission
+GLOBAL_CALL_PERMISSION_JSON=global_call_permission.json
+curl -s -o $GLOBAL_CALL_PERMISSION_JSON -X POST \
+  --header 'Content-Type: application/json' \
+  --header 'Accept: application/json' \
+  --header "Wazo-Tenant: $TENANT_UUID" \
+  --header "X-Auth-Token: $INITIAL_TOKEN" \
+  -d '{"name": "global", "description": "Shared call permission for all users", "enabled": true, "mode": "allow"}' \
+  "https://$STACK_IP:$STACK_PORT/api/confd/1.1/callpermissions" -k
+if [ -z $GLOBAL_CALL_PERMISSION_JSON ]; then
+  echo "global call permission file is missing, can't continue"
+fi
+GLOBAL_CALL_PERMISSION_ID=$(jq -r .id $GLOBAL_CALL_PERMISSION_JSON)
+
+# Create an emergency call permission
+EMERGENCY_CALL_PERMISSION_JSON=emergency_call_permission.json
+curl -s -o $EMERGENCY_CALL_PERMISSION_JSON -X POST \
+  --header 'Content-Type: application/json' \
+  --header 'Accept: application/json' \
+  --header "Wazo-Tenant: $TENANT_UUID" \
+  --header "X-Auth-Token: $INITIAL_TOKEN" \
+  -d '{"name": "emergency", "description": "Shared emergency number call permission for all users", "enabled": true, "mode": "allow"}' \
+  "https://$STACK_IP:$STACK_PORT/api/confd/1.1/callpermissions" -k
+if [ -z $EMERGENCY_CALL_PERMISSION_JSON ]; then
+  echo "emergency call permission file is missing, can't continue"
+fi
+EMERGENCY_CALL_PERMISSION_ID=$(jq -r .id $EMERGENCY_CALL_PERMISSION_JSON)
+
 cd ../load-generator/users/
 cat <<EOF >usergen_params.json
 {
@@ -163,7 +191,9 @@ cat <<EOF >usergen_params.json
   "webrtc_uuid":"$WEBRTC_UUID",
   "context":"$CONTEXT",
   "incall_context": "$INCALL_CONTEXT",
-  "incall_prefix": "$INCALL_PREFIX"
+  "incall_prefix": "$INCALL_PREFIX",
+  "global_call_permission_id": "$GLOBAL_CALL_PERMISSION_ID",
+  "emergency_call_permission_id": "$EMERGENCY_CALL_PERMISSION_ID"
 }
 EOF
 make usergen5000
