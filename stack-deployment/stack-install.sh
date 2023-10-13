@@ -54,6 +54,7 @@ if [ $NO_WIZARD -eq "0" ]; then
     -k -o $CONFD_JSON "https://$STACK_IP:$STACK_PORT/api/confd/1.1/wizard/discover"
 
   STACK_PRIVATE_IP=$(jq -r '.interfaces[0].ip_address' $CONFD_JSON)
+  rm -f $CONFD_JSON
   if [ -z $STACK_PRIVATE_IP ];then
       echo "missing private ip. check the result of GET 'https://$STACK_IP:$STACK_PORT/api/confd/1.1/wizard/discover'"
       exit 1
@@ -91,6 +92,7 @@ curl -s -XPOST -o $TOKEN_JSON \
   -d '{"access_type": "online", "backend": "wazo_user", "expiration": 600000}' \
   "https://$STACK_IP:$STACK_PORT/api/auth/0.1/token" -k
 INITIAL_TOKEN=$(jq -r .data.token token.json)
+rm -f $TOKEN_JSON
 
 
 # Create the tenant uuid
@@ -103,8 +105,8 @@ curl -s -o $TENANT_JSON -X POST \
   -d "$(jq -Mcn '$ARGS.named' --arg name $TENANT_NAME)" \
   "https://$STACK_IP:$STACK_PORT/api/auth/0.1/tenants" \
   -k -H "X-Auth-Token: $INITIAL_TOKEN"
-
 TENANT_UUID=$(jq -r .uuid $TENANT_JSON)
+rm -f $TENANT_JSON
 
 
 # Create the webrtc UUID
@@ -115,10 +117,11 @@ for n in $(seq 5); do
     --header "Wazo-Tenant: $TENANT_UUID" \
     --header "X-Auth-Token: $INITIAL_TOKEN" \
     "https://$STACK_IP:$STACK_PORT/api/confd/1.1/endpoints/sip/templates?search=webrtc" -k
-  WEBRTC_UUID=$(jq -r .items[].uuid werbrtc_sip_uuid.json)
+  WEBRTC_UUID=$(jq -r .items[].uuid $WEBRTC_UUID_JSON)
   if [ -z "$WEBRTC_UUID" ]; then
     sleep 1
   else
+    rm -f $WEBRTC_UUID_JSON
     break
   fi
 done
@@ -141,6 +144,7 @@ if [ -z $CONTEXT_JSON ]; then
   echo "context file is missing, can't continue"
 fi
 CONTEXT=$(jq -r .name $CONTEXT_JSON)
+rm -f $CONTEXT_JSON
 
 # Create the incoming call context
 INCALL_CONTEXT_JSON=incall_context.json
@@ -156,6 +160,7 @@ if [ -z $INCALL_CONTEXT_JSON ]; then
   echo "context file is missing, can't continue"
 fi
 INCALL_CONTEXT=$(jq -r .name $INCALL_CONTEXT_JSON)
+rm -f $INCALL_CONTEXT_JSON
 
 # Create a global call permission
 GLOBAL_CALL_PERMISSION_JSON=global_call_permission.json
@@ -170,6 +175,7 @@ if [ -z $GLOBAL_CALL_PERMISSION_JSON ]; then
   echo "global call permission file is missing, can't continue"
 fi
 GLOBAL_CALL_PERMISSION_ID=$(jq -r .id $GLOBAL_CALL_PERMISSION_JSON)
+rm -f $GLOBAL_CALL_PERMISSION_JSON
 
 # Create an emergency call permission
 EMERGENCY_CALL_PERMISSION_JSON=emergency_call_permission.json
@@ -184,6 +190,7 @@ if [ -z $EMERGENCY_CALL_PERMISSION_JSON ]; then
   echo "emergency call permission file is missing, can't continue"
 fi
 EMERGENCY_CALL_PERMISSION_ID=$(jq -r .id $EMERGENCY_CALL_PERMISSION_JSON)
+rm -f $EMERGENCY_CALL_PERMISSION_JSON
 
 cd ../load-generator/users/
 cat <<EOF >usergen_params.json
