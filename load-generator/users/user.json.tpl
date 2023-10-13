@@ -93,7 +93,11 @@
      }  
    },  
    "switchboards": [],  
-   "voicemail": null,  
+   "voicemail": {
+    "number": "__EXTENSION__",
+    "context": "__CONTEXT__",
+    "enabled": true
+   },
    "queues": [],  
    "func_key_template_id": null,  
    "call_pickup_target_users": []  
