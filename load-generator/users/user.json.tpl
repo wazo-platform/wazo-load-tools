@@ -24,7 +24,7 @@
    "ring_seconds": 30,  
    "simultaneous_calls": 5,  
    "call_permission_password": null,  
-   "subscription_type": 0,  
+   "subscription_type": 1,
    "enabled": true,  
    "call_permissions": [],  
    "auth": {
@@ -38,7 +38,16 @@
      "fail_destination": null  
    },  
    "groups": [],  
-   "incalls": [],
+   "incalls": [
+    {
+      "extensions": [
+        {
+          "exten": "__INCALL_PREFIX____EXTENSION__",
+          "context": "__INCALL_CONTEXT__"
+        }
+      ]
+    }
+   ],
    "lines": [
      {
        "name": "__EXTENSION__",
