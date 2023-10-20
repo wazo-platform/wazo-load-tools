@@ -1,0 +1,11 @@
+[Unit]
+Description=Pilot service
+
+[Service]
+Type=simple
+ExecStart=docker run -p 9990:9990  --rm --name wlpd -d wlpd:latest
+ExecStop=/usr/bin/docker stop wlpd
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
