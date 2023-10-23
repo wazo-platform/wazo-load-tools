@@ -1,0 +1,11 @@
+[Unit]
+Description=Trafgen Load Balancer service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/docker run -d -p 443:443 -p 9999:80 --rm --name trafgen-lb trafgen-lb:latest
+ExecStop=/usr/bin/docker kil trafgen-lb
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
