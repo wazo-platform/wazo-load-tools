@@ -4,19 +4,19 @@ USER_TEMPLATE ?= ./user.json.tpl
 PARAMS_FILE ?= ./usergen_params.json
 
 usergen10: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
-	@for i in $$(seq 1000 1009); do ./usergen.sh $$i $(PARAMS_FILE); done
+	@for i in $$(seq 1000 1009); do ./usergen.sh $$i 4 $(PARAMS_FILE); done
 
 usergen500: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
-	@for i in $$(seq 1 501); do ./usergen.sh $$i $(PARAMS_FILE); done
+	@for i in $$(seq 1 501); do ./usergen.sh $$i 4 $(PARAMS_FILE); done
 
 usergen1000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
-	@for i in $$(seq 1 1001); do ./usergen.sh $$i $(PARAMS_FILE); done
+	@for i in $$(seq 1 1001); do ./usergen.sh $$i 4 $(PARAMS_FILE); done
 
 usergen5000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
-	@for i in $$(seq 1000 6000); do ./usergen.sh $$i $(PARAMS_FILE); done
+	@for i in $$(seq 1000 6000); do ./usergen.sh $$i 4 $(PARAMS_FILE); done
 
 usergen10000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
-	@for i in $$(seq 10000 20000); do ./usergen.sh $$i $(PARAMS_FILE); done
+	@for i in $$(seq 10000 20000); do ./usergen.sh $$i 5 $(PARAMS_FILE); done
 
 .PHONY: confgen
 USERS_CSV ?= user-files/users.csv
