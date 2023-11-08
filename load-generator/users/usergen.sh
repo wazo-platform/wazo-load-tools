@@ -4,18 +4,20 @@
 
 START_SEQ=0
 
-if [ $# -ne 2 ]; then
+if [ $# -ne 3 ]; then
     echo "missing sequence parameter"
-    echo "usage ./usergen.sh SEQ PARAMS_FILE"
-    echo "example ./usergen.sh 134 usergen_params.json" 
+    echo "usage ./usergen.sh SEQ EXTEN_LEN PARAMS_FILE"
+    echo "example ./usergen.sh 134 4 usergen_params.json"
+    echo "  For user with extension \"0134\""
     exit 2
 fi
 
 # user_gen is aimed to create the json file representing a user.
 user_gen () {
     local SEQUENCE=$1
+    local EXTEN_LEN=$2
     local PASSWORD=htegrnadf
-    local EXTENSION=$(echo $START_SEQ+$SEQUENCE|bc)
+    local EXTENSION=$(printf "%0${EXTEN_LEN}d" $(echo $START_SEQ+$SEQUENCE|bc))
     local USERNAME=user$EXTENSION@wazo.io
     local USERS_CSV=user-files/users.csv
     local WEBRTC_UUID=$(jq -r .webrtc_uuid $PARAMS)
@@ -83,7 +85,8 @@ push_users () {
 }
 
 SEQ=$1
-PARAMS=$2
+EXTEN_LEN=$2
+PARAMS=$3
 UUID=$(jq  -r .uuid $PARAMS)
 TOKEN=$(jq -r .token $PARAMS)
 STACK_IP=$(jq  -r .ip $PARAMS)
@@ -91,7 +94,7 @@ STACK_IP=$(jq  -r .ip $PARAMS)
 GLOBAL_CALL_PERMISSION_ID=$(jq -r .global_call_permission_id $PARAMS)
 EMERGENCY_CALL_PERMISSION_ID=$(jq -r .emergency_call_permission_id $PARAMS)
 
-JSON=$(user_gen $SEQ)
+JSON=$(user_gen $SEQ $EXTEN_LEN)
 
 mkdir -p  user-files/err
 push_users $UUID $TOKEN $STACK_IP $JSON $GLOBAL_CALL_PERMISSION_ID $EMERGENCY_CALL_PERMISSION_ID
