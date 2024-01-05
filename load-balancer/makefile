@@ -113,11 +113,13 @@ commit: $(LAST_BUILD_FILE) $(VERSION_FILE)
 	fi
 
 
-run: stop
-	docker run -d -p 9999:443 -p 9998:80 --rm --name $(CONTAINER_NAME) $(IMAGE)-$(CLUSTER_SIZE):$(TAG)
+IMAGE_NAME ?= $(shell cat $(LAST_BUILD_FILE))
+run: 
+
+	docker run -d -p 9999:443 -p 9998:80 --rm  $(IMAGE_NAME) 
 
 stop:
-	-docker stop $(CONTAINER_NAME)
+	-docker stop $(CONTAINER_NAME) >2&
 
 KEY = certs/server.key
 CERT = certs/server.pem
