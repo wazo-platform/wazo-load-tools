@@ -1,5 +1,5 @@
 
-# wazo-scalability : load tester framework
+# wazo-scalability : This is all the infra we use to power our load framework.
 
 ## Goal
 

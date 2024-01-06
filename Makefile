@@ -4,6 +4,9 @@
 BASE = ${PWD}
 INFRA = $(BASE)/load-infra
 LOAD = $(BASE)/load-generator
+CERTS_FOLDER = "load-infra/certs"
+SERVER_CERTS_FOLDER = $(CERTS_FOLDER)/servers
+CLIENT_CERTS_FOLDER = "$(CERTS_FOLDER)/clients"
 
 tar-trafgen:
 	cd $(INFRA)/trafgen-node && \
@@ -59,3 +62,59 @@ tar-elk:
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/elk.tar etc && \
 	tar -rvf $(INFRA)/elk.tar usr 
+
+tar-basic:
+	cd $(INFRA)/all-nodes && \
+	tar -cvf $(INFRA)/basic.tar etc && \
+	tar -rvf $(INFRA)/basic.tar usr 
+
+SERVER_NAME ?=
+
+tar-docker-server:
+	@if [ -z "$(SERVER_NAME)" ]; then \
+		echo "error: SERVER_NAME is not set. Please specify the SERVER_NAME variable."; \
+	else \
+		cp $(SERVER_CERTS_FOLDER)/$(SERVER_NAME)/* $(INFRA)/docker-server/etc/docker/certs/ && \
+		cd $(INFRA)/all-nodes && \
+		tar -cvf $(INFRA)/docker-server.tar etc && \
+		tar -rvf $(INFRA)/docker-server.tar usr && \
+		cd $(INFRA)/docker-server && \
+		tar -rvf $(INFRA)/docker-server.tar usr && \
+		tar -rvf $(INFRA)/docker-server.tar etc; \
+	fi
+
+
+create-ca:
+	@$(MAKE) -C  load-infra ca-cert
+
+create-ca-crt:
+	@$(MAKE) -C  load-infra ca.crt
+
+SERVERS ?=
+
+servers-cert:
+	@if [ -z "$(SERVERS)" ]; then \
+		echo "error: SERVERS is not set. Please specify the SERVERS variable."; \
+	else \
+		for server in $(SERVERS); do \
+			if [[ ! -d "$(SERVER_CERTS_FOLDER)/$$server" ]]; then \
+				mkdir -p $(SERVER_CERTS_FOLDER)/$$server; \
+			fi; \
+			make -C load-infra server-cert SERVER=$$server; \
+		done; \
+	fi
+
+
+CLIENTS ?=
+
+clients-cert:
+	@if [ -z "$(CLIENTS)" ]; then \
+		echo "error: CLIENTS is not set. Please specify the CLIENTS variable."; \
+	else \
+		for client in $(CLIENTS); do \
+			if [[ ! -d "$(CLIENT_CERTS_FOLDER)/$$client" ]]; then \
+				mkdir -p $(CLIENT_CERTS_FOLDER)/$$client; \
+			fi; \
+			make -C load-infra client-cert CLIENT=$$client; \
+		done; \
+	fi
