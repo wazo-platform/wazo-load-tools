@@ -24,9 +24,13 @@
    "ring_seconds": 30,  
    "simultaneous_calls": 5,  
    "call_permission_password": null,  
-   "subscription_type": 0,  
+   "subscription_type": 1,
    "enabled": true,  
    "call_permissions": [],  
+   "auth": {
+      "username": "pcm+user__SEQUENCE__@wazo.io",
+      "password": "superpass"
+   },
    "fallbacks": {  
      "noanswer_destination": null,  
      "busy_destination": null,  
@@ -34,19 +38,28 @@
      "fail_destination": null  
    },  
    "groups": [],  
-   "incalls": [],  
-   "lines": [  
-     {  
-       "name": "__USERNAME__",  
-       "endpoint_sip": {  
-         "label": "__EXTENSION__",  
-         "name": "__EXTENSION__",  
-         "auth_section_options": [  
-           ["username", "__USERNAME__"],  
-           ["password", "__PASSWORD__"]  
+   "incalls": [
+    {
+      "extensions": [
+        {
+          "exten": "__INCALL_PREFIX____EXTENSION__",
+          "context": "__INCALL_CONTEXT__"
+        }
+      ]
+    }
+   ],
+   "lines": [
+     {
+       "name": "__EXTENSION__",
+       "endpoint_sip": {
+         "label": "__EXTENSION__",
+         "name": "__EXTENSION__",
+         "templates": [{"uuid": "__WEBRTC_UUID__"}],
+         "auth_section_options": [
+           ["username", "__EXTENSION__"],
+           ["password", "__EXTENSION__"]
          ]  
        },  
-       "templates": [{"uuid": "__WEBRTC_UUID__"}],
        "extensions": [  
          {  
            "exten": "__EXTENSION__",  
@@ -80,7 +93,11 @@
      }  
    },  
    "switchboards": [],  
-   "voicemail": null,  
+   "voicemail": {
+    "number": "__EXTENSION__",
+    "context": "__CONTEXT__",
+    "enabled": true
+   },
    "queues": [],  
    "func_key_template_id": null,  
    "call_pickup_target_users": []  
