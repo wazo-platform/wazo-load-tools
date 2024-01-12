@@ -7,5 +7,5 @@ COPY pilot.conf /etc/nginx/conf.d/pilot.conf
 COPY nginx.conf.generated /etc/nginx/nginx.conf
 COPY certs /etc/ssl/certs/
 
-CMD [ "nginx", "-s", "start" ]
+CMD [ "nginx", "-g", "'daemon off;'" ]
 
