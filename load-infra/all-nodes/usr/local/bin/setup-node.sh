@@ -34,3 +34,5 @@ sudo apt-get install -y  docker-ce \
 	docker-buildx-plugin \
 	docker-compose-plugin
 ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
+
+echo "source /etc/docker-funcs" >> /root/profile
