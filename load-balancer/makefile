@@ -2,12 +2,13 @@ PHONY: build run stop clean
 
 all: bump-version build clean
 
+
 DOCKER_FUNCTIONS ?= docker-manager
 LB_CONFIG_GEN_SCRIPT = gen-lb-config.sh
 # LAST_CONTAINER from 0 to 99
-LAST_CONTAINER ?= 0
+LAST_CONTAINER ?= 9
 # TRAFGEN_NODES from 1 to 10
-TRAFGEN_NODES ?= 10
+TRAFGEN_NODES ?= 1
 DOCKERFILE = Dockerfile
 IMAGE = trafgen-lb
 VERSION_FILE=version
@@ -58,32 +59,30 @@ bump-version-validation:
 	$(MAKE) control-version ACTION=inc
 	$(MAKE) show-version
 
-build: bump-version build-image mark-image
-TAG ?= $(shell cat $(VERSION_FILE))
+MAINTAINER ?= "dev@wazo.io"
 # IMAGE STATUS could be: dev|prod|test|donotuse|deprecated
 IMAGE_STATUS ?= dev
+API_DOCKERFILE_TEMPLATE ?= Dockerfile.tmpl
+API_DOCKERFILE ?= Dockerfile
+
+.PHONY: build-dockerfile
+
+build-dockerfile: $(API_DOCKERFILE_TEMPLATE)
+	sed -e 's/__MAINTAINER__/$(MAINTAINER)/g' \
+	    -e 's/__STATUS__/$(IMAGE_STATUS)/g' \
+	    -e 's/__CONTAINERS__/$(CONTAINERS)/g' \
+	    -e 's/__TRAFGEN_NODES__/$(TRAFGEN_NODES)/g' \
+	    -e 's/__CLUSTER_SIZE__/$(CLUSTER_SIZE)/g' \
+	    $(API_DOCKERFILE_TEMPLATE) > $(API_DOCKERFILE)
+
+build: build-dockerfile bump-version build-image mark-image
+
+TAG ?= $(shell cat $(VERSION_FILE))
+
 build-image: clean certs $(DOCKERFILE) $(LB_CONFIG_GEN_SCRIPT)
 	./$(LB_CONFIG_GEN_SCRIPT) $(LAST_CONTAINER) $(TRAFGEN_NODES)
 	docker build -t $(IMAGE)-$(CLUSTER_SIZE):$(TAG) \
-		--label cluster_size=$(CLUSTER_SIZE) \
-		--label containers_per_node=$(CONTAINERS) \
-		--label trafgen_nodes=$(TRAFGEN_NODES) \
-		--label maintainer="dev@wazo.io" \
-		--label image_status=$(IMAGE_STATUS) \
 		-f $(DOCKERFILE) .
-
-update-image-status-dev:
-	@source $(DOCKER_FUNCTIONS)
-	registry-update-image-labels $(IMAGE)-$(CLUSTER_SIZE) $(TAG) "image_status=dev"
-update-image-status-prod:
-	@source $(DOCKER_FUNCTIONS)
-	registry-update-image-labels $(IMAGE)-$(CLUSTER_SIZE) $(TAG) "image_status=prod"
-update-image-status-donotuse:
-	@source $(DOCKER_FUNCTIONS)
-	registry-update-image-labels $(IMAGE)-$(CLUSTER_SIZE) $(TAG) "image_status=donotuse"
-update-image-status-deprecated:
-	@source $(DOCKER_FUNCTIONS)
-	registry-update-image-labels $(IMAGE)-$(CLUSTER_SIZE) $(TAG) "image_status=deprecated"
 
 LAST_BUILD_FILE = .last_image_built
 mark-image:
