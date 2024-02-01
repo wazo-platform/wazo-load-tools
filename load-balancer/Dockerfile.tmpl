@@ -7,5 +7,10 @@ COPY pilot.conf /etc/nginx/conf.d/pilot.conf
 COPY nginx.conf.generated /etc/nginx/nginx.conf
 COPY certs /etc/ssl/certs/
 
-CMD [ "nginx", "-g", "'daemon off;'" ]
+LABEL maintainer=__MAINTAINER__
+LABEL image_status=__STATUS__
+LABEL trafgen_nodes=__TRAFGEN_NODES__
+LABEL containers_per_node=__CONTAINERS__
+LABEL cluster_size=__CLUSTER_SIZE__
 
+CMD [ "nginx", "-g", "daemon off;" ]

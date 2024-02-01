@@ -1,0 +1,10 @@
+[Unit]
+Description=Heplify Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/heplify -hs 172.16.43.106:9060
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
