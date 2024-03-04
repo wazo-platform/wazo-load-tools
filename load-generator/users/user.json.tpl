@@ -29,7 +29,7 @@
    "call_permissions": [],
    "auth": {
       "username": "pcm+user__SEQUENCE__@wazo.io",
-      "password": "superpass"
+      "password": "secret"
    },
    "fallbacks": {
      "noanswer_destination": null,

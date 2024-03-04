@@ -91,7 +91,7 @@ cat >>$LOAD_FILE <<EOF
       cmd: "sleep $TIMER && node /usr/src/app/index.js"
       env:
         LOGIN: $START_USER$EXT
-        PASSWORD: superpass
+        PASSWORD: secret
         SERVER: $SERVER
         SESSION_DURATION: $DURATION
         DEBUG: $DEBUG
