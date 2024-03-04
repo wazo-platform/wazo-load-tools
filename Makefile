@@ -27,7 +27,7 @@ tar-dns:
 	tar -rvf $(INFRA)/dns.tar opt && \
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/dns.tar etc && \
-	tar -rvf $(INFRA)/dns.tar usr 
+	tar -rvf $(INFRA)/dns.tar usr
 
 
 tar-prometheus:
@@ -36,7 +36,7 @@ tar-prometheus:
 	tar -rvf $(INFRA)/prometheus.tar etc && \
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/prometheus.tar etc && \
-	tar -rvf $(INFRA)/prometheus.tar usr 
+	tar -rvf $(INFRA)/prometheus.tar usr
 
 
 tar-registry:
@@ -45,7 +45,7 @@ tar-registry:
 	tar -rvf $(INFRA)/registry.tar etc && \
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/registry.tar etc && \
-	tar -rvf $(INFRA)/registry.tar usr 
+	tar -rvf $(INFRA)/registry.tar usr
 
 tar-controller:
 	cd $(INFRA)/controller && \
@@ -53,7 +53,7 @@ tar-controller:
 	tar -rvf $(INFRA)/controller.tar etc && \
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/controller.tar etc && \
-	tar -rvf $(INFRA)/controller.tar usr 
+	tar -rvf $(INFRA)/controller.tar usr
 
 tar-elk:
 	cd $(INFRA)/elk && \
@@ -61,12 +61,12 @@ tar-elk:
 	tar -rvf $(INFRA)/elk.tar etc && \
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/elk.tar etc && \
-	tar -rvf $(INFRA)/elk.tar usr 
+	tar -rvf $(INFRA)/elk.tar usr
 
 tar-basic:
 	cd $(INFRA)/all-nodes && \
 	tar -cvf $(INFRA)/basic.tar etc && \
-	tar -rvf $(INFRA)/basic.tar usr 
+	tar -rvf $(INFRA)/basic.tar usr
 
 SERVER_NAME ?=
 

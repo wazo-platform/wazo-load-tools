@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rabbitmq-plugins -n rabbit@localhost enable rabbitmq_management
-cat <<EOF >/etc/rabbitmq/rabbitmq.config 
+cat <<EOF >/etc/rabbitmq/rabbitmq.config
 [
     {rabbit, [
                     {disk_free_limit, 100000000},

@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 output_dir=/opt/wda/stats/$2
 if [ ! -d "$output_dir" ]; then
     mkdir $output_dir
@@ -15,7 +15,7 @@ do
   if [[ $line == *fetched* ]]; then
     key=$(echo "$line" | awk -F ' fetched ' '{print $1}'| sed 's/ /_/g')
     value=$(echo "$line" | awk -F ' fetched ' '{print $2}')
-    
+
     data["$key"]=$value
 
   elif [[ -n $ERROR ]]; then

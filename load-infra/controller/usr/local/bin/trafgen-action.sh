@@ -2,7 +2,7 @@
 
 run () {
     local node=$1
-    local action=$2 
+    local action=$2
     if [ "$action" == "reload" ];then
         ssh -f root@$node "sh -c 'nohup systemctl daemon-reload > /dev/null 2>&1 &'"
     else

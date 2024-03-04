@@ -2,7 +2,7 @@
 
 all: deploy-vm stack-install
 
-deploy-vm: cloud-init.yml vars.tf wazo.tf 
+deploy-vm: cloud-init.yml vars.tf wazo.tf
 	terraform init
 	terraform plan -out plan
 	terraform apply "plan"

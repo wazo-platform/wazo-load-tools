@@ -76,7 +76,7 @@ subject=CN = example.com
  => exporting to image                                                                                                                                                              0.1s
  => => exporting layers                                                                                                                                                             0.1s
  => => writing image sha256:aa4947b3d7eaf5687fe07f9aded712e34c507e664dfc56138a127035fcb7965d                                                                                        0.0s
- => => naming to docker.io/library/trafgen-lb-1:1.0.10    
+ => => naming to docker.io/library/trafgen-lb-1:1.0.10
 ```
 ``
 ### Full node cluster
@@ -103,15 +103,15 @@ subject=CN = example.com
  => exporting to image                                                                                                                                                                                                                                                                       0.1s
  => => exporting layers                                                                                                                                                                                                                                                                      0.0s
  => => writing image sha256:4c0e609ea590f8abae5e8ced5f9cda587369ece073607833023f0d591d5a8320                                                                                                                                                                                                 0.0s
- => => naming to docker.io/library/trafgen-lb-1000:1.0.11    
+ => => naming to docker.io/library/trafgen-lb-1000:1.0.11
 ```
 
 ## Running an image
 ```
-$ make run 
+$ make run
 cd878c200ea43fc7d2d0ea22c386f98c105a6fbfa315fd7a573fd3ef19b5623c
 ```
-or 
+or
 ```
 $ make run IMAGE_NAME=$(cat .last_image_built)
 

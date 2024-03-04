@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 ts=$(date +%s);
 TS=${1-$ts}
@@ -7,17 +7,17 @@ STATS_PATH=/opt/wda/stats/
 OUTPUT=$STATS_PATH/$TS.csv
 
 echo  "Start converting the log files into json"
-for x in $(seq 1 50); do 
-    /opt/wda/converter $x $TS; 
+for x in $(seq 1 50); do
+    /opt/wda/converter $x $TS;
 done
 
 
 echo  "Extract data per keys"
 KEYS=$(echo "User_info Activities Dird_sources Rooms Contacts_statuses App_access Contacts Switchboard_fetched error")
 for K in $KEYS; do
-    for x in $(seq 1 50); do 
-        export JSON=$(cat $STATS_PATH/$TS/$x.json) && export KEY=$K; 
-        if jq  'has("$KEY")' <<< $JSON; then 
+    for x in $(seq 1 50); do
+        export JSON=$(cat $STATS_PATH/$TS/$x.json) && export KEY=$K;
+        if jq  'has("$KEY")' <<< $JSON; then
             jq -r ."$KEY" $STATS_PATH/$TS/$x.json |grep -v null >>$COUNTS_PATH/$TS.$KEY.count;
         fi ;
     done

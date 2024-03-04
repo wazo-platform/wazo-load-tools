@@ -31,7 +31,7 @@ services:
       - 5601:5601
     networks:
       - elastic
-  
+
   logstash:
     image: docker.elastic.co/logstash/logstash:7.8.1
     container_name: logstash

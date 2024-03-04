@@ -113,9 +113,9 @@ commit: $(LAST_BUILD_FILE) $(VERSION_FILE)
 
 
 IMAGE_NAME ?= $(shell cat $(LAST_BUILD_FILE))
-run: 
+run:
 
-	docker run -d -p 9999:443 -p 9998:80 --rm  $(IMAGE_NAME) 
+	docker run -d -p 9999:443 -p 9998:80 --rm  $(IMAGE_NAME)
 
 stop:
 	-docker stop $(CONTAINER_NAME) >2&

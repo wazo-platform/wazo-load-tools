@@ -22,5 +22,5 @@ usergen10000: $(USERGEN_SCRIPT) $(USER_TEMPLATE)
 USERS_CSV ?= user-files/users.csv
 TEMPLATE ?= config.py.tpl
 CONFIG ?= config.generated.py
-confgen: $(USERS_CSV) $(TEMPLATE) 
+confgen: $(USERS_CSV) $(TEMPLATE)
 	./configen.sh $(USERS_CSV) $(TEMPLATE) $(CONFIG)

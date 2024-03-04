@@ -11,4 +11,4 @@ fi
 NODE=$1
 CONTAINER=$2
 
-container-action.sh $NODE $CONTAINER restart 
+container-action.sh $NODE $CONTAINER restart
