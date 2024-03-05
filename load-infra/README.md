@@ -35,7 +35,7 @@ The CA is an essential component because it will be used for validating the cert
 At the root of the wazo-scalability directory run the following command
 
 ```
-$ make create-ca 
+$ make create-ca
 ```
 
 ```
@@ -188,7 +188,7 @@ usr/local/bin/setup-node.sh
 
 the tarball is generated there:
 ```
-$ ls load-infra/docker-server.tar 
+$ ls load-infra/docker-server.tar
 load-infra/docker-server.tar
 ```
 ### 2.3 Configuring the node
@@ -287,5 +287,3 @@ load-infra/certs/clients/
 
 3 directories, 6 files
 ```
-
-

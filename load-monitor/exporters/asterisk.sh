@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat <<EOF >/etc/asterisk/prometheus.conf 
+cat <<EOF >/etc/asterisk/prometheus.conf
 [general]
 enabled = yes
 core_metrics_enabled = yes

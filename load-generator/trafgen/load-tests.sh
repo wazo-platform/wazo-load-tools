@@ -13,6 +13,6 @@ if [ "$CONFIG_LOAD" == "true" ]; then
     sed -i "s/192.168.32.241/$SOURCE_IP/"g /trafgen/xivo-load-tester/etc/conf.py
 fi
 
-# SCENARIO variable come from the trafgen.env file which is sourced by 
+# SCENARIO variable come from the trafgen.env file which is sourced by
 # the docker exec command.
 $COMMAND $BIN_DIR/scenarios/$SCENARIO

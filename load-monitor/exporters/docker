@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wget  -P /etc/systemd/system https://raw.githubusercontent.com/moby/moby/master/contrib/init/systemd/docker.service 
+wget  -P /etc/systemd/system https://raw.githubusercontent.com/moby/moby/master/contrib/init/systemd/docker.service
 wget  -P /etc/systemd/system https://raw.githubusercontent.com/moby/moby/master/contrib/init/systemd/docker.socket
 
 

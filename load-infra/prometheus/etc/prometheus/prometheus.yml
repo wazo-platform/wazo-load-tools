@@ -32,7 +32,7 @@ scrape_configs:
           ip: '172.16.43.10'
 
   - job_name: 'asterisk'
-    metrics_path: /api/asterisk/metrics 
+    metrics_path: /api/asterisk/metrics
     scheme: https
     tls_config:
       insecure_skip_verify: true
@@ -144,4 +144,3 @@ scrape_configs:
       - targets: ['quintana.wazo.community:443']
         labels:
           service: 'kamailio'
-

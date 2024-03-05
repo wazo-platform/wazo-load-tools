@@ -1,9 +1,9 @@
 FROM wazo-trafgen-sipp:0.0.1
 
-RUN apt-get update && apt-get install -y git python2 python-jinja2 apache2-utils  
+RUN apt-get update && apt-get install -y git python2 python-jinja2 apache2-utils
 
 RUN rm /usr/local/bin/python && \
-    ln -s /usr/bin/python2.7 /usr/local/bin/python 
+    ln -s /usr/bin/python2.7 /usr/local/bin/python
 
 WORKDIR /trafgen
 

@@ -20,4 +20,3 @@ wazo-500.load.wazo.io.               IN      A      172.16.43.10
 wazo-1000.load.wazo.io.        	     IN      A      172.16.43.95
 wazo-1000-extra.load.wazo.io.        IN      A      172.16.43.42
 wazo-5000.load.wazo.io.              IN      A      172.24.0.3
-

@@ -144,7 +144,7 @@ class MockCmd(Command):
 
         self.command =  f' echo docker exec -e SERVER={env["SERVER"]} -e LOGIN={env["LOGIN"]} -e PASSWORD={env["PASSWORD"]} -e SESSION_DURATION={env["SESSION_DURATION"]} -d {self.container} bash -c \'{cmd}\' > /dev/null 2>&1 &'
         self.host =  host
-        
+
 
     def connect(self):
         pass
@@ -177,13 +177,13 @@ def get_command(node, keyFile):
         return MockCmd(host, container, command, keyFile, env)
     if wda:
         return ExecWda(host, container, command, keyFile, env)
-    
+
     return ExecCmd(host, container, command, keyFile)
 
 
 async def process_node(node, ttl, compose, forever, channel, keyFile):
     """
-    Coroutine that connects, processes and disconnect from the remote host. Connection duration 
+    Coroutine that connects, processes and disconnect from the remote host. Connection duration
     is based on the TTL
     """
     if 'host' not in node:
@@ -201,7 +201,7 @@ async def process_node(node, ttl, compose, forever, channel, keyFile):
         return
 
     cmd = get_command(node, keyFile)
-    # Connection to the remote host 
+    # Connection to the remote host
     cmd.connect()
 
     if container == "caller":
@@ -216,7 +216,7 @@ async def process_node(node, ttl, compose, forever, channel, keyFile):
     # Await on the TTL
     await asyncio.sleep(ttl)
 
-    if not forever: 
+    if not forever:
         # restart the container to end the running tests
         cmd = DockerComposeRetart(host, container, compose, keyFile)
         cmd.connect()

@@ -11,7 +11,7 @@ from pydantic import BaseModel
 class Command(BaseModel):
     cmd: str
 
-    
+
 
 @app.get("/status")
 async def status():
@@ -33,7 +33,7 @@ async def shell(cmd: Command):
             status_code=500,
             detail=f'{result.stderr}',
         )
-    
+
 
 
 @app.exception_handler(422)

@@ -17,7 +17,7 @@ server {
 }
 EOF
 
-ln -s /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics 
+ln -s /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
 
 cp /etc/nginx/nginx.conf /opt/
 
@@ -108,7 +108,7 @@ ExecStartPre=-/usr/bin/docker stop %n
 ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull nginx/nginx-prometheus-exporter:0.10.0
 
-ExecStart=docker run --net=host nginx/nginx-prometheus-exporter:0.10.0 -nginx.scrape-uri=http://127.0.0.1:8080/status 
+ExecStart=docker run --net=host nginx/nginx-prometheus-exporter:0.10.0 -nginx.scrape-uri=http://127.0.0.1:8080/status
 
 
 [Install]

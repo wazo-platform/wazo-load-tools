@@ -63,7 +63,7 @@ for user in $USERS;do
         echo "        {'username': '$username', 'password': '$password', 'exten': '$exten'}," >> $CONFIG
     fi
 done
-        
+
 cat >>$CONFIG <<EOF
     ],
     expires = 3600,
