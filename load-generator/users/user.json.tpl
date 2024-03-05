@@ -50,7 +50,7 @@
    ],
    "lines": [
      {
-       "name": "__EXTENSION__",
+       "context": "__CONTEXT__",
        "endpoint_sip": {
          "label": "__EXTENSION__",
          "name": "__EXTENSION__",
@@ -60,13 +60,7 @@
            ["password", "__EXTENSION__"]
          ]
        },
-       "extensions": [
-         {
-           "exten": "__EXTENSION__",
-           "context": "__CONTEXT__"
-         }
-       ],
-       "context": "__CONTEXT__"
+       "extensions": [{"exten": "__EXTENSION__"}]
      }
    ],
    "forwards": {
