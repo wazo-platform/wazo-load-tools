@@ -1,16 +1,16 @@
 FROM nginx:1.25.2
 
 RUN apt-get update && apt-get install -y vim
+RUN mkdir /startup
 
-COPY cluster.conf /etc/nginx/conf.d/default.conf
-COPY pilot.conf /etc/nginx/conf.d/pilot.conf
-COPY nginx.conf.generated /etc/nginx/nginx.conf
+COPY cluster.conf.tpl /startup/cluster.conf.tpl
+COPY pilot.conf.tpl /startup/pilot.conf.tpl
+COPY docker-entrypoint.sh /startup/docker-entrypoint.sh
+COPY gen-lb-config.sh /startup/gen-lb-config.sh
+
 COPY certs /etc/ssl/certs/
 
 LABEL maintainer=__MAINTAINER__
 LABEL image_status=__STATUS__
-LABEL trafgen_nodes=__TRAFGEN_NODES__
-LABEL containers_per_node=__CONTAINERS__
-LABEL cluster_size=__CLUSTER_SIZE__
 
-CMD [ "nginx", "-g", "daemon off;" ]
+ENTRYPOINT [ "/startup/docker-entrypoint.sh" ]
