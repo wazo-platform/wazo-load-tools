@@ -12,7 +12,6 @@ tar-trafgen:
 	cd $(INFRA)/trafgen-node && \
 	tar -cvf  $(INFRA)/trafgen.tar usr && \
 	tar -rvf $(INFRA)/trafgen.tar etc && \
-	tar -rvf $(INFRA)/trafgen.tar opt && \
 	cd $(INFRA)/all-nodes && \
 	tar -rvf $(INFRA)/trafgen.tar etc && \
 	tar -rvf $(INFRA)/trafgen.tar usr && \
