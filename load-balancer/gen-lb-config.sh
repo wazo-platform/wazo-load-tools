@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/bash
 LAST_PORT=${1-0}
 TRAFGEN_NODES=${2-1}
 
-OUTPUT=nginx.conf.generated
+OUTPUT=/etc/nginx/nginx.conf
 cat >$OUTPUT<<'EOF'
 user  nginx;
 worker_processes  auto;

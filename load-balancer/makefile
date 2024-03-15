@@ -4,11 +4,6 @@ all: bump-version build clean
 
 
 DOCKER_FUNCTIONS ?= docker-manager
-LB_CONFIG_GEN_SCRIPT = gen-lb-config.sh
-# LAST_CONTAINER from 0 to 99
-LAST_CONTAINER ?= 9
-# TRAFGEN_NODES from 1 to 10
-TRAFGEN_NODES ?= 1
 DOCKERFILE = Dockerfile
 IMAGE = trafgen-lb
 VERSION_FILE=version
@@ -16,8 +11,6 @@ VERSION ?= $(shell cat $(VERSION_FILE))
 # SEMVER cat take the following values: patch|minor|major
 SEMVER ?= patch
 CONTAINER_NAME = $(IMAGE)
-CONTAINERS = $(shell echo $$(( $(LAST_CONTAINER) + 1 )))
-CLUSTER_SIZE = $(shell echo $$(( $(CONTAINERS) * $(TRAFGEN_NODES) )))
 IMAGES_BUILD_DIR = .images_built
 
 MAKEFLAGS += --silent
@@ -70,9 +63,6 @@ API_DOCKERFILE ?= Dockerfile
 build-dockerfile: $(API_DOCKERFILE_TEMPLATE)
 	sed -e 's/__MAINTAINER__/$(MAINTAINER)/g' \
 	    -e 's/__STATUS__/$(IMAGE_STATUS)/g' \
-	    -e 's/__CONTAINERS__/$(CONTAINERS)/g' \
-	    -e 's/__TRAFGEN_NODES__/$(TRAFGEN_NODES)/g' \
-	    -e 's/__CLUSTER_SIZE__/$(CLUSTER_SIZE)/g' \
 	    $(API_DOCKERFILE_TEMPLATE) > $(API_DOCKERFILE)
 
 build: build-dockerfile bump-version build-image mark-image
@@ -80,14 +70,13 @@ build: build-dockerfile bump-version build-image mark-image
 TAG ?= $(shell cat $(VERSION_FILE))
 
 build-image: clean certs $(DOCKERFILE) $(LB_CONFIG_GEN_SCRIPT)
-	./$(LB_CONFIG_GEN_SCRIPT) $(LAST_CONTAINER) $(TRAFGEN_NODES)
-	docker build -t $(IMAGE)-$(CLUSTER_SIZE):$(TAG) \
-		-f $(DOCKERFILE) .
+#	./$(LB_CONFIG_GEN_SCRIPT) $(LAST_CONTAINER) $(TRAFGEN_NODES)
+	docker build -t $(IMAGE):$(TAG) -f $(DOCKERFILE) .
 
 LAST_BUILD_FILE = .last_image_built
 mark-image:
-	echo $(TAG) >> $(IMAGES_BUILD_DIR)/$(IMAGE)-$(CLUSTER_SIZE)
-	echo $(IMAGE)-$(CLUSTER_SIZE):$(TAG) > $(LAST_BUILD_FILE)
+	echo $(TAG) >> $(IMAGES_BUILD_DIR)/$(IMAGE)
+	echo $(IMAGE):$(TAG) > $(LAST_BUILD_FILE)
 
 REGISTRY ?= registry.load.wazo.io
 PORT ?= 5000
