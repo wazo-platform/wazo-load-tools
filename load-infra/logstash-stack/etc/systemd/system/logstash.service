@@ -1,0 +1,11 @@
+[Unit]
+Description=Logstash
+Documentation=https://www.elastic.co/products/logstash
+After=network.target
+ConditionPathExists=/etc/logstash.conf
+
+[Service]
+ExecStart=/opt/logstash-8/logstash-8.11.1/bin/logstash  -f /etc/logstash.conf --config.reload.automatic
+
+[Install]
+WantedBy=multi-user.target

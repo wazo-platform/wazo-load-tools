@@ -1,0 +1,12 @@
+[Unit]
+Description=wlpd Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/local/bin/run-wlpd
+
+[Install]
+WantedBy=multi-user.target
