@@ -6,9 +6,9 @@ global:
   # external_labels:
   #  monitor: 'codelab-monitor'
 
-remote_write:
-  - url: "http://172.16.43.79:8428/api/v1/write"
-    write_relabel_configs:
+    #remote_write:
+    #- url: "http://172.16.43.106:8428/api/v1/write"
+    #write_relabel_configs:
 
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
@@ -17,61 +17,54 @@ scrape_configs:
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
     static_configs:
-      - targets: ['172.16.43.79:9090']
+      - targets: ['172.16.43.106:9090']
 
   - job_name: 'process_exporter'
     static_configs:
-      - targets: ['172.16.43.10:9256', '172.16.43.33:9256', '172.16.43.109:9256', '172.16.43.242:9256', '172.16.43.235:9256']
+      - targets: ['172.16.43.33:9256', '172.16.43.109:9256', '172.16.43.242:9256', '172.16.43.235:9256', '172.16.43.193:9257','172.16.43.141:9257','172.16.43.39:9257']
         labels:
-          ip: '172.16.43.10'
+          ip: '172.16.43.33'
 
   - job_name: 'node_exporter'
     static_configs:
-      - targets: ['172.16.43.10:9100', '172.16.43.33:9100', '172.16.43.109:9100', '172.16.43.242:9100', '172.16.43.235:9100']
+      - targets: ['172.16.43.33:9100', '172.16.43.109:9100', '172.16.43.242:9100', '172.16.43.235:9100', '172.16.43.193:9100', '172.16.43.141:9100', '172.16.43.34:9100', '172.16.43.48:9100','172.16.43.39:9100']
         labels:
-          ip: '172.16.43.10'
+          ip: '172.16.43.33'
 
   - job_name: 'asterisk'
-    metrics_path: /api/asterisk/metrics
+    metrics_path: /api/asterisk/metrics 
     scheme: https
     tls_config:
       insecure_skip_verify: true
     static_configs:
-      - targets: ['172.16.43.109:443', '172.16.43.242:443']
+      - targets: ['172.16.43.242:443', '172.16.43.193:443','172.16.43.141:443','172.16.43.39:443']
 
   - job_name: 'asterisk_exporter'
     static_configs:
-      - targets: ['172.16.43.10:5039', '172.16.43.33:5039']
+      - targets: ['172.16.43.33:5039','172.16.43.39:5039']
         labels:
 
   - job_name: 'rabbitmq_exporter'
     static_configs:
-      - targets: ['172.16.43.10:9419', '172.16.43.33:9419', '172.16.43.109:9419', '172.16.43.242:9419']
+      - targets: ['172.16.43.33:9419', '172.16.43.242:9419', '172.16.43.193:9419','172.16.43.141:9419','172.16.43.39:9419']
         labels:
-          ip: '172.16.43.10'
-
-  - job_name: 'nginx_status_exporter'
-    static_configs:
-      - targets: ['172.16.43.10:9123']
-        labels:
-          ip: '172.16.43.10'
-          instance: '172.16.43.10:9123'
+          ip: '172.16.43.33'
 
   - job_name: 'nginx_exporter'
     static_configs:
-      - targets: ['172.16.43.10:9113', '172,16.43.33:9113', '172.16.43.235:9113','172.16.43.109:9113','172.16.43.242:9113']
+      - targets: ['172,16.43.33:9113', '172.16.43.235:9113','172.16.43.242:9113','172.16.43.141:9113','172.16.43.193:9113','172.16.43.39:9113']
         labels:
-          ip: '172.16.43.10'
+          ip: '172.16.43.33'
 
   - job_name: "nginx-fluentd"
     static_configs:
-      - targets: ['172.16.43.10:24231', '172,16.43.33:24231', '172.16.43.235:24231','172.16.43.109:24231','172.16.43.242:24231']
+      - targets: ['172,16.43.33:24231', '172.16.43.235:24231','172.16.43.242:24231','172.16.43.141:24231','172.16.43.193:24231','172.16.43.39:24231']
 
   - job_name: 'postgres_exporter'
     static_configs:
-      - targets: ['172.16.43.10:9187', '172.16.43.33:9187', '172.16.43.48:9187']
+      - targets: ['172.16.43.33:9187', '172.16.43.48:9187',  '172.16.43.141:9187','172.16.43.193:9187', '172.16.43.48:9187','172.16.43.39:9187']
         labels:
-          ip: '172.16.43.10'
+          ip: '172.16.43.33'
 
   - job_name: 'dird_exporter'
     metrics_path: /api/dird/0.1/metrics
@@ -79,7 +72,7 @@ scrape_configs:
     tls_config:
       insecure_skip_verify: true
     static_configs:
-      - targets: ['172.16.43.10:443', '172.16.43.109:443', '172.16.43.33:443', '172.16.43.242:443']
+      - targets: ['172.16.43.33:443', '172.16.43.242:443', '172.16.43.141:443', '172.16.43.193:443','172.16.43.39:443']
         labels:
           framework: 'flask'
           service: 'dird'
@@ -90,7 +83,7 @@ scrape_configs:
     tls_config:
       insecure_skip_verify: true
     static_configs:
-      - targets: ['172.16.43.10:443', '172.16.43.109:443', '172.16.43.33:443', '172.16.43.242:443']
+      - targets: ['172.16.43.33:443', '172.16.43.242:443', '172.16.43.193:443', '172.16.43.141:443','172.16.43.39:443']
         labels:
           framework: 'flask'
           service: 'calld'
@@ -101,7 +94,7 @@ scrape_configs:
     tls_config:
       insecure_skip_verify: true
     static_configs:
-      - targets: ['172.16.43.10:443', '172.16.43.109:443', '172.16.43.33:443', '172.16.43.242:443']
+      - targets: ['172.16.43.109:443', '172.16.43.33:443', '172.16.43.242:443', '172.16.43.141:443', '172.16.43.193:443','172.16.43.39:443']
         labels:
           framework: 'flask'
           service: 'auth'
@@ -112,7 +105,7 @@ scrape_configs:
     tls_config:
       insecure_skip_verify: true
     static_configs:
-      - targets: ['172.16.43.10:443', '172.16.43.109:443', '172.16.43.33:443', '172.16.43.242:443']
+      - targets: ['172.16.43.33:443', '172.16.43.242:443', '172.16.43.141:443', '172.16.43.193:443','172.16.43.39:443']
         labels:
           framework: 'flask'
           service: 'chatd'
@@ -123,7 +116,7 @@ scrape_configs:
     tls_config:
       insecure_skip_verify: true
     static_configs:
-      - targets: ['172.16.43.10:443', '172.16.43.109:443', '172.16.43.33:443', '172.16.43.242:443']
+      - targets: ['172.16.43.33:443', '172.16.43.242:443', '172.16.43.193:443', '172.16.43.141:443','172.16.43.39:443']
         labels:
           framework: 'fastapi'
           service: 'sysconfd'
@@ -144,3 +137,7 @@ scrape_configs:
       - targets: ['quintana.wazo.community:443']
         labels:
           service: 'kamailio'
+
+  - job_name: redis_exporter
+    static_configs:
+    - targets: ['172.16.43.193:9121', '172.16.43.141:9121']

@@ -1,12 +1,13 @@
 [Unit]
-Description=prometheus stack
+Description=Start Prometheus stack
 After=docker.service
 Requires=docker.service
 
 [Service]
-TimeoutStartSec=0
-
-ExecStart=start-prometheus.sh
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/docker-compose -f /etc/prometheus/docker-compose.yml up -d
+ExecStop=/usr/local/bin/docker-compose -f /etc/prometheus/docker-compose.yml down
 
 [Install]
 WantedBy=multi-user.target
