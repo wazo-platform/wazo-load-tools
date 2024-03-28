@@ -1,0 +1,6 @@
+# this file is used to configure the trafgen load-balancer
+export TRAFGEN_IMAGE=trafgen-lb:2.0.3
+export CONNECT_TIMEOUT=60
+export READ_TIMEOUT=60
+export TRAFGEN_NODES=10
+export LAST_CONTAINER=99

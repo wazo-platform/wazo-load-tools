@@ -1,0 +1,22 @@
+#!/bin/bash -x
+
+if [ -z $1 ]; then 
+	echo "missing image to deploy"
+	echo "usage: deploy-fleet IMAGE_NAME [DOCKERCOMPOSE_FILE]"
+	echo "example: deploy-fleet wlapi:0.0.10"
+	echo "example: deploy-fleet wlapi:0.0.10 /opt/dockercompose.yml"
+else
+	IMAGE=$1
+fi
+
+if [ -z $2 ];then
+	DOCKERCOMPOSE=/opt/docker-compose.yml
+else
+	DOCKERCOMPOSE=$2
+fi
+
+DEPLOY_NODE=$(which deploy-node)
+for x in $(seq 1 10);do 
+	nohup $DEPLOY_NODE $x $IMAGE $DOCKERCOMPOSE & 
+done
+

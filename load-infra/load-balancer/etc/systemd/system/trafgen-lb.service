@@ -1,0 +1,12 @@
+[Unit]
+Description=Trafgen Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/local/bin/run-trafgen
+
+[Install]
+WantedBy=multi-user.target

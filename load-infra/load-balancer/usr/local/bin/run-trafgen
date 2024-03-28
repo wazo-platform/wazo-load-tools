@@ -1,0 +1,15 @@
+#!/usr/bin/bash -x
+
+source /etc/config-lb
+
+docker-pull.sh $TRAFGEN_IMAGE
+docker stop $CONTAINER_NAME  2>/dev/null
+docker rm $CONTAINER_NAME  2>/dev/null
+
+docker run -d -p 443:443 -p 9999:80 --rm \
+	--name $CONTAINER_NAME \
+	--env CONNECT_TIMEOUT=$CONNECT_TIMEOUT \
+	--env READ_TIMEOUT=$READ_TIMEOUT \
+	--env TRAFGEN_NODES=$TRAFGEN_NODES \
+	--env LAST_CONTAINER=$LAST_CONTAINER \
+	$TRAFGEN_IMAGE
