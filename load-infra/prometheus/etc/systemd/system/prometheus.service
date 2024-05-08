@@ -6,8 +6,8 @@ Requires=docker.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/bin/docker-compose -f /etc/prometheus/docker-compose.yml up -d
-ExecStop=/usr/local/bin/docker-compose -f /etc/prometheus/docker-compose.yml down
+ExecStart=/usr/bin/docker compose -f /etc/prometheus/docker-compose.yml up -d
+ExecStop=/usr/bin/docker compose -f /etc/prometheus/docker-compose.yml down
 
 [Install]
 WantedBy=multi-user.target

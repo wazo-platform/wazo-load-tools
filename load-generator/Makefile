@@ -31,10 +31,10 @@ prereqs:
 	-mkdir -p trafgen/logs/callee
 
 run: prereqs $(DOCKERCOMPOSE_FILE)
-	docker-compose -f $(DOCKERCOMPOSE_FILE) up &
+	docker compose -f $(DOCKERCOMPOSE_FILE) up &
 
 halt: $(DOCKERCOMPOSE_FILE)
-	docker-compose -f $(DOCKERCOMPOSE_FILE) down
+	docker compose -f $(DOCKERCOMPOSE_FILE) down
 
 load_test_caller: $(SCRIPT)
 	$(SCRIPT) $(CALLER_CONTAINER) $(CALLER_SCENARIO)
