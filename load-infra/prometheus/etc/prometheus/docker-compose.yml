@@ -1,11 +1,9 @@
-version: '3'
-
 volumes:
   grafana-data:
     driver: local
   prometheus-data:
     driver: local
-  clickhouse_data: {} 
+  clickhouse_data: {}
 
 services:
   grafana:
