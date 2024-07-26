@@ -1,0 +1,2 @@
+https://github.com/wazo-platform/wazo-auth-client/archive/master.zip
+https://github.com/wazo-platform/wazo-confd-client/archive/master.zip
