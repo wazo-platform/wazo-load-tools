@@ -1,7 +1,7 @@
 {
    "firstname": "User",
    "lastname": "__SEQUENCE__",
-   "email": "user__SEQUENCE__@wazo.io",
+   "email": "user__SEQUENCE__@__TENANT_SLUG__.wazo.io",
    "timezone": null,
    "language": null,
    "description": null,
@@ -28,7 +28,7 @@
    "enabled": true,
    "call_permissions": [],
    "auth": {
-      "username": "pcm+user__SEQUENCE__@wazo.io",
+      "username": "pcm+user__SEQUENCE__@__TENANT_SLUG__.wazo.io",
       "password": "secret"
    },
    "fallbacks": {
@@ -53,12 +53,7 @@
        "context": "__CONTEXT__",
        "endpoint_sip": {
          "label": "__EXTENSION__",
-         "name": "__EXTENSION__",
-         "templates": [{"uuid": "__WEBRTC_UUID__"}],
-         "auth_section_options": [
-           ["username", "__EXTENSION__"],
-           ["password", "__EXTENSION__"]
-         ]
+         "templates": [{"uuid": "__WEBRTC_UUID__"}]
        },
        "extensions": [{"exten": "__EXTENSION__"}]
      }
