@@ -1,0 +1,8 @@
+wazo-stack:
+  - description: My test stack
+    hostname: 127.0.0.1
+  - description: Another test stack
+    hostname: 192.168.0.1
+wazo-edge:
+  - description: My wazo-edge
+    hostname: 192.168.0.2
