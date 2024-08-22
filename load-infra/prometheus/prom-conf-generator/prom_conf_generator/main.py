@@ -23,17 +23,26 @@ from jinja2 import Environment, FileSystemLoader
     default='prometheus.yml.jinja2',
     help='Name of the template to render',
 )
-def main(config, template_dir, template_name):
+@click.option(
+    '--output',
+    '-o',
+    default='/etc/prometheus/prometheus.yml',
+    help='Location of the generated file',
+)
+def main(config, template_dir, template_name, output):
     with open(config) as f:
         conf = yaml.safe_load(f)
     environment = Environment(
         loader=FileSystemLoader([template_dir]),
     )
     template = environment.get_template(template_name)
-    print(template.render(
-        stacks=conf['wazo-stack'],
-        edges=conf['wazo-edge'],
-    ))
+    with open(output, 'w') as f:
+        f.write(
+            template.render(
+                stacks=conf['wazo-stack'],
+                edges=conf['wazo-edge'],
+            )
+        )
 
 
 if __name__ == '__main__':
