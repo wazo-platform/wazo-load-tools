@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 @click.option(
     '--config',
     help='Configuration file for the config generator',
-    required=True,
+    default='/etc/prometheus/templates/prometheus-template-config.yml',
 )
 @click.option(
     '--template-dir',
