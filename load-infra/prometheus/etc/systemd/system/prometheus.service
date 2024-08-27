@@ -6,6 +6,7 @@ Requires=docker.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
+ExecStartPre=/usr/local/bin/prom-conf-generator
 ExecStart=/usr/bin/docker compose -f /etc/prometheus/docker-compose.yml up -d
 ExecStop=/usr/bin/docker compose -f /etc/prometheus/docker-compose.yml down
 
