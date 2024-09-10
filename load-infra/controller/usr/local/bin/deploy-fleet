@@ -3,8 +3,8 @@
 if [ -z $1 ]; then 
 	echo "missing image to deploy"
 	echo "usage: deploy-fleet IMAGE_NAME [DOCKERCOMPOSE_FILE]"
-	echo "example: deploy-fleet wazocommunicationinc/wlapi:0.0.10"
-	echo "example: deploy-fleet wazocommunicationinc/wlapi:0.0.10 /opt/dockercompose.yml"
+	echo "example: deploy-fleet wazoplatform/wlapi:0.0.10"
+	echo "example: deploy-fleet wazoplatform/wlapi:0.0.10 /opt/dockercompose.yml"
 else
 	IMAGE=$1
 fi
