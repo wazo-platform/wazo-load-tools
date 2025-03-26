@@ -12,7 +12,7 @@
 
   ```shell
   pip install -r initiator/requirements.txt
-  pip install -r generator/requirements.txt
+  pip install -r generator/users/requirements.txt
   cat initiator/setup-vm.sh | ssh <wazo-host>
   initiator/setup-wazo.py \
     --host <wazo-host> \
