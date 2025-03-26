@@ -55,6 +55,11 @@ def parse_cli_args(argv):
         '--output',
         help='Output file to write config used to generate users. Default: stdout',
     )
+    parser.add_argument(
+        '-b',
+        '--branch',
+        help='Git branch to use for the plugin installation'
+    )
     parsed_args = parser.parse_args(argv)
 
     result = {}
@@ -64,6 +69,8 @@ def parse_cli_args(argv):
         result['password'] = parsed_args.password
     if parsed_args.output:
         result['output'] = parsed_args.output
+    if parsed_args.branch:
+        result['git_branch'] = parsed_args.branch
 
     return result
 
@@ -75,6 +82,8 @@ def load_config(args):
         config['plugind']['host'] = config['host']
     if config.get('password') and not config['auth']['password']:
         config['auth']['password'] = config['password']
+    if config.get('git_branch'):
+        config['exporter_plugin']['branch'] = config['git_branch']
 
     if not config['auth'].get('password'):
         raise Exception('Missing password')
