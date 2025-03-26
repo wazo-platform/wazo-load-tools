@@ -117,6 +117,7 @@ def main():
         ('nginx', '/api/nginx/metrics'),
         ('rabbitmq', '/api/rabbitmq/metrics'),
         ('postgresql', '/api/postgresql/metrics'),
+        ('node', '/api/node/metrics'),
     ]
 
     for name, suffix in metrics:
