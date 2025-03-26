@@ -116,11 +116,13 @@ def main():
         ('wazo-dird', '/api/dird/0.1/metrics'),
         ('nginx', '/api/nginx/metrics'),
         ('rabbitmq', '/api/rabbitmq/metrics'),
+        ('postgresql', '/api/postgresql/metrics'),
     ]
 
     for name, suffix in metrics:
         for _ in range(60):
-            response = requests.get(f'https://{config["host"]}{suffix}', verify=False)
+            url = f'https://{config["host"]}{suffix}'
+            response = requests.get(url, verify=False, allow_redirects=False)
             if response.status_code == 200:
                 break
             time.sleep(1)
