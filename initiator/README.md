@@ -1,5 +1,13 @@
 # Initiator
 
+## setup-vm
+
+Install tools and enable debug on wazo services
+
+```shell
+cat setup-vm.sh | ssh <wazo-ip>
+```
+
 ## setup-wazo
 
 Initialize wazo server by creating default resources
