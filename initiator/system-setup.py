@@ -109,15 +109,24 @@ def main():
     )
 
     metrics = [
+        ('agentd', '/api/agentd/1.0/metrics'),
+        ('amid', '/api/amid/1.0/metrics'),
+        ('asterisk', '/api/asterisk/metrics'),
         ('auth', '/api/auth/0.1/metrics'),
+        ('call-logd', '/api/call-logd/1.0/metrics'),
         ('calld', '/api/calld/1.0/metrics'),
-        ('wazo-chatd', '/api/chatd/1.0/metrics'),
-        ('wazo-sysconfd', '/api/sysconfd/metrics'),
-        ('wazo-dird', '/api/dird/0.1/metrics'),
+        ('chatd', '/api/chatd/1.0/metrics'),
+        ('confd', '/api/confd/1.1/metrics'),
+        ('dird', '/api/dird/0.1/metrics'),
+        ('dird', '/api/dird/0.1/metrics'),
         ('nginx', '/api/nginx/metrics'),
-        ('rabbitmq', '/api/rabbitmq/metrics'),
-        ('postgresql', '/api/postgresql/metrics'),
         ('node', '/api/node/metrics'),
+        ('phoned', ':9499/0.1/metrics'),
+        ('postgresql', '/api/postgresql/metrics'),
+        ('rabbitmq', '/api/rabbitmq/metrics'),
+        ('sysconfd', '/api/sysconfd/metrics'),
+        ('sysconfd', '/api/sysconfd/metrics'),
+        ('webhookd', '/api/webhookd/1.0/metrics'),
     ]
 
     for name, suffix in metrics:
