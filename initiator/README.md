@@ -1,11 +1,11 @@
 # Initiator
 
-## setup-vm
+## setup-system
 
 Install tools and enable debug on wazo services
 
 ```shell
-cat setup-vm.sh | ssh <wazo-ip>
+cat setup-system.sh | ssh <wazo-ip>
 ```
 
 ## setup-wazo
