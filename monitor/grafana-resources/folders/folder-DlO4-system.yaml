@@ -1,0 +1,8 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: DashboardFolder
+metadata:
+    name: DlO4-system
+spec:
+    orgId: 1
+    title: System
+    uid: DlO4-system

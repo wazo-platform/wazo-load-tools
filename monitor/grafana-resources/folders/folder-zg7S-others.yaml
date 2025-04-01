@@ -1,0 +1,8 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: DashboardFolder
+metadata:
+    name: zg7S-others
+spec:
+    orgId: 1
+    title: Others
+    uid: zg7S-others

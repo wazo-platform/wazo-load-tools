@@ -1,0 +1,1596 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: Dashboard
+metadata:
+    folder: xbE4-voip
+    name: jU3i-opensips
+spec:
+    annotations:
+        list:
+            - builtIn: 1
+              datasource:
+                type: datasource
+                uid: grafana
+              enable: true
+              hide: true
+              iconColor: rgba(0, 211, 255, 1)
+              name: Annotations & Alerts
+              type: dashboard
+    editable: true
+    fiscalYearStartMonth: 0
+    graphTooltip: 0
+    links: []
+    panels:
+        - collapsed: false
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 0
+          id: 19
+          panels: []
+          repeat: process
+          title: OpenSIPS meta metrics - $process
+          type: row
+        - datasource:
+            uid: $datasource
+          description: Did the OpenSIPS Management Interface respond to our queries?
+          fieldConfig:
+            defaults:
+                mappings:
+                    - options:
+                        "0":
+                            text: DOWN
+                      type: value
+                    - options:
+                        "1":
+                            text: UP
+                      type: value
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#d44a3a'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 0
+                        - color: '#299c46'
+                          value: 1
+                unit: none
+            overrides: []
+          gridPos:
+            h: 3
+            w: 2
+            x: 0
+            "y": 1
+          id: 4
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                uid: $datasource
+              expr: opensips_up{process=~"$process", instance=~"$node"}
+              format: time_series
+              instant: true
+              intervalFactor: 1
+              refId: A
+          title: OpenSIPS status
+          type: stat
+        - datasource:
+            uid: $datasource
+          description: Is the scrape successful?
+          fieldConfig:
+            defaults:
+                mappings:
+                    - options:
+                        "0":
+                            text: DOWN
+                      type: value
+                    - options:
+                        "1":
+                            text: UP
+                      type: value
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#d44a3a'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 0
+                        - color: '#299c46'
+                          value: 1
+                unit: none
+            overrides: []
+          gridPos:
+            h: 3
+            w: 2
+            x: 2
+            "y": 1
+          id: 9
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                uid: $datasource
+              expr: up{job="opensips", instance=~"$node", process="$process"}
+              format: time_series
+              instant: true
+              intervalFactor: 1
+              refId: A
+          title: Scrape status
+          type: stat
+        - datasource:
+            uid: $datasource
+          description: How much CPU does the OpenSIPS exporter use?
+          fieldConfig:
+            defaults:
+                decimals: 1
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                max: 100
+                min: 0
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#299c46'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 5
+                        - color: '#d44a3a'
+                          value: 10
+                unit: percent
+            overrides: []
+          gridPos:
+            h: 3
+            w: 4
+            x: 4
+            "y": 1
+          id: 11
+          maxDataPoints: 100
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                uid: $datasource
+              expr: (sum(rate(process_cpu_seconds_total{instance=~"$node",job="opensips", process=~"$process"}[$interval])) by () or sum(irate(process_cpu_seconds_total{instance=~"$node",job="opensips", process=~"$process"}[5m])) by ()) / count(node_cpu{mode="user", instance=~"$node"})*100
+              format: time_series
+              instant: true
+              interval: $interval
+              intervalFactor: 1
+              refId: A
+          title: CPU Usage exporter
+          type: stat
+        - datasource:
+            uid: $datasource
+          description: How much memory does the OpenSIPS exporter use?
+          fieldConfig:
+            defaults:
+                decimals: 0
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#299c46'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 5e+07
+                        - color: '#d44a3a'
+                          value: 1e+08
+                unit: bytes
+            overrides: []
+          gridPos:
+            h: 3
+            w: 4
+            x: 8
+            "y": 1
+          id: 13
+          maxDataPoints: 100
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                uid: $datasource
+              expr: process_resident_memory_bytes{instance=~"$node",job="opensips", process=~"$process"}
+              format: time_series
+              instant: true
+              intervalFactor: 1
+              refId: A
+          title: Memory Usage exporter
+          type: stat
+        - datasource:
+            uid: $datasource
+          description: How long has the OpenSIPS exporter been up and running?
+          fieldConfig:
+            defaults:
+                decimals: 1
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#d44a3a'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 300
+                        - color: '#299c46'
+                          value: 3600
+                unit: dtdurations
+            overrides: []
+          gridPos:
+            h: 3
+            w: 4
+            x: 12
+            "y": 1
+          id: 17
+          maxDataPoints: 100
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                uid: $datasource
+              expr: time() - process_start_time_seconds{instance=~"$node",job="opensips", process=~"$process"}
+              format: time_series
+              instant: true
+              intervalFactor: 1
+              refId: A
+          title: Exporter Uptime
+          type: stat
+        - datasource:
+            uid: $datasource
+          description: How long has the OpenSIPS process been running?
+          fieldConfig:
+            defaults:
+                decimals: 1
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#d44a3a'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 300
+                        - color: '#299c46'
+                          value: 1500
+                unit: dtdurations
+            overrides: []
+          gridPos:
+            h: 3
+            w: 4
+            x: 16
+            "y": 1
+          id: 117
+          maxDataPoints: 100
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                uid: $datasource
+              expr: opensips_core_uptime_seconds{instance=~"$node", process=~"$process"}
+              format: time_series
+              instant: true
+              intervalFactor: 1
+              refId: A
+          title: OpenSIPS uptime
+          type: stat
+        - datasource:
+            uid: $datasource
+          description: How many File Descriptors is the OpenSIPS exporter currently using?
+          fieldConfig:
+            defaults:
+                decimals: 0
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#299c46'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 512
+                        - color: '#d44a3a'
+                          value: 800
+                unit: short
+            overrides: []
+          gridPos:
+            h: 3
+            w: 4
+            x: 20
+            "y": 1
+          id: 15
+          maxDataPoints: 100
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                uid: $datasource
+              expr: process_open_fds{instance=~"$node",job="opensips", process=~"$process"}
+              format: time_series
+              instant: true
+              interval: $interval
+              intervalFactor: 1
+              refId: A
+          title: File Descriptors Used exporter
+          type: stat
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 4
+          id: 119
+          panels:
+            - datasource:
+                uid: $datasource
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 5
+              id: 155
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode="system",instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  groupBy:
+                    - params:
+                        - $__interval
+                      type: time
+                    - params:
+                        - "null"
+                      type: fill
+                  interval: 10s
+                  intervalFactor: 2
+                  legendFormat: System - Processes executing in kernel mode
+                  orderByTime: ASC
+                  policy: default
+                  refId: A
+                  resultFormat: time_series
+                  select:
+                    - - params:
+                            - value
+                        type: field
+                      - params: []
+                        type: mean
+                  tags: []
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode='user',instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  interval: ""
+                  intervalFactor: 2
+                  legendFormat: User - Normal processes executing in user mode
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode='nice',instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  interval: ""
+                  intervalFactor: 2
+                  legendFormat: Nice - Niced processes executing in user mode
+                  refId: C
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode='idle',instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  intervalFactor: 2
+                  legendFormat: Idle - Waiting for something to happen
+                  refId: D
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode='iowait',instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  interval: ""
+                  intervalFactor: 2
+                  legendFormat: Iowait - Waiting for I/O to complete
+                  refId: E
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode='irq',instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  interval: ""
+                  intervalFactor: 2
+                  legendFormat: Irq - Servicing interrupts
+                  refId: F
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode='softirq',instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  intervalFactor: 2
+                  legendFormat: Softirq - Servicing softirqs
+                  refId: G
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode='steal',instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  intervalFactor: 2
+                  legendFormat: Steal - Time spent in other operating systems when running in a virtualized environment
+                  refId: H
+                - datasource:
+                    uid: $datasource
+                  expr: sum by (mode)(irate(node_cpu{mode='guest',instance=~"$node",job=~"node"}[5m])) * 100
+                  format: time_series
+                  intervalFactor: 2
+                  legendFormat: Guest - Time spent running a virtual CPU for a guest operating system
+                  refId: I
+              title: CPU
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: Percentage of UDP/TCP children that are awake and processing SIP messages.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 5
+              id: 121
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_load{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: '{{protocol}} children processing on {{ip}}:{{port}}  - {{process}}@{{instance}}'
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_tcp_load{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: TCP children processing  - {{process}}@{{instance}}
+                  refId: B
+              title: Percentage of children processing messages
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: The realtime load per process ID.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 14
+              id: 252
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_process{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Current load process {{exported_process}} for {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_10m{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: 10m load process {{exported_process}} for {{process}}@{{instance}}
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_1m{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: 1m load process {{exported_process}} for {{process}}@{{instance}}
+                  refId: C
+              title: Load per OpenSIPS process (current, 1m, 10m)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: The realtime load of entire OpenSIPS - this counts all the core processes of OpenSIPS; the additional processes requested by modules are not counted in this load.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 14
+              id: 254
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_core{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Core load for {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_core_1m{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Core load 1m for {{process}}@{{instance}}
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_core_10m{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Core load 10m for {{process}}@{{instance}}
+                  refId: C
+              title: OpenSIPS core process load
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: The realtime load of entire OpenSIPS, counting both core and module processes.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 23
+              id: 256
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_all{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: All load for for {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_all_1m{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: All load 1m for for {{process}}@{{instance}}
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_load_all_10m{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: All load 1m for {{process}}@{{instance}}
+                  refId: C
+              title: Load of all processes
+              type: timeseries
+          title: OpenSIPS load
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 5
+          id: 29
+          panels:
+            - datasource:
+                uid: $datasource
+              description: What percentage of private memory is still free for a particular PID to use?
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 6
+              id: 23
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: (avg_over_time(opensips_pkmem_free_size{instance=~"$node", process=~"$process"}[$interval]) / avg_over_time(opensips_pkmem_total_size{instance=~"$node", process=~"$process"}[$interval])) * 100
+                  format: time_series
+                  instant: false
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: PID {{pid}} - {{process}}@{{instance}}
+                  refId: A
+              title: '% Memory Free (private memory) - $interval interval'
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: What percentage of shared memory is still free to use?
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 6
+              id: 25
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: (avg_over_time(opensips_shmem_free_size{instance=~"$node", process=~"$process"}[$interval]) / avg_over_time(opensips_shmem_total_size{instance=~"$node", process=~"$process"}[$interval])) * 100
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: '{{process}}@{{instance}}'
+                  refId: A
+              title: '% Memory Free (shared memory) - $interval interval'
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: Breakdown of memory usage by PID.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 15
+              id: 27
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_pkmem_real_used_size{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: PID {{pid}} - {{process}}@{{instance}}
+                  refId: A
+              title: Memory Usage by PID (private memory)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: How much shared memory does the OpenSIPS process use?
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 15
+              id: 31
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_shmem_real_used_size{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  interval: ""
+                  intervalFactor: 1
+                  legendFormat: '{{process}}@{{instance}}'
+                  refId: A
+              title: Memory Usage (shared memory)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 24
+              id: 250
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: max(opensips_pkmem_fragments{instance=~"$node", process=~"$process"}) without (pid)
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: ' {{process}}@{{instance}}'
+                  refId: B
+              title: Private memory fragments
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 24
+              id: 249
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_shmem_fragments{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: '{{process}}@{{instance}}'
+                  refId: A
+              title: Shared Memory fragments
+              type: timeseries
+          title: OpenSIPS memory usage
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 6
+          id: 21
+          panels:
+            - datasource:
+                uid: $datasource
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 10
+              id: 33
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_sl_replies{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: '{{type}} reply - {{process}}@{{instance}}'
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_sl_sent_err_replies_total{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Sent error replies - {{process}}@{{instance}}
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_sl_sent_replies_total{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Total sent replies - {{process}}@{{instance}}
+                  refId: C
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_sl_failures{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Reply failures - {{process}}@{{instance}}
+                  refId: D
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_sl_xxx_replies{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: XXX Replies - {{process}}@{{instance}}
+                  refId: E
+              title: Rate of replies ($interval)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 10
+              id: 7
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_core_requests_total{process=~"$process", instance=~"$node"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Total request received - {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_core_requests{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: '{{kind}} request - {{process}}@{{instance}}'
+                  refId: B
+              title: Rate of received requests by OpenSIPS ($interval)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 19
+              id: 2
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_core_replies_total{process=~"$process", instance=~"$node"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Total replies received - {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_core_replies{process=~"$process", instance=~"$node"}[$interval])
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: '{{kind}} replies received - {{process}}@{{instance}}'
+                  refId: B
+              title: Rate of received replies by OpenSIPS ($interval)
+              type: timeseries
+          title: OpenSIPS replies/requests
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 7
+          id: 195
+          panels:
+            - datasource:
+                uid: $datasource
+              description: Number of bytes waiting to be consumed on an interface that OpenSIPS is listening on.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 1
+              id: 229
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_net_waiting{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Bytes waiting ({{protocol}}) - {{process}}@{{instance}}
+                  refId: A
+              title: Bytes waiting for consumption
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 1
+              id: 231
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(node_network_receive_bytes{instance=~"$node",job=~"node"}[5m])
+                  format: time_series
+                  intervalFactor: 2
+                  legendFormat: '{{device}} - Receive'
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: rate(node_network_transmit_bytes{instance=~"$node",job=~"node"}[5m])
+                  format: time_series
+                  intervalFactor: 2
+                  legendFormat: '{{device}} - Transmit'
+                  refId: B
+              title: Network Traffic
+              type: timeseries
+          title: OpenSIPS netstats
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 8
+          id: 157
+          panels:
+            - datasource:
+                uid: $datasource
+              description: Rate of dialogs and what the status of the dialog was.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 1
+              id: 159
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_dialog_dialogs{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Dialog {{status}} - {{process}}@{{instance}}
+                  refId: A
+              title: Dialog rate per status ($interval)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: The number of dialog events received from other OpenSIPS instances.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 1
+              id: 161
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_dialog_received{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Dialog received - {{event}} - {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_dialog_sent{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Dialog sent - {{event}} - {{process}}@{{instance}}
+                  refId: B
+              title: Dialogs sent/receive rate from other OpenSIPS instances
+              type: timeseries
+          title: OpenSIPS dialogs
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 9
+          id: 35
+          panels:
+            - datasource:
+                uid: $datasource
+              description: How many transaction replies per second were received? And what was their response type? (2xx, 3xx, etc.)
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 5
+              id: 37
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_tm_transactions_total{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: '{{type}} transaction - {{process}}@{{instance}}'
+                  refId: A
+              title: Transaction reply received rate by type ($interval)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: How many replies were received per second? Were they generated locally? Relayed?
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 5
+              id: 39
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_tm_local_replies_total{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Local replies - {{process}}@{{instance}}
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_tm_received_replies_total{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: ""
+                  intervalFactor: 1
+                  legendFormat: Received replies - {{process}}@{{instance}}
+                  refId: C
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_tm_relayed_replies_total{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Relayed replies - {{process}}@{{instance}}
+                  refId: D
+              title: Transaction reply rate ($interval)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: How many transactions are in memory?
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 14
+              id: 41
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_tm_inuse_transactions{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  interval: ""
+                  intervalFactor: 1
+                  legendFormat: Transactions in memory - {{process}}@{{instance}}
+                  refId: A
+              title: Current transactions in memory
+              type: timeseries
+          title: OpenSIPS transactions
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 10
+          id: 43
+          panels:
+            - datasource:
+                uid: $datasource
+              description: How many transaction replies per second were received? And what was their response type? (2xx, 3xx, etc.)
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 6
+              id: 45
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_tmx_transactions_total{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: '{{type}} transaction - {{process}}@{{instance}}'
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_tmx_UAS_transactions{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  hide: false
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: UAS transaction - {{process}}@{{instance}}
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_tmx_UAC_transactions{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  hide: true
+                  intervalFactor: 1
+                  legendFormat: UAC transactions - {{process}}@{{instance}}
+                  refId: C
+              title: Transaction reply received rate by type ($interval)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: How many transactions are in memory or ongoing at the moment?
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 6
+              id: 47
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_tmx_inuse_transactions{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  interval: ""
+                  intervalFactor: 1
+                  legendFormat: Transactions in memory - {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_tmx_active_transactions{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Transactions ongoing - {{process}}@{{instance}}
+                  refId: B
+              title: Current transactions
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 15
+              id: 49
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_tmx_replies{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  groupBy:
+                    - params:
+                        - $__interval
+                      type: time
+                    - params:
+                        - "null"
+                      type: fill
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Transaction reply {{type}} - {{process}}@{{instance}}
+                  orderByTime: ASC
+                  policy: default
+                  refId: A
+                  resultFormat: time_series
+                  select:
+                    - - params:
+                            - value
+                        type: field
+                      - params: []
+                        type: mean
+                  tags: []
+              title: Transaction reply rate by action ($interval)
+              type: timeseries
+          title: Kamailio transactions
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 11
+          id: 113
+          panels:
+            - datasource:
+                uid: $datasource
+              description: What is the rate of errors per second?
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 4
+              id: 115
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_core_bad_URIs_rcvd{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: URI parse errors - {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_core_bad_msg_hdr{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: SIP Header parse errors - {{process}}@{{instance}}
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_core_unsupported_methods{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: Unsupported method - {{process}}@{{instance}}
+                  refId: C
+              title: Error rate ($interval)
+              type: timeseries
+          title: OpenSIPS errors
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 12
+          id: 58
+          panels:
+            - datasource:
+                uid: $datasource
+              description: How many URI checks have happened? Were they positive or negative?
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 24
+                x: 0
+                "y": 7
+              id: 67
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_uri_negative_checks{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: URI negative checks - {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_uri_positive_checks{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: URI positive checks - {{process}}@{{instance}}
+                  refId: B
+              title: URI Checks rate ($interval)
+              type: timeseries
+          title: OpenSIPS URI module
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 13
+          id: 69
+          panels:
+            - datasource:
+                uid: $datasource
+              description: Total number of AOR existing in the USRLOC memory cache for all domains per second.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 0
+                "y": 8
+              id: 71
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: rate(opensips_userloc_registered_users_total{instance=~"$node", process=~"$process"}[$interval])
+                  format: time_series
+                  interval: $interval
+                  intervalFactor: 1
+                  legendFormat: ' Registered users - {{process}}@{{instance}}'
+                  refId: A
+              title: User registration rate ($interval)
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: Number of contacts/expired users/total users existing in the USRLOC memory cache per domain.
+              fieldConfig:
+                defaults: {}
+                overrides: []
+              gridPos:
+                h: 9
+                w: 12
+                x: 12
+                "y": 8
+              id: 101
+              options: {}
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_usrloc_contacts{instance=~"$node",process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Contacts in {{domain}} - {{process}}@{{instance}}
+                  refId: A
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_usrloc_users{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Total users in {{domain}} - {{process}}@{{instance}}
+                  refId: B
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_usrloc_expires{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: Expired contacts in {{domain}} - {{process}}@{{instance}}
+                  refId: C
+              title: Users per domain
+              type: timeseries
+            - datasource:
+                uid: $datasource
+              description: Total number of AOR existing in the USRLOC memory cache for all domains.
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: thresholds
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                            - color: red
+                              value: 80
+                overrides: []
+              gridPos:
+                h: 5
+                w: 24
+                x: 0
+                "y": 17
+              id: 103
+              maxDataPoints: 100
+              options:
+                colorMode: value
+                graphMode: area
+                justifyMode: auto
+                orientation: auto
+                percentChangeColorMode: standard
+                reduceOptions:
+                    calcs:
+                        - lastNotNull
+                    fields: ""
+                    values: false
+                showPercentChange: false
+                textMode: auto
+                wideLayout: true
+              pluginVersion: 11.6.0
+              repeat: process
+              repeatDirection: h
+              targets:
+                - datasource:
+                    uid: $datasource
+                  expr: opensips_userloc_registered_users_total{instance=~"$node", process=~"$process"}
+                  format: time_series
+                  intervalFactor: 1
+                  legendFormat: ""
+                  refId: A
+              title: Total users in $process
+              type: stat
+          title: OpenSIPS User Location module
+          type: row
+    preload: false
+    refresh: false
+    schemaVersion: 41
+    tags:
+        - opensips
+    templating:
+        list:
+            - current:
+                text: Prometheus
+                value: NY8knvLVz
+              label: Datasource
+              name: datasource
+              options: []
+              query: prometheus
+              refresh: 1
+              regex: ""
+              type: datasource
+            - current:
+                text: All
+                value: $__all
+              datasource: $datasource
+              includeAll: true
+              label: Node
+              multi: true
+              name: node
+              options: []
+              query: label_values(opensips_up, instance)
+              refresh: 1
+              regex: ""
+              type: query
+            - current:
+                text: All
+                value: $__all
+              datasource: $datasource
+              includeAll: true
+              label: SER process
+              multi: true
+              name: process
+              options: []
+              query: label_values(opensips_up, process)
+              refresh: 1
+              regex: ""
+              type: query
+            - auto: true
+              auto_count: 30
+              auto_min: 10s
+              current:
+                text: $__auto
+                value: $__auto
+              label: Interval
+              name: interval
+              options:
+                - selected: false
+                  text: 1m
+                  value: 1m
+                - selected: false
+                  text: 10m
+                  value: 10m
+                - selected: false
+                  text: 30m
+                  value: 30m
+                - selected: false
+                  text: 1h
+                  value: 1h
+                - selected: false
+                  text: 6h
+                  value: 6h
+                - selected: false
+                  text: 12h
+                  value: 12h
+                - selected: false
+                  text: 1d
+                  value: 1d
+                - selected: false
+                  text: 7d
+                  value: 7d
+                - selected: false
+                  text: 14d
+                  value: 14d
+                - selected: false
+                  text: 30d
+                  value: 30d
+              query: 1m,10m,30m,1h,6h,12h,1d,7d,14d,30d
+              refresh: 2
+              type: interval
+    time:
+        from: now-6h
+        to: now
+    timepicker: {}
+    timezone: ""
+    title: OpenSIPS
+    uid: jU3i-opensips
