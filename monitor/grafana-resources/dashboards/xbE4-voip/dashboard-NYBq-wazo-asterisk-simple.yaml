@@ -1,0 +1,1121 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: Dashboard
+metadata:
+    folder: xbE4-voip
+    name: NYBq-wazo-asterisk-simple
+spec:
+    annotations:
+        list:
+            - builtIn: 1
+              datasource:
+                type: datasource
+                uid: grafana
+              enable: true
+              hide: true
+              iconColor: rgba(0, 211, 255, 1)
+              name: Annotations & Alerts
+              target:
+                limit: 100
+                matchAny: false
+                tags: []
+                type: dashboard
+              type: dashboard
+    editable: true
+    fiscalYearStartMonth: 0
+    graphTooltip: 0
+    links: []
+    panels:
+        - collapsed: false
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 0
+          id: 12
+          panels: []
+          title: Status
+          type: row
+        - fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 4
+            w: 5
+            x: 0
+            "y": 1
+          id: 20
+          options:
+            code:
+                language: plaintext
+                showLineNumbers: false
+                showMiniMap: false
+            content: "<img src=\"https://theme.zdassets.com/theme_assets/1871843/c8e815188e147f36375d3f4e52c2fb25558b1dec.png\"\n     alt=\"Wazo Icone\"\n     style=\"float: left; margin: 10px;\" />\n\n \n           "
+            mode: markdown
+          pluginVersion: 11.6.0
+          title: ""
+          type: text
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        "0":
+                            color: red
+                            index: 0
+                            text: Down
+                        "1":
+                            color: green
+                            index: 1
+                            text: Up
+                      type: value
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: red
+                        - color: green
+                          value: 1
+            overrides: []
+          gridPos:
+            h: 4
+            w: 6
+            x: 5
+            "y": 1
+          id: 6
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: up{instance="$instance"}
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Asterisk Status
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: dtdhms
+            overrides: []
+          gridPos:
+            h: 4
+            w: 5
+            x: 11
+            "y": 1
+          id: 10
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text:
+                titleSize: 1
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_core_uptime_seconds{instance="$instance"}
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Asterisk core Uptime
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: dtdhms
+            overrides: []
+          gridPos:
+            h: 4
+            w: 5
+            x: 16
+            "y": 1
+          id: 51
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text:
+                titleSize: 1
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_core_last_reload_seconds{instance="$instance"}
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Asterisk core last reload
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: none
+            overrides: []
+          gridPos:
+            h: 4
+            w: 3
+            x: 21
+            "y": 1
+          id: 50
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text:
+                titleSize: 1
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_core_scrape_time_ms{instance="$instance"}
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Asterisk core scrape time (ms)
+          type: stat
+        - collapsed: false
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 5
+          id: 8
+          panels: []
+          title: General Information
+          type: row
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: transparent
+                    mode: fixed
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 9
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: smooth
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: always
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+            overrides:
+                - matcher:
+                    id: byName
+                    options: asterisk_channels_count{eid="00:50:56:80:0b:88", instance="wazo-prod.di.unistra.fr:5039", job="asterisk"}
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: semi-dark-orange
+                        mode: fixed
+                    - id: displayName
+                      value: Active Channels
+                - matcher:
+                    id: byName
+                    options: asterisk_calls_count{eid="00:50:56:80:0b:88", instance="wazo-prod.di.unistra.fr:5039", job="asterisk"}
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: green
+                        mode: fixed
+                    - id: custom.barAlignment
+                      value: 0
+                    - id: custom.drawStyle
+                      value: bars
+                    - id: custom.fillOpacity
+                      value: 100
+                    - id: displayName
+                      value: Acrive Calls
+                - matcher:
+                    id: byName
+                    options: asterisk_bridges_count{eid="00:50:56:80:0b:88", instance="wazo-prod.di.unistra.fr:5039", job="asterisk"}
+                  properties:
+                    - id: displayName
+                      value: Active Bridges
+                    - id: color
+                      value:
+                        fixedColor: semi-dark-yellow
+                        mode: fixed
+          gridPos:
+            h: 8
+            w: 24
+            x: 0
+            "y": 6
+          id: 2
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: single
+                sort: none
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_calls_count{instance="$instance"}
+              format: time_series
+              instant: false
+              interval: "300"
+              intervalFactor: 1
+              legendFormat: ""
+              refId: A
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_channels_count{instance="$instance"}
+              hide: false
+              interval: "300"
+              legendFormat: ""
+              refId: B
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_bridges_count{instance="$instance"}
+              hide: false
+              interval: "300"
+              legendFormat: ""
+              refId: C
+          title: Simultaneous Active Calls / Channels / Bridges Historical
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                min: 0
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: '#EAB839'
+                          value: 50
+                        - color: red
+                          value: 100
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 0
+            "y": 14
+          id: 14
+          options:
+            minVizHeight: 75
+            minVizWidth: 75
+            orientation: auto
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showThresholdLabels: false
+            showThresholdMarkers: false
+            sizing: auto
+            text: {}
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_calls_count{instance="$instance"}
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Current Active Calls
+          type: gauge
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 3
+            "y": 14
+          id: 52
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: max_over_time(asterisk_calls_count{instance="$instance"}[1d])
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Max  Calls over the day
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: semi-dark-orange
+                    mode: fixed
+                mappings: []
+                min: 0
+                noValue: N/A
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: '#EAB839'
+                          value: 300
+                        - color: red
+                          value: 600
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 6
+            "y": 14
+          id: 25
+          options:
+            minVizHeight: 75
+            minVizWidth: 75
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showThresholdLabels: false
+            showThresholdMarkers: false
+            sizing: auto
+            text: {}
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_channels_count{instance="$instance"}
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Current Active Channels
+          type: gauge
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: semi-dark-orange
+                    mode: fixed
+                mappings: []
+                max: 100
+                noValue: N/A
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 9
+            "y": 14
+          id: 26
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: max_over_time(asterisk_channels_count{instance="$instance"}[1d])
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Max Channels over the day
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: semi-dark-yellow
+                    mode: fixed
+                mappings: []
+                min: 0
+                noValue: N/A
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 12
+            "y": 14
+          id: 27
+          options:
+            minVizHeight: 75
+            minVizWidth: 75
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showThresholdLabels: false
+            showThresholdMarkers: false
+            sizing: auto
+            text: {}
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_bridges_count{instance="$instance"}
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Current Active Bridges
+          type: gauge
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: semi-dark-yellow
+                    mode: fixed
+                mappings: []
+                noValue: N/A
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 15
+            "y": 14
+          id: 28
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: max_over_time(asterisk_bridges_count{instance="$instance"}[1d])
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Max Bridges over the day
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: semi-dark-blue
+                    mode: fixed
+                mappings: []
+                noValue: N/A
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 18
+            "y": 14
+          id: 46
+          options:
+            minVizHeight: 75
+            minVizWidth: 75
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showThresholdLabels: false
+            showThresholdMarkers: true
+            sizing: auto
+            text: {}
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(asterisk_endpoints_state{instance="$instance"}==2)
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Current online  Endpoints
+          type: gauge
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: dark-blue
+                    mode: fixed
+                mappings: []
+                noValue: N/A
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 21
+            "y": 14
+          id: 53
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: max_over_time(count(asterisk_endpoints_state{instance="$instance"}==2)[1d:10m])
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Max Endpoints over the day
+          type: stat
+        - collapsed: false
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 19
+          id: 38
+          panels: []
+          title: Endpoints Information
+          type: row
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: semi-dark-blue
+                    mode: fixed
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 50
+                    gradientMode: hue
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: smooth
+                    lineStyle:
+                        fill: solid
+                    lineWidth: 1
+                    pointSize: 4
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: none
+            overrides: []
+          gridPos:
+            h: 8
+            w: 24
+            x: 0
+            "y": 20
+          id: 41
+          options:
+            legend:
+                calcs:
+                    - last
+                displayMode: list
+                placement: bottom
+                showLegend: false
+            tooltip:
+                hideZeros: false
+                mode: single
+                sort: none
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(asterisk_endpoints_state{instance="$instance"}==2)
+              interval: "300"
+              legendFormat: ""
+              refId: A
+          title: Online Endpoints Historical
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: fixed
+                custom:
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                mappings: []
+            overrides:
+                - matcher:
+                    id: byName
+                    options: Endpoint Online
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: dark-blue
+                        mode: fixed
+                - matcher:
+                    id: byName
+                    options: Endpoints Offline
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: super-light-blue
+                        mode: fixed
+          gridPos:
+            h: 9
+            w: 6
+            x: 0
+            "y": 28
+          id: 43
+          options:
+            displayLabels:
+                - percent
+                - name
+                - value
+            legend:
+                displayMode: list
+                placement: bottom
+                showLegend: true
+            pieType: pie
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: |
+                count(asterisk_endpoints_state{instance="$instance"}==0)
+              format: time_series
+              interval: ""
+              legendFormat: Enpoints Unknown
+              refId: A
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(asterisk_endpoints_state{instance="$instance"}==1)
+              format: time_series
+              hide: false
+              interval: ""
+              legendFormat: Endpoints Offline
+              refId: B
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(asterisk_endpoints_state{instance="$instance"}==2)
+              format: time_series
+              hide: false
+              interval: ""
+              legendFormat: Endpoint Online
+              refId: C
+          title: Current Endpoints State ( 0=unknown; 1=offline; 2=online)
+          transformations:
+            - id: organize
+              options: {}
+          type: piechart
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: semi-dark-blue
+                    mode: fixed
+                mappings: []
+                max: 100
+                min: 0
+                noValue: N/A
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: none
+            overrides: []
+          gridPos:
+            h: 9
+            w: 6
+            x: 6
+            "y": 28
+          id: 45
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            text: {}
+            textMode: auto
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_endpoints_count{instance="$instance"}
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Current defined  Endpoints
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    fixedColor: light-blue
+                    mode: fixed
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 50
+                    gradientMode: hue
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: smooth
+                    lineStyle:
+                        fill: solid
+                    lineWidth: 1
+                    pointSize: 4
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: none
+            overrides: []
+          gridPos:
+            h: 9
+            w: 12
+            x: 12
+            "y": 28
+          id: 54
+          options:
+            legend:
+                calcs:
+                    - last
+                displayMode: list
+                placement: bottom
+                showLegend: false
+            tooltip:
+                mode: single
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: asterisk_endpoints_count{instance="$instance"}
+              interval: "300"
+              legendFormat: ""
+              refId: A
+          title: Evolution of Defined Endpoints
+          type: timeseries
+    preload: false
+    refresh: 1m
+    schemaVersion: 41
+    tags:
+        - wazo
+        - asterisk
+    templating:
+        list:
+            - current:
+                text: 172.16.43.227:443
+                value: 172.16.43.227:443
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              definition: |
+                label_values(asterisk_bridges_count{instance=~".*"}, instance)
+              includeAll: false
+              name: instance
+              options: []
+              query:
+                query: |
+                    label_values(asterisk_bridges_count{instance=~".*"}, instance)
+                refId: StandardVariableQuery
+              refresh: 1
+              regex: ""
+              type: query
+    time:
+        from: now-24h
+        to: now
+    timepicker: {}
+    timezone: ""
+    title: Wazo - Asterisk Simple
+    uid: NYBq-wazo-asterisk-simple
