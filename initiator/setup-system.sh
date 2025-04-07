@@ -3,6 +3,8 @@ set -e
 set -u  # fail if variable is undefined
 set -o pipefail  # fail if command before pipe fails
 
+PLUGIN_BRANCH="${1:-master}"
+
 echo 'Installing debug tools...'
 apt-get update
 apt-get install -y htop
@@ -47,4 +49,4 @@ for wazo_service in "${WAZO_SERVICES[@]}"; do
 done
 
 apt-get install -y wazo-plugind-cli
-wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheus-exporter-plugin"
+wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheus-exporter-plugin --ref $PLUGIN_BRANCH"
