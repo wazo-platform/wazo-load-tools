@@ -10,8 +10,12 @@
   - `grr config set grafana.token secret`
   - `grr config set targets Dashboard,Dashboardfolder,Datasource`
 
-- Edit `prometheus-config/prometheus.yml` to replace `localhost` by the
-  `<wazo-ip>`
+- Generate prometheus configuration file
+
+  ```sh
+  pip install ./prometheus-config-generator/requirements.txt
+  ./prometheus-config-generator/generate.py --wazo-host <wazo-ip> -o promehteus-config/prometheus.yml
+  ```
 
 ## Run Environment
 
