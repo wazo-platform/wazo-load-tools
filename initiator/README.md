@@ -16,3 +16,11 @@ The script will generate a configuration file used by users generators
 ```shell
 ./setup-wazo.py -s <wazo-ip> -p <password> -o ../generator/users/config.yml
 ```
+
+## install-exporter-plugin
+
+Install wazo-prometheus-exporter-plugin with wazo-plugind
+
+```shell
+./install-exporter-plugin.py -s <wazo-ip> -p <password>
+```
