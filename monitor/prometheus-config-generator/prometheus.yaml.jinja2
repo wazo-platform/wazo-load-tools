@@ -1,3 +1,6 @@
+{% macro dump_stacks(port) -%}
+{% for server in servers %}'{{ server.host }}:{{ port }}'{%- if loop.last %}{% else %}, {% endif %}{% endfor %}
+{%- endmacro %}
 global:
   scrape_interval: 15s
 
@@ -8,7 +11,7 @@ scrape_configs:
     tls_config:
       insecure_skip_verify: true
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
 
   - job_name: wazo-agentd
     scheme: https
@@ -16,7 +19,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/agentd/1.0/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-agentd'
@@ -27,7 +30,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/amid/1.0/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-amid'
@@ -38,7 +41,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/auth/0.1/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-auth'
@@ -49,7 +52,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/call-logd/1.0/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-call-logd'
@@ -60,7 +63,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/calld/1.0/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-calld'
@@ -71,7 +74,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/chatd/1.0/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-chatd'
@@ -82,7 +85,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/confd/1.1/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-confd'
@@ -93,7 +96,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/dird/0.1/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-dird'
@@ -104,7 +107,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/phoned/0.1/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-phoned'
@@ -115,7 +118,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/sysconfd/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'fastapi'
           service: 'wazo-sysconfd'
@@ -126,7 +129,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/webhookd/1.0/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
         labels:
           framework: 'flask'
           service: 'wazo-webhookd'
@@ -137,7 +140,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/nginx/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
 
   - job_name: rabbitmq
     scheme: https
@@ -145,7 +148,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/rabbitmq/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
 
   - job_name: postgresql
     scheme: https
@@ -153,7 +156,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/postgresql/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
 
   - job_name: node
     scheme: https
@@ -161,7 +164,7 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/node/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
 
   - job_name: process
     scheme: https
@@ -169,4 +172,4 @@ scrape_configs:
       insecure_skip_verify: true
     metrics_path: /api/process/metrics
     static_configs:
-      - targets: ['localhost:443']
+      - targets: [{{ dump_stacks(443) }}]
