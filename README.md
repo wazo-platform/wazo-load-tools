@@ -18,9 +18,6 @@
     --host <wazo-host> \
     --password <password> \
     --output generator/users/config.yml
-  initiator/install-exporter-plugin.py \
-    --host <wazo-host> \
-    --password <password> \
   generator/users/generate-users.py \
     --number<#users> \
     --extra-config generator/users/config.yml \
