@@ -1,0 +1,27 @@
+services:
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret  # avoid reset password screen on login
+    volumes:
+      - grafana-data:/var/lib/grafana:rw
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus-config:/etc/prometheus:ro
+      - prometheus-data:/prometheus:rw
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=30d"
+
+volumes:
+  prometheus-data:
+  grafana-data:

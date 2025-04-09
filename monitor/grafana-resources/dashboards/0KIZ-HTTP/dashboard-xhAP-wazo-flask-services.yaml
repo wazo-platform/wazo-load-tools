@@ -1,0 +1,667 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: Dashboard
+metadata:
+    folder: 0KIZ-HTTP
+    name: xhAP-wazo-flask-services
+spec:
+    annotations:
+        list:
+            - builtIn: 1
+              datasource:
+                type: datasource
+                uid: grafana
+              enable: true
+              hide: true
+              iconColor: rgba(0, 211, 255, 1)
+              name: Annotations & Alerts
+              target:
+                limit: 100
+                matchAny: false
+                tags: []
+                type: dashboard
+              type: dashboard
+    editable: true
+    fiscalYearStartMonth: 0
+    graphTooltip: 0
+    links: []
+    panels:
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+            overrides:
+                - __systemRef: hideSeriesFrom
+                  matcher:
+                    id: byNames
+                    options:
+                        mode: exclude
+                        names:
+                            - auth 401
+                        prefix: 'All except:'
+                        readOnly: true
+                  properties:
+                    - id: custom.hideFrom
+                      value:
+                        legend: false
+                        tooltip: false
+                        viz: true
+          gridPos:
+            h: 9
+            w: 24
+            x: 0
+            "y": 0
+          id: 18
+          options:
+            legend:
+                calcs: []
+                displayMode: list
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: single
+                sort: none
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: increase(flask_http_request_total{instance="$instance"}[1m])
+              legendFormat: '{{service}} {{status}}'
+              range: true
+              refId: A
+          title: all methods
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 10
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: short
+            overrides:
+                - matcher:
+                    id: byName
+                    options: errors
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: '#c15c17'
+                        mode: fixed
+          gridPos:
+            h: 6
+            w: 24
+            x: 0
+            "y": 9
+          id: 4
+          options:
+            alertThreshold: true
+            legend:
+                calcs:
+                    - mean
+                    - lastNotNull
+                    - max
+                displayMode: list
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: multi
+                sort: none
+          pluginVersion: 11.6.0
+          targets:
+            - $$hashKey: object:766
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: sum(rate(flask_http_request_duration_seconds_count{status!="200|204", method="$method", instance="$instance"}[30s]))
+              format: time_series
+              interval: ""
+              intervalFactor: 1
+              legendFormat: errors
+              range: true
+              refId: A
+          title: Errors per second
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: bars
+                    fillOpacity: 100
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: normal
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                min: 0
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: short
+            overrides:
+                - matcher:
+                    id: byName
+                    options: HTTP 500
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: '#bf1b00'
+                        mode: fixed
+          gridPos:
+            h: 9
+            w: 24
+            x: 0
+            "y": 15
+          id: 13
+          options:
+            alertThreshold: true
+            legend:
+                calcs:
+                    - mean
+                    - max
+                displayMode: list
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: multi
+                sort: none
+          pluginVersion: 11.6.0
+          targets:
+            - $$hashKey: object:140
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: code
+              expr: increase(flask_http_request_total{instance="$instance", method="$method"}[1m])
+              format: time_series
+              interval: ""
+              intervalFactor: 1
+              legendFormat: HTTP {{ status }} {{ service }}
+              range: true
+              refId: A
+          title: Total requests per minute
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+            overrides: []
+          gridPos:
+            h: 9
+            w: 24
+            x: 0
+            "y": 24
+          id: 19
+          options:
+            alertThreshold: true
+            legend:
+                calcs: []
+                displayMode: list
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: single
+                sort: none
+          pluginVersion: 11.6.0
+          targets:
+            - $$hashKey: object:140
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: increase(flask_http_request_total{instance="$instance"}[1m])
+              format: time_series
+              interval: ""
+              intervalFactor: 1
+              legendFormat: '{{ status }} {{ service }}'
+              range: true
+              refId: A
+          title: Total requests per minute all methods
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 9
+            w: 24
+            x: 0
+            "y": 33
+          id: 2
+          options:
+            alertThreshold: true
+          pluginVersion: 9.3.6
+          targets:
+            - $$hashKey: object:214
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: rate(flask_http_request_duration_seconds_count{status="$return_code", method="$method", instance="$instance"}[30s])
+              format: time_series
+              interval: ""
+              intervalFactor: 1
+              legendFormat: '{{service}}  {{path}}'
+              range: true
+              refId: A
+          title: Requests per second
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 10
+            w: 24
+            x: 0
+            "y": 42
+          id: 6
+          options:
+            alertThreshold: true
+          pluginVersion: 9.3.6
+          targets:
+            - $$hashKey: object:146
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: rate(flask_http_request_duration_seconds_sum{status="$return_code", instance="$instance", method="$method"}[30s]) / rate(flask_http_request_duration_seconds_count{status="200"}[30s])
+              format: time_series
+              interval: ""
+              intervalFactor: 1
+              legendFormat: '{{ service }} {{ path }}'
+              range: true
+              refId: A
+          title: Average response time [30s]
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 7
+            w: 24
+            x: 0
+            "y": 52
+          id: 11
+          options:
+            alertThreshold: true
+          pluginVersion: 9.3.6
+          targets:
+            - $$hashKey: object:1079
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: increase(flask_http_request_duration_seconds_bucket{status="$return_code", le="0.25", instance="$instance"}[30s]) / ignoring(le) increase(flask_http_request_duration_seconds_count{status="200"}[30s])
+              format: time_series
+              instant: false
+              interval: ""
+              intervalFactor: 1
+              legendFormat: '{{ service }} {{ path }}'
+              refId: A
+          title: status  under 250ms
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 10
+            w: 12
+            x: 0
+            "y": 59
+          id: 9
+          options:
+            alertThreshold: true
+          pluginVersion: 9.3.6
+          targets:
+            - $$hashKey: object:638
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: rate(process_cpu_seconds_total{instance="$instance"}[30s])
+              format: time_series
+              intervalFactor: 1
+              legendFormat: '{{service}}'
+              range: true
+              refId: A
+          title: CPU usage
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 10
+            w: 12
+            x: 12
+            "y": 59
+          id: 8
+          options:
+            alertThreshold: true
+          pluginVersion: 9.3.6
+          targets:
+            - $$hashKey: object:638
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: code
+              expr: process_resident_memory_bytes{instance="$instance"}
+              format: time_series
+              interval: ""
+              intervalFactor: 1
+              legendFormat: '{{service}}'
+              range: true
+              refId: A
+          title: Memory usage
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 10
+            w: 24
+            x: 0
+            "y": 69
+          id: 15
+          options:
+            alertThreshold: true
+          pluginVersion: 9.3.6
+          targets:
+            - $$hashKey: object:426
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: histogram_quantile(0.5, rate(flask_http_request_duration_seconds_bucket{status="200", instance="$instance", method="$method"}[30s]))
+              format: time_series
+              interval: ""
+              intervalFactor: 1
+              legendFormat: '{{ service }} {{ path }}'
+              range: true
+              refId: A
+          title: Request duration [s] - p50
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 9
+            w: 24
+            x: 0
+            "y": 79
+          id: 16
+          options:
+            alertThreshold: true
+          pluginVersion: 9.3.6
+          targets:
+            - $$hashKey: object:426
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              editorMode: builder
+              expr: histogram_quantile(0.9, rate(flask_http_request_duration_seconds_bucket{status="200", instance="$instance", method="$method"}[30s]))
+              format: time_series
+              interval: ""
+              intervalFactor: 1
+              legendFormat: '{{ service }} {{ path }}'
+              range: true
+              refId: A
+          title: Request duration [s] - p90
+          type: timeseries
+    preload: false
+    refresh: 5s
+    schemaVersion: 41
+    tags:
+        - wazo
+    templating:
+        list:
+            - current:
+                text: 172.16.43.227:443
+                value: 172.16.43.227:443
+              datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              definition: label_values(python_info, instance)
+              includeAll: false
+              name: instance
+              options: []
+              query:
+                query: label_values(python_info, instance)
+                refId: StandardVariableQuery
+              refresh: 1
+              regex: ""
+              type: query
+            - current:
+                text:
+                    - GET
+                value:
+                    - GET
+              includeAll: true
+              multi: true
+              name: method
+              options:
+                - selected: true
+                  text: GET
+                  value: GET
+                - selected: false
+                  text: POST
+                  value: POST
+                - selected: false
+                  text: HEAD
+                  value: HEAD
+                - selected: false
+                  text: DELETE
+                  value: DELETE
+                - selected: false
+                  text: PATCH
+                  value: PATCH
+              query: GET,POST,HEAD,DELETE,PATCH
+              type: custom
+            - current:
+                text: "200"
+                value: "200"
+              includeAll: false
+              name: return_code
+              options:
+                - selected: true
+                  text: "200"
+                  value: "200"
+                - selected: false
+                  text: "204"
+                  value: "204"
+                - selected: false
+                  text: "401"
+                  value: "401"
+                - selected: false
+                  text: "403"
+                  value: "403"
+                - selected: false
+                  text: "404"
+                  value: "404"
+                - selected: false
+                  text: "500"
+                  value: "500"
+                - selected: false
+                  text: "502"
+                  value: "502"
+                - selected: false
+                  text: "503"
+                  value: "503"
+                - selected: false
+                  text: "504"
+                  value: "504"
+              query: 200,204,401,403,404,500,502,503,504
+              type: custom
+    time:
+        from: now-5m
+        to: now
+    timepicker:
+        refresh_intervals: []
+    timezone: ""
+    title: Wazo - Flask Services
+    uid: xhAP-wazo-flask-services

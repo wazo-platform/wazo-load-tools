@@ -1,0 +1,1622 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: Dashboard
+metadata:
+    folder: zg7S-others
+    name: rxHw-rabbitmq
+spec:
+    annotations:
+        list:
+            - builtIn: 1
+              datasource:
+                type: datasource
+                uid: grafana
+              enable: true
+              hide: true
+              iconColor: rgba(0, 211, 255, 1)
+              name: Annotations & Alerts
+              target:
+                limit: 100
+                matchAny: false
+                tags: []
+                type: dashboard
+              type: dashboard
+    description: Rabbitmq stats and alerting using RabbitMQ Exporter (https://github.com/kbudde/rabbitmq_exporter)
+    editable: true
+    fiscalYearStartMonth: 0
+    graphTooltip: 1
+    links: []
+    panels:
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 0
+          id: 28
+          panels: []
+          title: Status de RabbitMQ
+          type: row
+        - fieldConfig:
+            defaults: {}
+            overrides: []
+          gridPos:
+            h: 5
+            w: 5
+            x: 0
+            "y": 1
+          id: 51
+          options:
+            code:
+                language: plaintext
+                showLineNumbers: false
+                showMiniMap: false
+            content: |-
+                <img src="https://www.rabbitmq.com/assets/files/rabbitmq-logo-with-name-258baa7f7ef3862e8f0dfa09cb760f68.svg"
+                     alt="Rabbit Icone"
+                     style="float: left; margin: 10px;" />
+            mode: markdown
+          pluginVersion: 11.6.0
+          title: Panel Title
+          type: text
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                links: []
+                mappings:
+                    - options:
+                        "0":
+                            color: red
+                            index: 0
+                            text: Down
+                        "1":
+                            color: green
+                            index: 1
+                            text: Up
+                      type: value
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 0
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 6
+            "y": 1
+          hideTimeOverride: true
+          id: 12
+          options:
+            colorMode: background
+            graphMode: area
+            justifyMode: auto
+            orientation: auto
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: rabbitmq_running{instance=~"$instance"}
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: '{{instance}}'
+              metric: rabbitmq_running
+              refId: A
+              step: 2
+          timeFrom: 30s
+          title: 'Service  RabbitMQ '
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#299c46'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 1024
+                        - color: '#d44a3a'
+                          value: 2048
+                unit: decmbytes
+            overrides: []
+          gridPos:
+            h: 5
+            w: 7
+            x: 10
+            "y": 1
+          id: 22
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: rabbitmq_node_mem_used{instance=~"$instance", node=~"$node"}/1024/1024
+              instant: true
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Memory used (MB)
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: '#299c46'
+                        - color: rgba(237, 129, 40, 0.89)
+                          value: 512
+                        - color: '#d44a3a'
+                          value: 1000
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 6
+            x: 18
+            "y": 1
+          id: 38
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: process_open_fds{instance=~"$instance",job="rabbitmq"}
+              instant: true
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Number of File Descriptor
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 4
+            x: 0
+            "y": 6
+          id: 44
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*websocket.*"})
+              instant: true
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Number of Websoketd queues
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 4
+            x: 4
+            "y": 6
+          id: 45
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*celery.*"})
+              instant: true
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Number of celey queues
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 4
+            x: 8
+            "y": 6
+          id: 52
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*wazo-confd.*"})
+              instant: true
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Number of wazo-confd queues
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 4
+            x: 12
+            "y": 6
+          id: 46
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*wazo-dird.*"})
+              instant: true
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Number of wazo-dird queues
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 4
+            x: 16
+            "y": 6
+          id: 53
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*wazo-chatd.*"})
+              instant: true
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Number of wazo-chatd queues
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        match: "null"
+                        result:
+                            text: N/A
+                      type: special
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 4
+            x: 20
+            "y": 6
+          id: 49
+          maxDataPoints: 100
+          options:
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - mean
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*wazo-calld.*"})
+              instant: true
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Number of wazo-calld queues
+          type: stat
+        - collapsed: false
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 11
+          id: 26
+          panels: []
+          title: Utilisation de la mémoire
+          type: row
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 60
+                    gradientMode: hue
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: linear
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                links: []
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: '#EAB839'
+                          value: 50
+                        - color: red
+                          value: 80
+                unit: percent
+            overrides:
+                - matcher:
+                    id: byName
+                    options: Percent
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: blue
+                        mode: fixed
+          gridPos:
+            h: 7
+            w: 24
+            x: 0
+            "y": 12
+          id: 9
+          options:
+            legend:
+                calcs: []
+                displayMode: list
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: single
+                sort: none
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum(rabbitmq_node_mem_used{instance=~"$instance", node=~"$node"}) by (node) / sum(rabbitmq_node_mem_limit{instance=~"$instance",node=~"$node"}) by (node) * 100
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: Percent
+              metric: rabbitmq_node_mem_used
+              refId: A
+              step: 2
+          title: Memory usage (percent)
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 59
+                    gradientMode: hue
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: linear
+                    lineWidth: 3
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                links: []
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: blue
+                        - color: '#EAB839'
+                          value: 50
+                        - color: red
+                          value: 80
+                unit: mbytes
+            overrides: []
+          gridPos:
+            h: 7
+            w: 24
+            x: 0
+            "y": 19
+          id: 47
+          options:
+            legend:
+                calcs: []
+                displayMode: list
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: single
+                sort: none
+          pluginVersion: 11.6.0
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum(rabbitmq_node_mem_used{instance=~"$instance", node=~"$node"}) by (node) /1024/1024
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: MB
+              metric: rabbitmq_node_mem_used
+              refId: A
+              step: 2
+          title: Memory usage (MB)
+          type: timeseries
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 26
+          id: 37
+          panels: []
+          title: Utilisation des FD
+          type: row
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: left
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 11
+                    gradientMode: opacity
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 3
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                links: []
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: bits
+            overrides:
+                - matcher:
+                    id: byName
+                    options: /rabbit@localhost:free
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: blue
+                        mode: fixed
+                - matcher:
+                    id: byName
+                    options: /rabbit@localhost:limit
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: green
+                        mode: fixed
+                - matcher:
+                    id: byName
+                    options: Max FDS
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: red
+                        mode: fixed
+                - matcher:
+                    id: byName
+                    options: Current FDS
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: blue
+                        mode: fixed
+          gridPos:
+            h: 8
+            w: 24
+            x: 0
+            "y": 27
+          id: 17
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: process_max_fds{instance=~"$instance"}
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: Max FDS
+              metric: rabbitmq_node_mem_used
+              refId: A
+              step: 2
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: process_open_fds{instance=~"$instance"}
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: Current FDS
+              metric: rabbitmq_node_mem_used
+              refId: B
+              step: 2
+          title: Utilisation des File Descriptor
+          type: timeseries
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 35
+          id: 30
+          panels: []
+          title: Utilisation du disque
+          type: row
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: left
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 11
+                    gradientMode: opacity
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 3
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                links: []
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: bits
+            overrides:
+                - matcher:
+                    id: byName
+                    options: /rabbit@localhost:free
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: green
+                        mode: fixed
+                - matcher:
+                    id: byName
+                    options: /rabbit@localhost:limit
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: dark-red
+                        mode: fixed
+          gridPos:
+            h: 8
+            w: 24
+            x: 0
+            "y": 36
+          id: 35
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              expr: min(rabbitmq_node_disk_free{instance=~"$instance", node=~"$node"}) by (node)
+              format: time_series
+              intervalFactor: 2
+              legendFormat: '{{instance}}/{{node}}:free'
+              metric: rabbitmq_node_mem_used
+              refId: A
+              step: 2
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: min(rabbitmq_node_disk_free_limit{instance=~"$instance", node=~"$node"}) by (node)
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: '{{instance}}/{{node}}:limit'
+              metric: rabbitmq_node_mem_used
+              refId: B
+              step: 2
+          title: Disk free
+          type: timeseries
+        - collapsed: false
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 44
+          id: 34
+          panels: []
+          title: Connections/Channels/Consumers state
+          type: row
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 57
+                    gradientMode: hue
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                decimals: 0
+                links: []
+                mappings: []
+                min: 0
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: short
+            overrides:
+                - __systemRef: hideSeriesFrom
+                  matcher:
+                    id: byNames
+                    options:
+                        mode: exclude
+                        names:
+                            - connections
+                        prefix: 'All except:'
+                        readOnly: true
+                  properties:
+                    - id: custom.hideFrom
+                      value:
+                        legend: false
+                        tooltip: false
+                        viz: true
+                - matcher:
+                    id: byName
+                    options: connections
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: blue
+                        mode: fixed
+          gridPos:
+            h: 10
+            w: 24
+            x: 0
+            "y": 45
+          id: 5
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - max
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum(rabbitmq_connections{instance=~"$instance"})
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: connections
+              metric: rabbitmq_connectionsTotal
+              refId: A
+              step: 2
+          title: Connections
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 10
+                    gradientMode: opacity
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                decimals: 0
+                links: []
+                mappings: []
+                min: 0
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: short
+            overrides:
+                - matcher:
+                    id: byName
+                    options: channels
+                  properties:
+                    - id: color
+                      value:
+                        fixedColor: blue
+                        mode: fixed
+          gridPos:
+            h: 10
+            w: 24
+            x: 0
+            "y": 55
+          id: 48
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - max
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              expr: sum(rabbitmq_channels{instance=~"$instance"})
+              format: time_series
+              intervalFactor: 2
+              legendFormat: channels
+              refId: B
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              expr: sum(rabbitmq_queue_consumers{instance=~"$instance"})
+              format: time_series
+              intervalFactor: 2
+              legendFormat: consumers
+              refId: C
+          title: ' channels and consumers'
+          type: timeseries
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 65
+          id: 32
+          panels: []
+          title: Websoketd queues
+          type: row
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 40
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                decimals: 0
+                links: []
+                mappings: []
+                min: 0
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: short
+            overrides: []
+          gridPos:
+            h: 11
+            w: 12
+            x: 0
+            "y": 66
+          id: 23
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - max
+                    - min
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*websocket.*"})
+              hide: false
+              interval: ""
+              legendFormat: nb websocketd queues
+              refId: B
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum(rabbitmq_queue_messages{instance=~"$instance", queue=~".*websocket.*"})
+              hide: false
+              interval: ""
+              legendFormat: nb websocketd messages
+              refId: C
+          title: Number of Websocketd Queues and Messages
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 11
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: smooth
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: short
+            overrides: []
+          gridPos:
+            h: 11
+            w: 12
+            x: 12
+            "y": 66
+          id: 24
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - max
+                    - min
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum(rabbitmq_queue_messages_ready{instance=~"$instance", queue=~".*websocket.*"})
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: ready
+              metric: rabbitmq_queue_messages_ready
+              refId: A
+              step: 2
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum(rabbitmq_queue_messages_published_total{instance=~"$instance", queue=~".*websocket.*"})
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: published
+              metric: rabbitmq_queue_messages_published_total
+              refId: B
+              step: 2
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum(rabbitmq_queue_messages_delivered_total{instance=~"$instance", queue=~".*websocket.*"})
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: delivered
+              metric: rabbitmq_queue_messages_delivered_total
+              refId: C
+              step: 2
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum (rabbitmq_queue_messages_unacknowledged{instance=~"$instance", queue!~".*websocket.*"})
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: unack
+              metric: ack
+              refId: D
+              step: 2
+          title: Number of Messages Websocketd per status
+          type: timeseries
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 77
+          id: 40
+          panels: []
+          title: Others queues
+          type: row
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 19
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                decimals: 0
+                links: []
+                mappings: []
+                min: 0
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: short
+            overrides: []
+          gridPos:
+            h: 7
+            w: 12
+            x: 0
+            "y": 78
+          id: 2
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - max
+                    - min
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: rabbitmq_queue_messages{instance=~"$instance", queue!~".*websocket.*"}
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: '{{queue}}'
+              metric: rabbitmq_queue_messages
+              refId: A
+              step: 2
+          title: Messages per Queue
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: NY8knvLVz
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 40
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                links: []
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                        - color: red
+                          value: 80
+                unit: short
+            overrides: []
+          gridPos:
+            h: 7
+            w: 12
+            x: 12
+            "y": 78
+          id: 8
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - max
+                    - min
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                mode: single
+          pluginVersion: 8.1.2
+          targets:
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: max(rabbitmq_queue_messages_ready{instance=~"$instance", queue!~".*websocket.*"}) by (queue)
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: '{{queue}}:ready'
+              metric: rabbitmq_queue_messages_ready
+              refId: A
+              step: 2
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: max(rabbitmq_queue_messages_published_total{instance=~"$instance", queue!~".*websocket.*"}) by (queue)
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: '{{queue}}:published'
+              metric: rabbitmq_queue_messages_published_total
+              refId: B
+              step: 2
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: max(rabbitmq_queue_messages_delivered_total{instance=~"$instance", queue!~".*websocket.*"}) by (queue)
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: '{{queue}}:delivered'
+              metric: rabbitmq_queue_messages_delivered_total
+              refId: C
+              step: 2
+            - datasource:
+                type: prometheus
+                uid: NY8knvLVz
+              exemplar: true
+              expr: sum by (queue)(rabbitmq_queue_messages_unacknowledged{instance=~"$instance", queue!~".*websocket.*"})
+              format: time_series
+              interval: ""
+              intervalFactor: 2
+              legendFormat: '{{queue}}:unack'
+              metric: ack
+              refId: D
+              step: 2
+          title: Number of Messages per status (other queues)
+          type: timeseries
+    preload: false
+    refresh: ""
+    schemaVersion: 41
+    tags:
+        - rabbitmq
+    templating:
+        list:
+            - current:
+                text: Prometheus
+                value: NY8knvLVz
+              includeAll: false
+              name: datasource
+              options: []
+              query: prometheus
+              refresh: 1
+              regex: ""
+              type: datasource
+            - current:
+                text: All
+                value: $__all
+              datasource: Prometheus
+              definition: label_values(rabbitmq_running, instance)
+              includeAll: true
+              name: instance
+              options: []
+              query:
+                query: label_values(rabbitmq_running, instance)
+                refId: StandardVariableQuery
+              refresh: 1
+              regex: ""
+              type: query
+            - current:
+                text: All
+                value: $__all
+              datasource: Prometheus
+              definition: label_values(rabbitmq_running{instance=~"$instance"}, node)
+              includeAll: true
+              name: node
+              options: []
+              query:
+                query: label_values(rabbitmq_running{instance=~"$instance"}, node)
+                refId: StandardVariableQuery
+              refresh: 1
+              regex: ""
+              type: query
+    time:
+        from: now-2d
+        to: now
+    timepicker: {}
+    timezone: browser
+    title: RabbitMQ
+    uid: rxHw-rabbitmq

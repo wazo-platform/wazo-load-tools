@@ -1,0 +1,8 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: DashboardFolder
+metadata:
+    name: xbE4-voip
+spec:
+    orgId: 1
+    title: VoIP
+    uid: xbE4-voip
