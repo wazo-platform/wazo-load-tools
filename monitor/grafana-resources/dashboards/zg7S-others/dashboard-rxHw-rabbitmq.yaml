@@ -50,7 +50,10 @@ spec:
                 language: plaintext
                 showLineNumbers: false
                 showMiniMap: false
-            content: "<img src=\"https://www.rabbitmq.com/img/logo-rabbitmq.svg\"\n     alt=\"Rabbit Icone\"\n     style=\"float: left; margin: 10px;\" />\n\n \n           "
+            content: |-
+                <img src="https://www.rabbitmq.com/assets/files/rabbitmq-logo-with-name-258baa7f7ef3862e8f0dfa09cb760f68.svg"
+                     alt="Rabbit Icone"
+                     style="float: left; margin: 10px;" />
             mode: markdown
           pluginVersion: 11.6.0
           title: Panel Title
