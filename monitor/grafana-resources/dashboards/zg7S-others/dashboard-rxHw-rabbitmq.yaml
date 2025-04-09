@@ -231,7 +231,7 @@ spec:
                 type: prometheus
                 uid: NY8knvLVz
               exemplar: true
-              expr: process_open_fds{instance=~"$instance"}
+              expr: process_open_fds{instance=~"$instance",job="rabbitmq"}
               instant: true
               interval: ""
               legendFormat: ""
