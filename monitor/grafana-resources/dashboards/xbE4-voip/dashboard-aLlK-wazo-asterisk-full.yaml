@@ -106,7 +106,7 @@ spec:
                 type: prometheus
                 uid: NY8knvLVz
               exemplar: true
-              expr: up{instance="$instance"}
+              expr: up{instance="$instance",job="asterisk"}
               interval: ""
               legendFormat: ""
               refId: A
