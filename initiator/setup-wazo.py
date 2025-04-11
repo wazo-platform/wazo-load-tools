@@ -143,6 +143,7 @@ def main():
         break
 
     webrtc_sip_template_uuid = confd_tenant['webrtc_sip_template_uuid']
+    global_sip_template_uuid = confd_tenant['global_sip_template_uuid']
 
     body = {
         'label': 'internal',
@@ -153,7 +154,7 @@ def main():
 
     incall_prefix = '123'
     body = {
-        'label': 'internal',
+        'label': 'incoming',
         'type': 'incall',
         'user_ranges': [
             {
@@ -163,6 +164,32 @@ def main():
         ],
     }
     incall_context = confd_client.contexts.create(body)
+
+    body = {
+        'label': 'loadtester',
+        'name': 'loadtester',
+        "templates": [{"uuid": global_sip_template_uuid}],
+        'auth_section_options': [
+            ["username", "loadtester"],
+            ["password", "loadtester"],
+        ],
+        "outbound_auth_section_options": [
+            ["username", "loadtester"],
+            ["password", "loadtester"],
+        ],
+    }
+    trunk_endpoint_sip = confd_client.endpoints_sip.create(
+        body, tenant_uuid=tenant['uuid']
+    )
+
+    body = {
+        'name': 'loadtester',
+        'context': incall_context['name'],
+        'outgoing_caller_id_format': '+E164',
+    }
+    load_tester_trunk = confd_client.trunks.create(body, tenant_uuid=tenant['uuid'])
+
+    confd_client.trunks(load_tester_trunk).add_endpoint_sip(trunk_endpoint_sip)
 
     user_generator_config = {
         'tenant_uuid': tenant['uuid'],
