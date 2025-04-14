@@ -9,6 +9,11 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=secret  # avoid reset password screen on login
     volumes:
       - grafana-data:/var/lib/grafana:rw
+    healthcheck:
+      test: ["CMD", "wget", "-o", "/dev/null" , "-O", "/dev/null", "http://localhost:3000"]
+      interval: 2s
+      timeout: 1s
+      retries: 5
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -21,6 +26,11 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.retention.time=30d"
+    healthcheck:
+      test: ["CMD", "wget", "-o", "/dev/null" , "-O", "/dev/null", "http://localhost:9090"]
+      interval: 2s
+      timeout: 1s
+      retries: 5
 
 volumes:
   prometheus-data:
