@@ -17,7 +17,7 @@ def parse_cli_args(argv):
     parser.add_argument(
         '-s',
         '--wazo-host',
-        help='Wazo host serveur',
+        help='Wazo host serveur. Use commas to separate multiple values.',
         required=True,
     )
     parser.add_argument(
@@ -54,7 +54,7 @@ def main():
     environment = Environment(loader=FileSystemLoader([os.path.dirname(__file__)]))
     template = environment.get_template('prometheus.yaml.jinja2')
     result = template.render(
-        servers=[{'host': config['wazo_host']}],
+        servers=[{'host': host} for host in config['wazo_host'].split(',')],
     )
     with _open_output_file(config['output']) as output_file:
         output_file.write(result)
