@@ -39,3 +39,13 @@ To review dashboards with production data, you can use `grr`:
 
 - `grr serve grafana-resources`
 - Open `http://localhost:8080`
+
+## Infra
+
+Contains terraform files to build monitor instance and its dependencies
+
+```sh
+terraform init
+terraform plan -var-file=<file>
+terraform apply -var-file=<file>
+```
