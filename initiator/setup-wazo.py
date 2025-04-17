@@ -142,7 +142,6 @@ def main():
             raise
         break
 
-    webrtc_sip_template_uuid = confd_tenant['webrtc_sip_template_uuid']
     global_sip_template_uuid = confd_tenant['global_sip_template_uuid']
 
     body = {
@@ -193,7 +192,7 @@ def main():
 
     user_generator_config = {
         'tenant_uuid': tenant['uuid'],
-        'webrtc_sip_template_uuid': webrtc_sip_template_uuid,  # only to support format: json
+        'global_sip_template_uuid': global_sip_template_uuid,  # only to support format: json
         'internal_context': internal_context['name'],
         'incall_context': incall_context['name'],
         'incall_prefix': incall_prefix,
