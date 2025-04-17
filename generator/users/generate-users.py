@@ -21,7 +21,7 @@ _DEFAULT_CONFIG = {
     'internal_context': 'internal',
     'incall_context': 'from-externe',
     'incall_prefix': '1234',
-    'webrtc_sip_template_uuid': None,
+    'global_sip_template_uuid': None,
     'email': 'dev@wazo.io',
 }
 
@@ -30,7 +30,7 @@ def generate_user(config, index):
     context = config['internal_context']
     incall_context = config['incall_context']
     incall_prefix = config['incall_prefix']
-    webrtc_sip_template_uuid = config['webrtc_sip_template_uuid']
+    global_sip_template_uuid = config['global_sip_template_uuid']
     email_user, email_domain = config['email'].split('@', 1)
     exten = f'{config["users_range_start"] + index}'
     email = f'{email_user}+user{index}@{email_domain}'
@@ -60,7 +60,7 @@ def generate_user(config, index):
                 'endpoint_sip': {
                     'label': exten,
                     'name': exten,
-                    'templates': [{'uuid': webrtc_sip_template_uuid}],
+                    'templates': [{'uuid': global_sip_template_uuid}],
                     'auth_section_options': [
                         ['username', exten],
                         ['password', exten],
@@ -118,7 +118,7 @@ def generate_users_csv(config, number, output_file):
             'subscription_type': user['subscription_type'],
             'exten': user['lines'][0]['extensions'][0]['exten'],
             'context': user['lines'][0]['context'],
-            'line_protocol': 'webrtc',  # Association to webrtc_sip_template is done internally
+            'line_protocol': 'sip',
             'sip_username': sip_auth_options[0][1],
             'sip_password': sip_auth_options[1][1],
             'incall_exten': user['incalls'][0]['extensions'][0]['exten'],
