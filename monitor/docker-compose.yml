@@ -6,7 +6,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=secret  # avoid reset password screen on login
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin # grants admin role to anonymous access
+      - GF_AUTH_ANONYMOUS_ENABLED=true # removes login 1/2
+      - GF_AUTH_BASIC_ENABLED=false # removes login 2/2
     volumes:
       - grafana-data:/var/lib/grafana:rw
     healthcheck:

@@ -6,8 +6,6 @@
 - Install [Grizzly](https://grafana.github.io/grizzly/)
 - Configure Grizzly
   - `grr config set grafana.url http://localhost:3000`
-  - `grr config set grafana.user admin`
-  - `grr config set grafana.token secret`
   - `grr config set targets Dashboard,Dashboardfolder,Datasource`
 
 - Generate prometheus configuration file
