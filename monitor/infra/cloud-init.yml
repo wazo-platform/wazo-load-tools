@@ -2,7 +2,8 @@
 runcmd:
   - echo 'Mounting volume...'
   - mkdir /mnt/prometheus
-  - mount /dev/sdb /mnt/prometheus
+  # Workaround: Volumes are not always detected in the same order
+  - mount /dev/sda /mnt/prometheus || mount /dev/sdb /mnt/prometheus
   - chmod 777 /mnt/prometheus
 
   - echo 'Installing docker...'
