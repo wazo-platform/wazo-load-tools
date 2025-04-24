@@ -60,7 +60,7 @@ spec:
           type: text
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -110,7 +110,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: rabbitmq_running{instance=~"$instance"}
               format: time_series
@@ -125,7 +125,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -173,7 +173,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: rabbitmq_node_mem_used{instance=~"$instance", node=~"$node"}/1024/1024
               instant: true
@@ -184,7 +184,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -232,7 +232,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: process_open_fds{instance=~"$instance",job="rabbitmq"}
               instant: true
@@ -243,7 +243,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -287,7 +287,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*websocket.*"})
               instant: true
@@ -298,7 +298,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -342,7 +342,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*celery.*"})
               instant: true
@@ -353,7 +353,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -397,7 +397,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*wazo-confd.*"})
               instant: true
@@ -408,7 +408,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -452,7 +452,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*wazo-dird.*"})
               instant: true
@@ -463,7 +463,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -507,7 +507,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*wazo-chatd.*"})
               instant: true
@@ -518,7 +518,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -562,7 +562,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*wazo-calld.*"})
               instant: true
@@ -583,7 +583,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -657,7 +657,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum(rabbitmq_node_mem_used{instance=~"$instance", node=~"$node"}) by (node) / sum(rabbitmq_node_mem_limit{instance=~"$instance",node=~"$node"}) by (node) * 100
               format: time_series
@@ -671,7 +671,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -737,7 +737,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum(rabbitmq_node_mem_used{instance=~"$instance", node=~"$node"}) by (node) /1024/1024
               format: time_series
@@ -761,7 +761,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -850,7 +850,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: process_max_fds{instance=~"$instance"}
               format: time_series
@@ -862,7 +862,7 @@ spec:
               step: 2
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: process_open_fds{instance=~"$instance"}
               format: time_series
@@ -886,7 +886,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -959,7 +959,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: min(rabbitmq_node_disk_free{instance=~"$instance", node=~"$node"}) by (node)
               format: time_series
               intervalFactor: 2
@@ -969,7 +969,7 @@ spec:
               step: 2
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: min(rabbitmq_node_disk_free_limit{instance=~"$instance", node=~"$node"}) by (node)
               format: time_series
@@ -993,7 +993,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -1076,7 +1076,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum(rabbitmq_connections{instance=~"$instance"})
               format: time_series
@@ -1090,7 +1090,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -1158,7 +1158,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: sum(rabbitmq_channels{instance=~"$instance"})
               format: time_series
               intervalFactor: 2
@@ -1166,7 +1166,7 @@ spec:
               refId: B
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: sum(rabbitmq_queue_consumers{instance=~"$instance"})
               format: time_series
               intervalFactor: 2
@@ -1186,7 +1186,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -1247,7 +1247,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(rabbitmq_queue_messages{instance=~"$instance", queue=~".*websocket.*"})
               hide: false
@@ -1256,7 +1256,7 @@ spec:
               refId: B
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum(rabbitmq_queue_messages{instance=~"$instance", queue=~".*websocket.*"})
               hide: false
@@ -1267,7 +1267,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -1326,7 +1326,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum(rabbitmq_queue_messages_ready{instance=~"$instance", queue=~".*websocket.*"})
               format: time_series
@@ -1338,7 +1338,7 @@ spec:
               step: 2
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum(rabbitmq_queue_messages_published_total{instance=~"$instance", queue=~".*websocket.*"})
               format: time_series
@@ -1350,7 +1350,7 @@ spec:
               step: 2
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum(rabbitmq_queue_messages_delivered_total{instance=~"$instance", queue=~".*websocket.*"})
               format: time_series
@@ -1362,7 +1362,7 @@ spec:
               step: 2
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum (rabbitmq_queue_messages_unacknowledged{instance=~"$instance", queue!~".*websocket.*"})
               format: time_series
@@ -1386,7 +1386,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -1447,7 +1447,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: rabbitmq_queue_messages{instance=~"$instance", queue!~".*websocket.*"}
               format: time_series
@@ -1461,7 +1461,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -1520,7 +1520,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: max(rabbitmq_queue_messages_ready{instance=~"$instance", queue!~".*websocket.*"}) by (queue)
               format: time_series
@@ -1532,7 +1532,7 @@ spec:
               step: 2
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: max(rabbitmq_queue_messages_published_total{instance=~"$instance", queue!~".*websocket.*"}) by (queue)
               format: time_series
@@ -1544,7 +1544,7 @@ spec:
               step: 2
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: max(rabbitmq_queue_messages_delivered_total{instance=~"$instance", queue!~".*websocket.*"}) by (queue)
               format: time_series
@@ -1556,7 +1556,7 @@ spec:
               step: 2
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: sum by (queue)(rabbitmq_queue_messages_unacknowledged{instance=~"$instance", queue!~".*websocket.*"})
               format: time_series
@@ -1575,11 +1575,9 @@ spec:
         - rabbitmq
     templating:
         list:
-            - current:
-                text: Prometheus
-                value: NY8knvLVz
-              includeAll: false
-              name: datasource
+            - includeAll: false
+              label: datasource
+              name: DS_PROMETHEUS
               options: []
               query: prometheus
               refresh: 1
