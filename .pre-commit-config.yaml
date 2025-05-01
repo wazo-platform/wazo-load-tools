@@ -6,6 +6,7 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+        exclude: monitor/grafana-resources
   - repo: https://github.com/wazo-platform/wazo-git-hooks
     rev: 1.1.5
     hooks:

@@ -154,7 +154,7 @@ spec:
           useTimePrecision: false
           valueMaps:
             - $$hashKey: object:578
-              op: '='
+              op: =
               text: N/A
               value: "null"
           valueTextColor: '#000000'
@@ -244,7 +244,7 @@ spec:
           units: short
           useTimePrecision: false
           valueMaps:
-            - op: '='
+            - op: =
               text: N/A
               value: "null"
           valueTextColor: '#000000'
