@@ -15,6 +15,9 @@
   ./prometheus-config-generator/generate.py --wazo-host <wazo-ip> -o prometheus-config/prometheus.yml
   ```
 
+- (Optional) Update Alertmanager configuration file:
+  `alertmanager-config/alertmanager.yml`
+
 ## Run Environment
 
 - Start containers: `docker compose up -d`
