@@ -8,7 +8,7 @@
   - `grr config set grafana.url http://localhost:3000`
   - `grr config set targets Dashboard,Dashboardfolder,Datasource`
 
-- Generate prometheus configuration file
+- Generate Prometheus configuration file
 
   ```sh
   pip install -r ./prometheus-config-generator/requirements.txt

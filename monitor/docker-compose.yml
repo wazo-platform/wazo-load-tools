@@ -28,8 +28,9 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.retention.time=30d"
+      - "--log.level=debug"
     healthcheck:
-      test: ["CMD", "wget", "-o", "/dev/null" , "-O", "/dev/null", "http://localhost:9090"]
+      test: ["CMD", "wget", "-o", "/dev/null" , "-O", "/dev/null", "http://localhost:9090/-/healthy"]
       interval: 2s
       timeout: 1s
       retries: 5
