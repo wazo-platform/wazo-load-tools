@@ -2,18 +2,18 @@
 # - ${value}: result from the last evaluation of the "for"
 
 groups:
-- name: Alerting Rules
+- name: Static Rules
   rules:
-  - alert: MemoryRabbitMQ
+  - alert: MemoryLeak
     expr:  |
-      avg_over_time(process_resident_memory_bytes{job="rabbitmq"}[10m])
-      > (avg_over_time(process_resident_memory_bytes{job="rabbitmq"}[50m] offset 10m))
+      avg_over_time(process_resident_memory_bytes[10m])
+      > (avg_over_time(process_resident_memory_bytes[50m] offset 10m))
     for: 30m
     labels:
       severity: warning
     annotations:
-      summary: "{{ $labels.job }} memory increase abnormally: {{ $value }}"
-      description: "{{ $labels.instance }} of job {{ $labels.job }} has a potential memory leak"
+      summary: "Service {{ $labels.job }} has a potential memory leak"
+      description: "Instance **{{ $labels.instance }}**, Memory: {{ $value }}"
 
   - alert: CriticalRAMUsage
     expr: |
@@ -27,5 +27,45 @@ groups:
     labels:
       severity: critical
     annotations:
-      summary: Memory usage has been above 90% for more than 10 minutes
-      description: Instance **{{ $labels.instance }}**
+      summary: "Memory usage has been above 90% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: CriticalCPULoad
+    expr: |
+      (1 - avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[10m])))
+      * 100 > 96
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "CPU load average has been above 96% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: AsteriskTotalCalls
+    # Allow 10m without call
+    expr: increase(asterisk_calls_sum[10m]) == 0.0
+    labels:
+      severity: warning
+    annotations:
+      summary: "Total calls are not increasing"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: PGConnectionUsage
+    expr: sum(pg_stat_activity_count) by (instance) / sum(pg_settings_max_connections) by (instance) * 100 > 90
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "PostgreSQL connections usage has been above 90% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+- name: Scenario Rules
+  rules:
+  - alert: AsteriskSimultCalls
+    expr: asterisk_calls_count > 35
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Simultaneous calls are higher than expected"
+      description: "Instance **{{ $labels.instance }}**, Calls: {{ $value }} > 35"
