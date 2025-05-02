@@ -50,3 +50,15 @@ terraform init
 terraform plan -var-file=<file>
 terraform apply -var-file=<file>
 ```
+
+## Alerting Rules
+
+To debug, write or test alerting rules, use `promtool`:
+
+```shell
+docker exec prometheus sh -c "promtool test rules /etc/prometheus/tests.yml"
+```
+
+- Use `--run <test-name>` to execute specific test
+- Use `--debug` to enable debugging and see how many time the alert was
+  in "pending" or "firing" state

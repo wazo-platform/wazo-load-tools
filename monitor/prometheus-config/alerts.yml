@@ -1,0 +1,16 @@
+# NOTE:
+# - ${value}: result from the last evaluation of the "for"
+
+groups:
+- name: Alerting Rules
+  rules:
+  - alert: MemoryRabbitMQ
+    expr:  |
+      avg_over_time(process_resident_memory_bytes{job="rabbitmq"}[10m])
+      > (avg_over_time(process_resident_memory_bytes{job="rabbitmq"}[50m] offset 10m))
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      summary: "{{ $labels.job }} memory increase abnormally: {{ $value }}"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} has a potential memory leak"
