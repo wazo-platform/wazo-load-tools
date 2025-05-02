@@ -11,6 +11,44 @@ evaluation_interval: 1m
 #   have interval less than 10m
 
 tests:
+  - name: when memory reaches threshold more than 10m
+    interval: 1m
+    input_series:
+      - series: 'node_memory_MemFree_bytes{instance="localhost"}'
+        values: '2+0x10'
+      - series: 'node_memory_Buffers_bytes{instance="localhost"}'
+        values: '2+0x10'
+      - series: 'node_memory_Cached_bytes{instance="localhost"}'
+        values: '2+0x10'
+      - series: 'node_memory_MemTotal_bytes{instance="localhost"}'
+        values: '100+0x10'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: CriticalRAMUsage
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              instance: localhost
+            exp_annotations:
+              summary: "Memory usage has been above 90% for more than 10 minutes"
+              description: "Instance **localhost**"
+
+  - name: when memory reaches threshold less than 10m
+    interval: 1m
+    input_series:
+      - series: 'node_memory_MemFree_bytes{instance="localhost"}'
+        values: '30+0x8 2 2'
+      - series: 'node_memory_Buffers_bytes{instance="localhost"}'
+        values: '30+0x8 2 2'
+      - series: 'node_memory_Cached_bytes{instance="localhost"}'
+        values: '30+0x8 2 2'
+      - series: 'node_memory_MemTotal_bytes{instance="localhost"}'
+        values: '100+0x10'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: CriticalRAMUsage
+        exp_alerts: []
+
   - name: when memory increase by step
     interval: 1m
     input_series:

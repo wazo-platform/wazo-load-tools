@@ -14,3 +14,18 @@ groups:
     annotations:
       summary: "{{ $labels.job }} memory increase abnormally: {{ $value }}"
       description: "{{ $labels.instance }} of job {{ $labels.job }} has a potential memory leak"
+
+  - alert: CriticalRAMUsage
+    expr: |
+      (1 -
+        (
+          (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)
+          / node_memory_MemTotal_bytes
+        )
+      ) * 100 > 90
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: Memory usage has been above 90% for more than 10 minutes
+      description: Instance **{{ $labels.instance }}**
