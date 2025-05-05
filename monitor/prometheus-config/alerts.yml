@@ -4,6 +4,17 @@
 groups:
 - name: Static Rules
   rules:
+  - alert: MemoryLeak
+    expr:  |
+      avg_over_time(namedprocess_namegroup_memory_bytes{memtype="resident"}[10m])
+      > (avg_over_time(namedprocess_namegroup_memory_bytes{memtype="resident"}[50m] offset 10m))
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Service {{ $labels.groupname }} has a potential memory leak"
+      description: "Instance **{{ $labels.instance }}**, Memory: {{ $value }}"
+
   - alert: MemoryLeakFromExporter
     expr:  |
       avg_over_time(process_resident_memory_bytes[10m])
