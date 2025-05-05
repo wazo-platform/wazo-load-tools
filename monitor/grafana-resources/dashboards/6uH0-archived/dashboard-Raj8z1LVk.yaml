@@ -28,7 +28,7 @@ spec:
     panels:
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -85,7 +85,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               editorMode: builder
               expr: increase(flask_http_request_duration_seconds_bucket{service="$service", le="7.5"}[30s]) / ignoring(le) increase(flask_http_request_duration_seconds_count{service="$service"}[30s])
               legendFormat: __auto
@@ -95,7 +95,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -154,7 +154,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               editorMode: code
               expr: histogram_quantile(0.95, avg by(le) (rate(flask_http_request_duration_seconds_bucket{service="${service}"}[$__rate_interval])))
               legendFormat: __auto
@@ -164,7 +164,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -222,7 +222,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               editorMode: code
               exemplar: false
               expr: |-
@@ -246,13 +246,21 @@ spec:
     tags: []
     templating:
         list:
+            - includeAll: false
+              label: datasource
+              name: DS_PROMETHEUS
+              options: []
+              query: prometheus
+              refresh: 1
+              regex: ""
+              type: datasource
             - current:
                 selected: true
                 text: auth_lt
                 value: auth_lt
               datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               definition: label_values(flask_exporter_info, service)
               hide: 0
               includeAll: false

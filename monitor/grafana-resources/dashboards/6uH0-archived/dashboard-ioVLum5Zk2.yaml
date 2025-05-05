@@ -32,7 +32,7 @@ spec:
               value: current
           datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fontSize: 100%
           gridPos:
             h: 7
@@ -89,7 +89,7 @@ spec:
           type: table-old
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -150,7 +150,7 @@ spec:
           dashes: false
           datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           editable: true
           error: false
           fieldConfig:
@@ -232,7 +232,7 @@ spec:
           dashes: false
           datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           decimals: 2
           editable: true
           error: false
@@ -327,7 +327,7 @@ spec:
           dashes: false
           datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           editable: true
           error: false
           fieldConfig:
@@ -418,7 +418,7 @@ spec:
           dashes: false
           datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           editable: true
           error: false
           fieldConfig:
@@ -502,7 +502,7 @@ spec:
           dashes: false
           datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           editable: true
           error: false
           fieldConfig:
@@ -586,7 +586,7 @@ spec:
           dashes: false
           datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           editable: true
           error: false
           fieldConfig:
@@ -680,7 +680,7 @@ spec:
           dashes: false
           datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           editable: true
           error: false
           fieldConfig:
@@ -816,7 +816,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: topk(20, irate(redis_commands_total{instance=~"$instance"} [1m]))
               format: time_series
@@ -902,7 +902,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: topk(20, irate(redis_commands_duration_seconds_total{instance=~"$instance"} [1m]))
               format: time_series
@@ -945,10 +945,18 @@ spec:
         - redis
     templating:
         list:
+            - includeAll: false
+              label: datasource
+              name: DS_PROMETHEUS
+              options: []
+              query: prometheus
+              refresh: 1
+              regex: ""
+              type: datasource
             - current: {}
               datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               definition: label_values(redis_up, release)
               hide: 0
               includeAll: false
@@ -969,7 +977,7 @@ spec:
             - current: {}
               datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               definition: query_result(up{release="$release"})
               hide: 0
               includeAll: true
