@@ -218,3 +218,20 @@ tests:
             exp_annotations:
               summary: 'PostgreSQL connections usage has been above 90% for more than 10 minutes'
               description: 'Instance **localhost**'
+
+  - name: asterisk file descriptors
+    interval: 1m
+    input_series:
+      - series: 'namedprocess_namegroup_open_filedesc{groupname="asterisk", instance="localhost"}'
+        values: '8000+0x4'
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: AsteriskFileDescriptors
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: localhost
+              groupname: asterisk
+            exp_annotations:
+              summary: "Asterisk file descriptors count has been above 90% for more than 5 minutes"
+              description: "Instance **localhost**, File Descriptors: 8000"

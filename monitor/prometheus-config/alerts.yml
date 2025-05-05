@@ -70,6 +70,15 @@ groups:
       summary: "PostgreSQL connections usage has been above 90% for more than 10 minutes"
       description: "Instance **{{ $labels.instance }}**"
 
+  - alert: AsteriskFileDescriptors
+    expr: namedprocess_namegroup_open_filedesc{groupname="asterisk"} > (8192 * 0.90)
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Asterisk file descriptors count has been above 90% for more than 5 minutes"
+      description: "Instance **{{ $labels.instance }}**, File Descriptors: {{ $value }}"
+
 - name: Scenario Rules
   rules:
   - alert: AsteriskSimultCalls
