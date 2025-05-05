@@ -75,48 +75,48 @@ tests:
         alertname: CriticalCPULoad
         exp_alerts: []
 
-  - name: when memory increase by step
+  - name: when exporter memory increase by step
     interval: 1m
     input_series:
       - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
         values: '0 100+0x28 200+0x30'
     alert_rule_test:
       - eval_time: 60m
-        alertname: MemoryLeak
+        alertname: MemoryLeakFromExporter
         exp_alerts:
           - exp_labels:
               severity: warning
               instance: localhost
               job: rabbitmq
             exp_annotations:
-              summary: "Service rabbitmq has a potential memory leak"
+              summary: "Exporter rabbitmq has a potential memory leak"
               description: "Instance **localhost**, Memory: 200"
 
-  - name: when memory decrease by step
+  - name: when exporter memory decrease by step
     interval: 1m
     input_series:
       - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
         values: '0 200+0x28 100+0x30'
     alert_rule_test:
       - eval_time: 60m
-        alertname: MemoryLeak
+        alertname: MemoryLeakFromExporter
         exp_alerts: []
 
-  - name: when memory increase slowly
+  - name: when exporter memory increase slowly
     interval: 1m
     input_series:
       - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
         values: '0 100+1x59'
     alert_rule_test:
       - eval_time: 60m
-        alertname: MemoryLeak
+        alertname: MemoryLeakFromExporter
         exp_alerts:
           - exp_labels:
               severity: warning
               instance: localhost
               job: rabbitmq
             exp_annotations:
-              summary: "Service rabbitmq has a potential memory leak"
+              summary: "Exporter rabbitmq has a potential memory leak"
               description: "Instance **localhost**, Memory: 154.5"
 
   - name: simultaneous calls

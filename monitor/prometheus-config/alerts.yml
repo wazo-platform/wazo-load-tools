@@ -4,7 +4,7 @@
 groups:
 - name: Static Rules
   rules:
-  - alert: MemoryLeak
+  - alert: MemoryLeakFromExporter
     expr:  |
       avg_over_time(process_resident_memory_bytes[10m])
       > (avg_over_time(process_resident_memory_bytes[50m] offset 10m))
@@ -12,7 +12,7 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: "Service {{ $labels.job }} has a potential memory leak"
+      summary: "Exporter {{ $labels.job }} has a potential memory leak"
       description: "Instance **{{ $labels.instance }}**, Memory: {{ $value }}"
 
   - alert: CriticalRAMUsage
