@@ -35,6 +35,22 @@ services:
       timeout: 1s
       retries: 5
 
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager-config:/etc/alertmanager:ro
+      - alertmanager-data:/alertmanager:rw
+    healthcheck:
+      test: ["CMD", "wget", "-o", "/dev/null" , "-O", "/dev/null", "http://localhost:9093/-/healthy"]
+      interval: 2s
+      timeout: 1s
+      retries: 5
+
 volumes:
   prometheus-data:
   grafana-data:
+  alertmanager-data:

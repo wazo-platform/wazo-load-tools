@@ -1,0 +1,91 @@
+# NOTE:
+# - ${value}: result from the last evaluation of the "for"
+
+groups:
+- name: Static Rules
+  rules:
+  - alert: MemoryLeak
+    expr:  |
+      avg_over_time(namedprocess_namegroup_memory_bytes{memtype="resident"}[10m])
+      > (avg_over_time(namedprocess_namegroup_memory_bytes{memtype="resident"}[50m] offset 10m))
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Service {{ $labels.groupname }} has a potential memory leak"
+      description: "Instance **{{ $labels.instance }}**, Memory: {{ $value }}"
+
+  - alert: MemoryLeakFromExporter
+    expr:  |
+      avg_over_time(process_resident_memory_bytes[10m])
+      > (avg_over_time(process_resident_memory_bytes[50m] offset 10m))
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Exporter {{ $labels.job }} has a potential memory leak"
+      description: "Instance **{{ $labels.instance }}**, Memory: {{ $value }}"
+
+  - alert: CriticalRAMUsage
+    expr: |
+      (1 -
+        (
+          (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)
+          / node_memory_MemTotal_bytes
+        )
+      ) * 100 > 90
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Memory usage has been above 90% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: CriticalCPULoad
+    expr: |
+      (1 - avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[10m])))
+      * 100 > 96
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "CPU load average has been above 96% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: AsteriskTotalCalls
+    # Allow 10m without call
+    expr: increase(asterisk_calls_sum[10m]) == 0.0
+    labels:
+      severity: warning
+    annotations:
+      summary: "Total calls are not increasing"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: PGConnectionUsage
+    expr: sum(pg_stat_activity_count) by (instance) / sum(pg_settings_max_connections) by (instance) * 100 > 90
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "PostgreSQL connections usage has been above 90% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: AsteriskFileDescriptors
+    expr: namedprocess_namegroup_open_filedesc{groupname="asterisk"} > (8192 * 0.90)
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Asterisk file descriptors count has been above 90% for more than 5 minutes"
+      description: "Instance **{{ $labels.instance }}**, File Descriptors: {{ $value }}"
+
+- name: Scenario Rules
+  rules:
+  - alert: AsteriskSimultCalls
+    expr: asterisk_calls_count > 35
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Simultaneous calls are higher than expected"
+      description: "Instance **{{ $labels.instance }}**, Calls: {{ $value }} > 35"

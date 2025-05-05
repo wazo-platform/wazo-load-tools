@@ -1,0 +1,237 @@
+rule_files:
+    - alerts.yml
+
+evaluation_interval: 1m
+
+# NOTE:
+# - Avoid to use ambiguous short syntax (1x10) for values
+#   ex: 1x10 will produce 11 values
+# - <metric>[10m] is left-open, i.e. samples with timestamps coinciding with
+#   the left boundary of the range are excluded. That's why dummy series must
+#   have interval less than 10m
+
+tests:
+  - name: when memory firing more than 10m
+    interval: 1m
+    input_series:
+      - series: 'node_memory_MemFree_bytes{instance="localhost"}'
+        values: '2+0x10'
+      - series: 'node_memory_Buffers_bytes{instance="localhost"}'
+        values: '2+0x10'
+      - series: 'node_memory_Cached_bytes{instance="localhost"}'
+        values: '2+0x10'
+      - series: 'node_memory_MemTotal_bytes{instance="localhost"}'
+        values: '100+0x10'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: CriticalRAMUsage
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              instance: localhost
+            exp_annotations:
+              summary: 'Memory usage has been above 90% for more than 10 minutes'
+              description: 'Instance **localhost**'
+
+  - name: when memory firing less than 10m
+    interval: 1m
+    input_series:
+      - series: 'node_memory_MemFree_bytes{instance="localhost"}'
+        values: '30+0x8 2 2'
+      - series: 'node_memory_Buffers_bytes{instance="localhost"}'
+        values: '30+0x8 2 2'
+      - series: 'node_memory_Cached_bytes{instance="localhost"}'
+        values: '30+0x8 2 2'
+      - series: 'node_memory_MemTotal_bytes{instance="localhost"}'
+        values: '100+0x10'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: CriticalRAMUsage
+        exp_alerts: []
+
+  - name: when cpu load average firing more than 10m
+    interval: 1m
+    input_series:
+      - series: 'node_cpu_seconds_total{instance="localhost", mode="idle"}'
+        values: '0+2x20'
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: CriticalCPULoad
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              instance: localhost
+            exp_annotations:
+              summary: "CPU load average has been above 96% for more than 10 minutes"
+              description: 'Instance **localhost**'
+
+  - name: when cpu load average firing less than 10m
+    interval: 1m
+    input_series:
+      - series: 'node_cpu_seconds_total{instance="localhost", mode="idle"}'
+        values: '0+4x20'
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: CriticalCPULoad
+        exp_alerts: []
+
+  - name: when memory increase by step
+    interval: 1m
+    input_series:
+      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+        values: '0 100+0x28 200+0x30'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident",instance="localhost"}'
+        values: '0 100+0x28 200+0x30'
+    alert_rule_test:
+      - eval_time: 60m
+        alertname: MemoryLeakFromExporter
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: localhost
+              job: rabbitmq
+            exp_annotations:
+              summary: "Exporter rabbitmq has a potential memory leak"
+              description: "Instance **localhost**, Memory: 200"
+      - eval_time: 60m
+        alertname: MemoryLeak
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: localhost
+              groupname: rabbitmq
+              memtype: resident
+            exp_annotations:
+              summary: "Service rabbitmq has a potential memory leak"
+              description: "Instance **localhost**, Memory: 200"
+
+  - name: when memory decrease by step
+    interval: 1m
+    input_series:
+      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+        values: '0 200+0x28 100+0x30'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident",instance="localhost"}'
+        values: '0 200+0x28 100+0x30'
+    alert_rule_test:
+      - eval_time: 60m
+        alertname: MemoryLeakFromExporter
+        exp_alerts: []
+      - eval_time: 60m
+        alertname: MemoryLeak
+        exp_alerts: []
+
+  - name: when memory increase slowly
+    interval: 1m
+    input_series:
+      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+        values: '0 100+1x59'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident",instance="localhost"}'
+        values: '0 100+1x59'
+    alert_rule_test:
+      - eval_time: 60m
+        alertname: MemoryLeakFromExporter
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: localhost
+              job: rabbitmq
+            exp_annotations:
+              summary: "Exporter rabbitmq has a potential memory leak"
+              description: "Instance **localhost**, Memory: 154.5"
+      - eval_time: 60m
+        alertname: MemoryLeak
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: localhost
+              groupname: rabbitmq
+              memtype: resident
+            exp_annotations:
+              summary: "Service rabbitmq has a potential memory leak"
+              description: "Instance **localhost**, Memory: 154.5"
+
+  - name: simultaneous calls
+    interval: 1m
+    input_series:
+      - series: 'asterisk_calls_count{instance="localhost"}'
+        values: '0+0x9 42+0x9'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: AsteriskSimultCalls
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: AsteriskSimultCalls
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: localhost
+            exp_annotations:
+              summary: 'Simultaneous calls are higher than expected'
+              description: 'Instance **localhost**, Calls: 42 > 35'
+
+  - name: total calls
+    interval: 1m
+    input_series:
+      - series: 'asterisk_calls_sum{instance="localhost"}'
+        values: '0+1x10 10+0x9'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: AsteriskTotalCalls
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: AsteriskTotalCalls
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: localhost
+            exp_annotations:
+              summary: 'Total calls are not increasing'
+              description: 'Instance **localhost**'
+
+  - name: total calls when reset
+    interval: 1m
+    input_series:
+      - series: 'asterisk_calls_sum{instance="localhost"}'
+        values: '0+1x10 0 0 0+1x7'
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: AsteriskTotalCalls
+        exp_alerts: []
+
+  - name: postgres connections
+    interval: 1m
+    input_series:
+      - series: 'pg_stat_activity_count{instance="localhost"}'
+        values: '50+0x9 91+0x10'
+      - series: 'pg_settings_max_connections{instance="localhost"}'
+        values: '100+0x19'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: PGConnectionUsage
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: PGConnectionUsage
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              instance: localhost
+            exp_annotations:
+              summary: 'PostgreSQL connections usage has been above 90% for more than 10 minutes'
+              description: 'Instance **localhost**'
+
+  - name: asterisk file descriptors
+    interval: 1m
+    input_series:
+      - series: 'namedprocess_namegroup_open_filedesc{groupname="asterisk", instance="localhost"}'
+        values: '8000+0x4'
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: AsteriskFileDescriptors
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: localhost
+              groupname: asterisk
+            exp_annotations:
+              summary: "Asterisk file descriptors count has been above 90% for more than 5 minutes"
+              description: "Instance **localhost**, File Descriptors: 8000"

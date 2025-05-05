@@ -1,0 +1,5 @@
+receivers:
+- name: noop
+
+route:
+  receiver: noop

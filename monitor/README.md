@@ -15,6 +15,9 @@
   ./prometheus-config-generator/generate.py --wazo-host <wazo-ip> -o prometheus-config/prometheus.yml
   ```
 
+- (Optional) Update Alertmanager configuration file:
+  `alertmanager-config/alertmanager.yml`
+
 ## Run Environment
 
 - Start containers: `docker compose up -d`
@@ -47,3 +50,15 @@ terraform init
 terraform plan -var-file=<file>
 terraform apply -var-file=<file>
 ```
+
+## Alerting Rules
+
+To debug, write or test alerting rules, use `promtool`:
+
+```shell
+docker exec prometheus sh -c "promtool test rules /etc/prometheus/tests.yml"
+```
+
+- Use `--run <test-name>` to execute specific test
+- Use `--debug` to enable debugging and see how many time the alert was
+  in "pending" or "firing" state
