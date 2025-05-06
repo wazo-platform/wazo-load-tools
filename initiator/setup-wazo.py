@@ -154,7 +154,8 @@ def main():
     body = {
         'label': 'internal',
         'type': 'internal',
-        'user_ranges': [{'start': '10000', 'end': '99999'}],
+        'user_ranges': [{'start': '10000', 'end': '19999'}],
+        'group_ranges': [{'start': '20000', 'end': '29999'}],
     }
     internal_context = confd_client.contexts.create(body)
 
