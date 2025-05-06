@@ -60,7 +60,9 @@ def generate_user(config, index):
                 'endpoint_sip': {
                     'label': exten,
                     'name': exten,
-                    'templates': [{'uuid': global_sip_template_uuid}],
+                    'templates': [
+                        {'uuid': global_sip_template_uuid},
+                    ],
                     'auth_section_options': [
                         ['username', exten],
                         ['password', exten],

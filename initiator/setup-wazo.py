@@ -143,6 +143,13 @@ def main():
         break
 
     global_sip_template_uuid = confd_tenant['global_sip_template_uuid']
+    global_sip_template = confd_client.endpoints_sip_templates.get(
+        global_sip_template_uuid
+    )
+    global_sip_template['aor_section_options'].append(['qualify_frequency', '0'])
+    global_sip_template['endpoint_section_options'].append(['rtp_symmetric', 'yes'])
+    global_sip_template['endpoint_section_options'].append(['rewrite_contact', 'yes'])
+    confd_client.endpoints_sip_templates.update(global_sip_template)
 
     body = {
         'label': 'internal',
