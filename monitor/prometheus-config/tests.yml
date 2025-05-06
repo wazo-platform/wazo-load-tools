@@ -91,8 +91,8 @@ tests:
               instance: localhost
               job: rabbitmq
             exp_annotations:
-              summary: "Exporter rabbitmq has a potential memory leak"
-              description: "Instance **localhost**, Memory: 200"
+              summary: "Potential exporter memory leak"
+              description: "Instance **localhost**, Exporter: rabbitmq, Memory: 200"
       - eval_time: 60m
         alertname: MemoryLeak
         exp_alerts:
@@ -102,8 +102,8 @@ tests:
               groupname: rabbitmq
               memtype: resident
             exp_annotations:
-              summary: "Service rabbitmq has a potential memory leak"
-              description: "Instance **localhost**, Memory: 200"
+              summary: "Potential service memory leak"
+              description: "Instance **localhost**, Service: rabbitmq, Memory: 200"
 
   - name: when memory decrease by step
     interval: 1m
@@ -136,8 +136,8 @@ tests:
               instance: localhost
               job: rabbitmq
             exp_annotations:
-              summary: "Exporter rabbitmq has a potential memory leak"
-              description: "Instance **localhost**, Memory: 154.5"
+              summary: "Potential exporter memory leak"
+              description: "Instance **localhost**, Exporter: rabbitmq, Memory: 154.5"
       - eval_time: 60m
         alertname: MemoryLeak
         exp_alerts:
@@ -147,8 +147,8 @@ tests:
               groupname: rabbitmq
               memtype: resident
             exp_annotations:
-              summary: "Service rabbitmq has a potential memory leak"
-              description: "Instance **localhost**, Memory: 154.5"
+              summary: "Potential service memory leak"
+              description: "Instance **localhost**, Service: rabbitmq, Memory: 154.5"
 
   - name: simultaneous calls
     interval: 1m
