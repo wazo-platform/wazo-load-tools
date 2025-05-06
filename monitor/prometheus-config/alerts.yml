@@ -12,8 +12,8 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: "Service {{ $labels.groupname }} has a potential memory leak"
-      description: "Instance **{{ $labels.instance }}**, Memory: {{ $value }}"
+      summary: "Potential service memory leak"
+      description: "Instance **{{ $labels.instance }}**, Service: {{ $labels.groupname }}, Memory: {{ $value }}"
 
   - alert: MemoryLeakFromExporter
     expr:  |
@@ -23,8 +23,8 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: "Exporter {{ $labels.job }} has a potential memory leak"
-      description: "Instance **{{ $labels.instance }}**, Memory: {{ $value }}"
+      summary: "Potential exporter memory leak"
+      description: "Instance **{{ $labels.instance }}**, Exporter: {{ $labels.job }}, Memory: {{ $value }}"
 
   - alert: CriticalRAMUsage
     expr: |
