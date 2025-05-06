@@ -28,5 +28,11 @@
     --password <password> \
     --users-file generator/users/users.csv \
     --format csv \
+    --extra-config generator/users/config.yml \
+    --output generator/users/created-users.json
+  genetator/users/add-users-to-group.py
+    --host <wazo-host> \
+    --password <password> \
+    --created-users-file generator/users/created-users.json \
     --extra-config generator/users/config.yml
   ```

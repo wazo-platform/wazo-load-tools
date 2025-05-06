@@ -198,12 +198,31 @@ def main():
 
     confd_client.trunks(load_tester_trunk).add_endpoint_sip(trunk_endpoint_sip)
 
+    body = {
+        'label': 'callees',
+        'max_calls': 100,
+        'ring_in_use': False,
+        'ring_strategy': 'memorized_round_robin',
+    }
+    group = confd_client.groups.create(body)
+    body = {'exten': '20000', 'context': internal_context['name']}
+    extension = confd_client.extensions.create(body)
+    confd_client.groups(group['uuid']).add_extension(extension)
+
+    body = {'destination': {'group_id': group['id'], 'type': 'group'}}
+    incall = confd_client.incalls.create(body)
+
+    body = {'exten': '20000', 'context': incall_context['name']}
+    extension = confd_client.extensions.create(body)
+    confd_client.incalls(incall['id']).add_extension(extension)
+
     user_generator_config = {
         'tenant_uuid': tenant['uuid'],
         'global_sip_template_uuid': global_sip_template_uuid,  # only to support format: json
         'internal_context': internal_context['name'],
         'incall_context': incall_context['name'],
         'incall_prefix': incall_prefix,
+        'group_uuid': group['uuid'],
     }
 
     with _open_output_file(config['output']) as output_file:
