@@ -143,18 +143,13 @@ def main():
         break
 
     global_sip_template_uuid = confd_tenant['global_sip_template_uuid']
-
-    body = {
-        'label': 'line-config',
-        'aor_section_options': [
-            ['qualify_frequency', '0'],
-        ],
-        'endpoint_section_options': [
-            ['rtp_symmetric', 'yes'],
-            ['rewrite_contact', 'yes'],
-        ],
-    }
-    load_test_line_template = confd_client.endpoints_sip_templates.create(body)
+    global_sip_template = confd_client.endpoints_sip_templates.get(
+        global_sip_template_uuid
+    )
+    global_sip_template['aor_section_options'].append(['qualify_frequency', '0'])
+    global_sip_template['endpoint_section_options'].append(['rtp_symmetric', 'yes'])
+    global_sip_template['endpoint_section_options'].append(['rewrite_contact', 'yes'])
+    confd_client.endpoints_sip_templates.update(global_sip_template)
 
     body = {
         'label': 'internal',
@@ -214,7 +209,6 @@ def main():
     user_generator_config = {
         'tenant_uuid': tenant['uuid'],
         'global_sip_template_uuid': global_sip_template_uuid,  # only to support format: json
-        'line_template_uuid': load_test_line_template['uuid'],
         'internal_context': internal_context['name'],
         'incall_context': incall_context['name'],
         'incall_prefix': incall_prefix,
