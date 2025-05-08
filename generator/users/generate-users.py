@@ -32,7 +32,6 @@ def generate_user(config, index):
     incall_prefix = config['incall_prefix']
     group_uuid = config['group_uuid']
     global_sip_template_uuid = config['global_sip_template_uuid']
-    line_template_uuid = config['line_template_uuid']
     email_user, email_domain = config['email'].split('@', 1)
     exten = f'{config["users_range_start"] + index}'
     email = f'{email_user}+user{index}@{email_domain}'
@@ -64,7 +63,6 @@ def generate_user(config, index):
                     'name': exten,
                     'templates': [
                         {'uuid': global_sip_template_uuid},
-                        {'uuid': line_template_uuid},
                     ],
                     'auth_section_options': [
                         ['username', exten],
