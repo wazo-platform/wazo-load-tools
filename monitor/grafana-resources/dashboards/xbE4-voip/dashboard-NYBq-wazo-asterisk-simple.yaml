@@ -56,7 +56,7 @@ spec:
           type: text
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -104,9 +104,9 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: up{instance="$instance"}
+              expr: up{instance="$instance",job="asterisk"}
               interval: ""
               legendFormat: ""
               refId: A
@@ -114,7 +114,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -152,7 +152,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_core_uptime_seconds{instance="$instance"}
               interval: ""
@@ -162,7 +162,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -200,7 +200,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_core_last_reload_seconds{instance="$instance"}
               interval: ""
@@ -210,7 +210,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -248,7 +248,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_core_scrape_time_ms{instance="$instance"}
               interval: ""
@@ -268,7 +268,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -367,7 +367,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_calls_count{instance="$instance"}
               format: time_series
@@ -378,7 +378,7 @@ spec:
               refId: A
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_channels_count{instance="$instance"}
               hide: false
@@ -387,7 +387,7 @@ spec:
               refId: B
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_bridges_count{instance="$instance"}
               hide: false
@@ -398,7 +398,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -437,7 +437,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_calls_count{instance="$instance"}
               interval: ""
@@ -447,7 +447,7 @@ spec:
           type: gauge
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -483,7 +483,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: max_over_time(asterisk_calls_count{instance="$instance"}[1d])
               interval: ""
@@ -493,7 +493,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -535,7 +535,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_channels_count{instance="$instance"}
               interval: ""
@@ -545,7 +545,7 @@ spec:
           type: gauge
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -587,7 +587,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: max_over_time(asterisk_channels_count{instance="$instance"}[1d])
               interval: ""
@@ -597,7 +597,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -637,7 +637,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_bridges_count{instance="$instance"}
               interval: ""
@@ -647,7 +647,7 @@ spec:
           type: gauge
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -686,7 +686,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: max_over_time(asterisk_bridges_count{instance="$instance"}[1d])
               interval: ""
@@ -696,7 +696,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -735,7 +735,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(asterisk_endpoints_state{instance="$instance"}==2)
               interval: ""
@@ -745,7 +745,7 @@ spec:
           type: gauge
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -784,7 +784,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: max_over_time(count(asterisk_endpoints_state{instance="$instance"}==2)[1d:10m])
               interval: ""
@@ -804,7 +804,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -870,7 +870,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(asterisk_endpoints_state{instance="$instance"}==2)
               interval: "300"
@@ -880,7 +880,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -935,7 +935,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: |
                 count(asterisk_endpoints_state{instance="$instance"}==0)
@@ -945,7 +945,7 @@ spec:
               refId: A
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(asterisk_endpoints_state{instance="$instance"}==1)
               format: time_series
@@ -955,7 +955,7 @@ spec:
               refId: B
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: count(asterisk_endpoints_state{instance="$instance"}==2)
               format: time_series
@@ -970,7 +970,7 @@ spec:
           type: piechart
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -1010,7 +1010,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_endpoints_count{instance="$instance"}
               interval: ""
@@ -1020,7 +1020,7 @@ spec:
           type: stat
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -1078,7 +1078,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: asterisk_endpoints_count{instance="$instance"}
               interval: "300"
@@ -1094,12 +1094,20 @@ spec:
         - asterisk
     templating:
         list:
+            - includeAll: false
+              label: datasource
+              name: DS_PROMETHEUS
+              options: []
+              query: prometheus
+              refresh: 1
+              regex: ""
+              type: datasource
             - current:
-                text: 172.16.43.227:443
-                value: 172.16.43.227:443
+                text: ""
+                value: ""
               datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               definition: |
                 label_values(asterisk_bridges_count{instance=~".*"}, instance)
               includeAll: false

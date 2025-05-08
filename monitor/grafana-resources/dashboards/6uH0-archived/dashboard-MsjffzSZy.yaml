@@ -38,7 +38,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -85,7 +85,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: nginx_up{instance=~"$instance"}
               format: time_series
               instant: false
@@ -105,7 +105,7 @@ spec:
           type: row
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           description: ""
           fieldConfig:
             defaults:
@@ -170,7 +170,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: irate(nginx_connections_accepted{instance=~"$instance"}[5m])
               format: time_series
               instant: false
@@ -179,7 +179,7 @@ spec:
               refId: A
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: irate(nginx_connections_handled{instance=~"$instance"}[5m])
               format: time_series
               instant: false
@@ -190,7 +190,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -254,7 +254,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: nginx_connections_active{instance=~"$instance"}
               format: time_series
               intervalFactor: 1
@@ -262,7 +262,7 @@ spec:
               refId: A
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: nginx_connections_reading{instance=~"$instance"}
               format: time_series
               intervalFactor: 1
@@ -270,7 +270,7 @@ spec:
               refId: B
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: nginx_connections_waiting{instance=~"$instance"}
               format: time_series
               intervalFactor: 1
@@ -278,7 +278,7 @@ spec:
               refId: C
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: nginx_connections_writing{instance=~"$instance"}
               format: time_series
               intervalFactor: 1
@@ -288,7 +288,7 @@ spec:
           type: timeseries
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -351,7 +351,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               expr: irate(nginx_http_requests_total{instance=~"$instance"}[5m])
               format: time_series
               intervalFactor: 1
@@ -368,10 +368,7 @@ spec:
         - nginx prometheus exporter
     templating:
         list:
-            - current:
-                text: default
-                value: default
-              includeAll: false
+            - includeAll: false
               label: datasource
               name: DS_PROMETHEUS
               options: []
@@ -384,7 +381,7 @@ spec:
                 value: $__all
               datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               definition: label_values(nginx_up, instance)
               includeAll: true
               multi: true

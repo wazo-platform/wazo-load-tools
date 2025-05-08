@@ -27,7 +27,7 @@ spec:
     panels:
         - datasource:
             type: prometheus
-            uid: NY8knvLVz
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -115,7 +115,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               editorMode: code
               expr: |-
                 histogram_quantile(
@@ -133,7 +133,7 @@ spec:
               refId: A
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               editorMode: code
               expr: |-
                 histogram_quantile(
@@ -152,7 +152,7 @@ spec:
               refId: B
             - datasource:
                 type: prometheus
-                uid: NY8knvLVz
+                uid: ${DS_PROMETHEUS}
               editorMode: code
               expr: |-
                 histogram_quantile(
@@ -235,7 +235,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: PEB814BE3CA3B78C0
+                uid: ${DS_PROMETHEUS}
               editorMode: code
               expr: |-
                 round(
@@ -252,7 +252,9 @@ spec:
               refId: A
           title: Traffic
           type: timeseries
-        - datasource: {}
+        - datasource:
+            type: prometheus
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -318,7 +320,7 @@ spec:
           targets:
             - datasource:
                 type: prometheus
-                uid: PEB814BE3CA3B78C0
+                uid: ${DS_PROMETHEUS}
               editorMode: code
               expr: sum(rate(nginx_request_status_code_total{path=~"$path", status_code!~"[4-5].*"}[1m])) / sum(rate(nginx_request_status_code_total{path=~"$path"}[1m]))
               legendFormat: '{{ ingress }}'
@@ -332,6 +334,14 @@ spec:
     tags: []
     templating:
         list:
+            - includeAll: false
+              label: datasource
+              name: DS_PROMETHEUS
+              options: []
+              query: prometheus
+              refresh: 1
+              regex: ""
+              type: datasource
             - current:
                 text: /api/devices
                 value: /api/devices

@@ -32,7 +32,7 @@ spec:
           title: OpenSIPS meta metrics - $process
           type: row
         - datasource:
-            uid: $datasource
+            uid: ${DS_PROMETHEUS}
           description: Did the OpenSIPS Management Interface respond to our queries?
           fieldConfig:
             defaults:
@@ -79,7 +79,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               expr: opensips_up{process=~"$process", instance=~"$node"}
               format: time_series
               instant: true
@@ -88,7 +88,7 @@ spec:
           title: OpenSIPS status
           type: stat
         - datasource:
-            uid: $datasource
+            uid: ${DS_PROMETHEUS}
           description: Is the scrape successful?
           fieldConfig:
             defaults:
@@ -135,7 +135,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               expr: up{job="opensips", instance=~"$node", process="$process"}
               format: time_series
               instant: true
@@ -144,7 +144,7 @@ spec:
           title: Scrape status
           type: stat
         - datasource:
-            uid: $datasource
+            uid: ${DS_PROMETHEUS}
           description: How much CPU does the OpenSIPS exporter use?
           fieldConfig:
             defaults:
@@ -191,7 +191,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               expr: (sum(rate(process_cpu_seconds_total{instance=~"$node",job="opensips", process=~"$process"}[$interval])) by () or sum(irate(process_cpu_seconds_total{instance=~"$node",job="opensips", process=~"$process"}[5m])) by ()) / count(node_cpu{mode="user", instance=~"$node"})*100
               format: time_series
               instant: true
@@ -201,7 +201,7 @@ spec:
           title: CPU Usage exporter
           type: stat
         - datasource:
-            uid: $datasource
+            uid: ${DS_PROMETHEUS}
           description: How much memory does the OpenSIPS exporter use?
           fieldConfig:
             defaults:
@@ -246,7 +246,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               expr: process_resident_memory_bytes{instance=~"$node",job="opensips", process=~"$process"}
               format: time_series
               instant: true
@@ -255,7 +255,7 @@ spec:
           title: Memory Usage exporter
           type: stat
         - datasource:
-            uid: $datasource
+            uid: ${DS_PROMETHEUS}
           description: How long has the OpenSIPS exporter been up and running?
           fieldConfig:
             defaults:
@@ -300,7 +300,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               expr: time() - process_start_time_seconds{instance=~"$node",job="opensips", process=~"$process"}
               format: time_series
               instant: true
@@ -309,7 +309,7 @@ spec:
           title: Exporter Uptime
           type: stat
         - datasource:
-            uid: $datasource
+            uid: ${DS_PROMETHEUS}
           description: How long has the OpenSIPS process been running?
           fieldConfig:
             defaults:
@@ -354,7 +354,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               expr: opensips_core_uptime_seconds{instance=~"$node", process=~"$process"}
               format: time_series
               instant: true
@@ -363,7 +363,7 @@ spec:
           title: OpenSIPS uptime
           type: stat
         - datasource:
-            uid: $datasource
+            uid: ${DS_PROMETHEUS}
           description: How many File Descriptors is the OpenSIPS exporter currently using?
           fieldConfig:
             defaults:
@@ -408,7 +408,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               expr: process_open_fds{instance=~"$node",job="opensips", process=~"$process"}
               format: time_series
               instant: true
@@ -426,7 +426,7 @@ spec:
           id: 119
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               fieldConfig:
                 defaults: {}
                 overrides: []
@@ -439,7 +439,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode="system",instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   groupBy:
@@ -464,7 +464,7 @@ spec:
                         type: mean
                   tags: []
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode='user',instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   interval: ""
@@ -472,7 +472,7 @@ spec:
                   legendFormat: User - Normal processes executing in user mode
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode='nice',instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   interval: ""
@@ -480,14 +480,14 @@ spec:
                   legendFormat: Nice - Niced processes executing in user mode
                   refId: C
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode='idle',instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   intervalFactor: 2
                   legendFormat: Idle - Waiting for something to happen
                   refId: D
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode='iowait',instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   interval: ""
@@ -495,7 +495,7 @@ spec:
                   legendFormat: Iowait - Waiting for I/O to complete
                   refId: E
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode='irq',instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   interval: ""
@@ -503,21 +503,21 @@ spec:
                   legendFormat: Irq - Servicing interrupts
                   refId: F
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode='softirq',instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   intervalFactor: 2
                   legendFormat: Softirq - Servicing softirqs
                   refId: G
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode='steal',instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   intervalFactor: 2
                   legendFormat: Steal - Time spent in other operating systems when running in a virtualized environment
                   refId: H
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: sum by (mode)(irate(node_cpu{mode='guest',instance=~"$node",job=~"node"}[5m])) * 100
                   format: time_series
                   intervalFactor: 2
@@ -526,7 +526,7 @@ spec:
               title: CPU
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: Percentage of UDP/TCP children that are awake and processing SIP messages.
               fieldConfig:
                 defaults: {}
@@ -540,14 +540,14 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_load{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: '{{protocol}} children processing on {{ip}}:{{port}}  - {{process}}@{{instance}}'
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_tcp_load{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -556,7 +556,7 @@ spec:
               title: Percentage of children processing messages
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: The realtime load per process ID.
               fieldConfig:
                 defaults: {}
@@ -570,21 +570,21 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_process{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: Current load process {{exported_process}} for {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_10m{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: 10m load process {{exported_process}} for {{process}}@{{instance}}
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_1m{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -593,7 +593,7 @@ spec:
               title: Load per OpenSIPS process (current, 1m, 10m)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: The realtime load of entire OpenSIPS - this counts all the core processes of OpenSIPS; the additional processes requested by modules are not counted in this load.
               fieldConfig:
                 defaults: {}
@@ -607,21 +607,21 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_core{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: Core load for {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_core_1m{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: Core load 1m for {{process}}@{{instance}}
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_core_10m{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -630,7 +630,7 @@ spec:
               title: OpenSIPS core process load
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: The realtime load of entire OpenSIPS, counting both core and module processes.
               fieldConfig:
                 defaults: {}
@@ -644,21 +644,21 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_all{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: All load for for {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_all_1m{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: All load 1m for for {{process}}@{{instance}}
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_load_all_10m{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -677,7 +677,7 @@ spec:
           id: 29
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: What percentage of private memory is still free for a particular PID to use?
               fieldConfig:
                 defaults: {}
@@ -691,7 +691,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: (avg_over_time(opensips_pkmem_free_size{instance=~"$node", process=~"$process"}[$interval]) / avg_over_time(opensips_pkmem_total_size{instance=~"$node", process=~"$process"}[$interval])) * 100
                   format: time_series
                   instant: false
@@ -702,7 +702,7 @@ spec:
               title: '% Memory Free (private memory) - $interval interval'
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: What percentage of shared memory is still free to use?
               fieldConfig:
                 defaults: {}
@@ -716,7 +716,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: (avg_over_time(opensips_shmem_free_size{instance=~"$node", process=~"$process"}[$interval]) / avg_over_time(opensips_shmem_total_size{instance=~"$node", process=~"$process"}[$interval])) * 100
                   format: time_series
                   interval: $interval
@@ -726,7 +726,7 @@ spec:
               title: '% Memory Free (shared memory) - $interval interval'
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: Breakdown of memory usage by PID.
               fieldConfig:
                 defaults: {}
@@ -740,7 +740,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_pkmem_real_used_size{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -749,7 +749,7 @@ spec:
               title: Memory Usage by PID (private memory)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: How much shared memory does the OpenSIPS process use?
               fieldConfig:
                 defaults: {}
@@ -763,7 +763,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_shmem_real_used_size{instance=~"$node", process=~"$process"}
                   format: time_series
                   interval: ""
@@ -773,7 +773,7 @@ spec:
               title: Memory Usage (shared memory)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               fieldConfig:
                 defaults: {}
                 overrides: []
@@ -786,7 +786,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: max(opensips_pkmem_fragments{instance=~"$node", process=~"$process"}) without (pid)
                   format: time_series
                   intervalFactor: 1
@@ -795,7 +795,7 @@ spec:
               title: Private memory fragments
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               fieldConfig:
                 defaults: {}
                 overrides: []
@@ -808,7 +808,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_shmem_fragments{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -827,7 +827,7 @@ spec:
           id: 21
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               fieldConfig:
                 defaults: {}
                 overrides: []
@@ -840,14 +840,14 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_sl_replies{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   intervalFactor: 1
                   legendFormat: '{{type}} reply - {{process}}@{{instance}}'
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_sl_sent_err_replies_total{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -855,7 +855,7 @@ spec:
                   legendFormat: Sent error replies - {{process}}@{{instance}}
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_sl_sent_replies_total{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -863,7 +863,7 @@ spec:
                   legendFormat: Total sent replies - {{process}}@{{instance}}
                   refId: C
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_sl_failures{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -871,7 +871,7 @@ spec:
                   legendFormat: Reply failures - {{process}}@{{instance}}
                   refId: D
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_sl_xxx_replies{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -881,7 +881,7 @@ spec:
               title: Rate of replies ($interval)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               fieldConfig:
                 defaults: {}
                 overrides: []
@@ -894,7 +894,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_core_requests_total{process=~"$process", instance=~"$node"}[$interval])
                   format: time_series
                   interval: $interval
@@ -902,7 +902,7 @@ spec:
                   legendFormat: Total request received - {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_core_requests{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -912,7 +912,7 @@ spec:
               title: Rate of received requests by OpenSIPS ($interval)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               fieldConfig:
                 defaults: {}
                 overrides: []
@@ -925,7 +925,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_core_replies_total{process=~"$process", instance=~"$node"}[$interval])
                   format: time_series
                   interval: $interval
@@ -933,7 +933,7 @@ spec:
                   legendFormat: Total replies received - {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_core_replies{process=~"$process", instance=~"$node"}[$interval])
                   format: time_series
                   intervalFactor: 1
@@ -952,7 +952,7 @@ spec:
           id: 195
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: Number of bytes waiting to be consumed on an interface that OpenSIPS is listening on.
               fieldConfig:
                 defaults: {}
@@ -966,7 +966,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_net_waiting{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -975,7 +975,7 @@ spec:
               title: Bytes waiting for consumption
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               fieldConfig:
                 defaults: {}
                 overrides: []
@@ -988,14 +988,14 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(node_network_receive_bytes{instance=~"$node",job=~"node"}[5m])
                   format: time_series
                   intervalFactor: 2
                   legendFormat: '{{device}} - Receive'
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(node_network_transmit_bytes{instance=~"$node",job=~"node"}[5m])
                   format: time_series
                   intervalFactor: 2
@@ -1014,7 +1014,7 @@ spec:
           id: 157
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: Rate of dialogs and what the status of the dialog was.
               fieldConfig:
                 defaults: {}
@@ -1028,7 +1028,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_dialog_dialogs{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1038,7 +1038,7 @@ spec:
               title: Dialog rate per status ($interval)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: The number of dialog events received from other OpenSIPS instances.
               fieldConfig:
                 defaults: {}
@@ -1052,7 +1052,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_dialog_received{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1060,7 +1060,7 @@ spec:
                   legendFormat: Dialog received - {{event}} - {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_dialog_sent{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1080,7 +1080,7 @@ spec:
           id: 35
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: How many transaction replies per second were received? And what was their response type? (2xx, 3xx, etc.)
               fieldConfig:
                 defaults: {}
@@ -1094,7 +1094,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_tm_transactions_total{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1104,7 +1104,7 @@ spec:
               title: Transaction reply received rate by type ($interval)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: How many replies were received per second? Were they generated locally? Relayed?
               fieldConfig:
                 defaults: {}
@@ -1118,7 +1118,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_tm_local_replies_total{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1126,7 +1126,7 @@ spec:
                   legendFormat: Local replies - {{process}}@{{instance}}
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_tm_received_replies_total{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: ""
@@ -1134,7 +1134,7 @@ spec:
                   legendFormat: Received replies - {{process}}@{{instance}}
                   refId: C
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_tm_relayed_replies_total{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   intervalFactor: 1
@@ -1143,7 +1143,7 @@ spec:
               title: Transaction reply rate ($interval)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: How many transactions are in memory?
               fieldConfig:
                 defaults: {}
@@ -1157,7 +1157,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_tm_inuse_transactions{instance=~"$node", process=~"$process"}
                   format: time_series
                   interval: ""
@@ -1177,7 +1177,7 @@ spec:
           id: 43
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: How many transaction replies per second were received? And what was their response type? (2xx, 3xx, etc.)
               fieldConfig:
                 defaults: {}
@@ -1191,7 +1191,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_tmx_transactions_total{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1199,7 +1199,7 @@ spec:
                   legendFormat: '{{type}} transaction - {{process}}@{{instance}}'
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_tmx_UAS_transactions{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   hide: false
@@ -1208,7 +1208,7 @@ spec:
                   legendFormat: UAS transaction - {{process}}@{{instance}}
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_tmx_UAC_transactions{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   hide: true
@@ -1218,7 +1218,7 @@ spec:
               title: Transaction reply received rate by type ($interval)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: How many transactions are in memory or ongoing at the moment?
               fieldConfig:
                 defaults: {}
@@ -1232,7 +1232,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_tmx_inuse_transactions{instance=~"$node", process=~"$process"}
                   format: time_series
                   interval: ""
@@ -1240,7 +1240,7 @@ spec:
                   legendFormat: Transactions in memory - {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_tmx_active_transactions{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -1249,7 +1249,7 @@ spec:
               title: Current transactions
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               fieldConfig:
                 defaults: {}
                 overrides: []
@@ -1262,7 +1262,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_tmx_replies{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   groupBy:
@@ -1299,7 +1299,7 @@ spec:
           id: 113
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: What is the rate of errors per second?
               fieldConfig:
                 defaults: {}
@@ -1313,7 +1313,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_core_bad_URIs_rcvd{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1321,7 +1321,7 @@ spec:
                   legendFormat: URI parse errors - {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_core_bad_msg_hdr{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1329,7 +1329,7 @@ spec:
                   legendFormat: SIP Header parse errors - {{process}}@{{instance}}
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_core_unsupported_methods{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1349,7 +1349,7 @@ spec:
           id: 58
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: How many URI checks have happened? Were they positive or negative?
               fieldConfig:
                 defaults: {}
@@ -1363,7 +1363,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_uri_negative_checks{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1371,7 +1371,7 @@ spec:
                   legendFormat: URI negative checks - {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_uri_positive_checks{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1391,7 +1391,7 @@ spec:
           id: 69
           panels:
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: Total number of AOR existing in the USRLOC memory cache for all domains per second.
               fieldConfig:
                 defaults: {}
@@ -1405,7 +1405,7 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: rate(opensips_userloc_registered_users_total{instance=~"$node", process=~"$process"}[$interval])
                   format: time_series
                   interval: $interval
@@ -1415,7 +1415,7 @@ spec:
               title: User registration rate ($interval)
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: Number of contacts/expired users/total users existing in the USRLOC memory cache per domain.
               fieldConfig:
                 defaults: {}
@@ -1429,21 +1429,21 @@ spec:
               options: {}
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_usrloc_contacts{instance=~"$node",process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: Contacts in {{domain}} - {{process}}@{{instance}}
                   refId: A
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_usrloc_users{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
                   legendFormat: Total users in {{domain}} - {{process}}@{{instance}}
                   refId: B
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_usrloc_expires{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -1452,7 +1452,7 @@ spec:
               title: Users per domain
               type: timeseries
             - datasource:
-                uid: $datasource
+                uid: ${DS_PROMETHEUS}
               description: Total number of AOR existing in the USRLOC memory cache for all domains.
               fieldConfig:
                 defaults:
@@ -1492,7 +1492,7 @@ spec:
               repeatDirection: h
               targets:
                 - datasource:
-                    uid: $datasource
+                    uid: ${DS_PROMETHEUS}
                   expr: opensips_userloc_registered_users_total{instance=~"$node", process=~"$process"}
                   format: time_series
                   intervalFactor: 1
@@ -1509,11 +1509,9 @@ spec:
         - opensips
     templating:
         list:
-            - current:
-                text: Prometheus
-                value: NY8knvLVz
-              label: Datasource
-              name: datasource
+            - includeAll: false
+              label: datasource
+              name: DS_PROMETHEUS
               options: []
               query: prometheus
               refresh: 1
@@ -1522,7 +1520,7 @@ spec:
             - current:
                 text: All
                 value: $__all
-              datasource: $datasource
+              datasource: ${DS_PROMETHEUS}
               includeAll: true
               label: Node
               multi: true
@@ -1535,7 +1533,7 @@ spec:
             - current:
                 text: All
                 value: $__all
-              datasource: $datasource
+              datasource: ${DS_PROMETHEUS}
               includeAll: true
               label: SER process
               multi: true

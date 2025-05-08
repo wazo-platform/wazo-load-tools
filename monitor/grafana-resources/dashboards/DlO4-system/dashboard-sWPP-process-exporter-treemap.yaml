@@ -22,7 +22,7 @@ spec:
     links: []
     panels:
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -41,7 +41,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: sum(namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="proportionalResident"} > 0) by (groupname)
               format: table
               instant: true
@@ -51,7 +51,7 @@ spec:
           title: proportional resident memory map
           type: marcusolsson-treemap-panel
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -70,7 +70,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: sum(rate(namedprocess_namegroup_cpu_seconds_total{instance=~"$instance"}[$__rate_interval] ))  by (groupname)
               format: table
               instant: true
@@ -80,7 +80,7 @@ spec:
           title: cpu map
           type: marcusolsson-treemap-panel
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -141,7 +141,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="proportionalResident"} > 0
               format: time_series
               intervalFactor: 2
@@ -150,7 +150,7 @@ spec:
           title: proportional resident memory
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -211,7 +211,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: sum (rate(namedprocess_namegroup_cpu_seconds_total{instance=~"$instance"}[$__rate_interval]) )without (mode) > 0
               format: time_series
               intervalFactor: 2
@@ -220,7 +220,7 @@ spec:
           title: cpu
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -281,7 +281,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="resident"} / ignoring(memtype) namedprocess_namegroup_num_procs > 0
               format: time_series
               intervalFactor: 2
@@ -290,7 +290,7 @@ spec:
           title: resident memory (average)
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -351,7 +351,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: namedprocess_namegroup_num_procs{instance=~"$instance"}
               format: time_series
               intervalFactor: 2
@@ -360,7 +360,7 @@ spec:
           title: num processes
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 color:
@@ -421,7 +421,7 @@ spec:
           pluginVersion: 11.6.0
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="virtual"}
               format: time_series
               intervalFactor: 2
@@ -430,7 +430,7 @@ spec:
           title: virtual memory
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -443,7 +443,7 @@ spec:
           options: {}
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: rate(namedprocess_namegroup_context_switches_total{instance=~"$instance", ctxswitchtype="voluntary"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
@@ -452,7 +452,7 @@ spec:
           title: voluntary context switches
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -465,7 +465,7 @@ spec:
           options: {}
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: rate(namedprocess_namegroup_context_switches_total{instance=~"$instance", ctxswitchtype="nonvoluntary"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
@@ -474,7 +474,7 @@ spec:
           title: nonvoluntary context switches
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -487,7 +487,7 @@ spec:
           options: {}
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: namedprocess_namegroup_open_filedesc{instance=~"$instance"}
               format: time_series
               intervalFactor: 2
@@ -496,7 +496,7 @@ spec:
           title: file descripters
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -509,7 +509,7 @@ spec:
           options: {}
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: rate(namedprocess_namegroup_read_bytes_total{instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
@@ -518,7 +518,7 @@ spec:
           title: read bytes
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -531,7 +531,7 @@ spec:
           options: {}
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: rate(namedprocess_namegroup_write_bytes_total{instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
@@ -540,7 +540,7 @@ spec:
           title: write bytes
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -553,7 +553,7 @@ spec:
           options: {}
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: rate(namedprocess_namegroup_major_page_faults_total{instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
@@ -562,7 +562,7 @@ spec:
           title: major page faults
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults: {}
             overrides: []
@@ -575,7 +575,7 @@ spec:
           options: {}
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               expr: rate(namedprocess_namegroup_minor_page_faults_total{instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
@@ -584,7 +584,7 @@ spec:
           title: minor page faults
           type: timeseries
         - datasource:
-            uid: $PROMETHEUS_DS
+            uid: ${DS_PROMETHEUS}
           fieldConfig:
             defaults:
                 unit: s
@@ -603,7 +603,7 @@ spec:
                   displayName: uptime
           targets:
             - datasource:
-                uid: $PROMETHEUS_DS
+                uid: ${DS_PROMETHEUS}
               exemplar: true
               expr: time() - (avg by (groupname) (namedprocess_namegroup_oldest_start_time_seconds{instance=~"$instance"} > 0))
               format: table
@@ -625,20 +625,18 @@ spec:
         - process
     templating:
         list:
-            - current:
-                text: Prometheus
-                value: NY8knvLVz
-              hide: 1
-              name: PROMETHEUS_DS
+            - includeAll: false
+              label: datasource
+              name: DS_PROMETHEUS
               options: []
               query: prometheus
               refresh: 1
               regex: ""
               type: datasource
             - current:
-                text: 172.16.43.227:443
-                value: 172.16.43.227:443
-              datasource: $PROMETHEUS_DS
+                text: ""
+                value: ""
+              datasource: ${DS_PROMETHEUS}
               includeAll: false
               name: instance
               options: []
