@@ -75,25 +75,18 @@ tests:
         alertname: CriticalCPULoad
         exp_alerts: []
 
-  - name: when memory increase by step
+  - name: when memory increase linearly
     interval: 1m
     input_series:
+        # 10KiB/s (10*1024) * seconds from interval (60) + 1 (to exceed threshold) = 614401
       - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
-        values: '0 100+0x28 200+0x30'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident",instance="localhost"}'
-        values: '0 100+0x28 200+0x30'
+        values: '0+614401x31'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+        values: '0+614401x31'
+      - series: 'rabbitmq_node_mem_used{instance="localhost"}'
+        values: '0+614401x31'
     alert_rule_test:
-      - eval_time: 60m
-        alertname: MemoryLeakFromExporter
-        exp_alerts:
-          - exp_labels:
-              severity: warning
-              instance: localhost
-              job: rabbitmq
-            exp_annotations:
-              summary: "Potential exporter memory leak"
-              description: "Instance **localhost**, Exporter: rabbitmq, Memory: 200"
-      - eval_time: 60m
+      - eval_time: 31m
         alertname: MemoryLeak
         exp_alerts:
           - exp_labels:
@@ -102,33 +95,9 @@ tests:
               groupname: rabbitmq
               memtype: resident
             exp_annotations:
-              summary: "Potential service memory leak"
-              description: "Instance **localhost**, Service: rabbitmq, Memory: 200"
-
-  - name: when memory decrease by step
-    interval: 1m
-    input_series:
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
-        values: '0 200+0x28 100+0x30'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident",instance="localhost"}'
-        values: '0 200+0x28 100+0x30'
-    alert_rule_test:
-      - eval_time: 60m
-        alertname: MemoryLeakFromExporter
-        exp_alerts: []
-      - eval_time: 60m
-        alertname: MemoryLeak
-        exp_alerts: []
-
-  - name: when memory increase slowly
-    interval: 1m
-    input_series:
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
-        values: '0 100+1x59'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident",instance="localhost"}'
-        values: '0 100+1x59'
-    alert_rule_test:
-      - eval_time: 60m
+              summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
+              description: "Instance **localhost**, Service rabbitmq, Memory 18.16MiB"
+      - eval_time: 31m
         alertname: MemoryLeakFromExporter
         exp_alerts:
           - exp_labels:
@@ -136,19 +105,96 @@ tests:
               instance: localhost
               job: rabbitmq
             exp_annotations:
-              summary: "Potential exporter memory leak"
-              description: "Instance **localhost**, Exporter: rabbitmq, Memory: 154.5"
-      - eval_time: 60m
-        alertname: MemoryLeak
+              summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
+              description: "Instance **localhost**, Exporter rabbitmq, Memory 18.16MiB"
+      - eval_time: 31m
+        alertname: MemoryLeakFromRabbitMQ
         exp_alerts:
           - exp_labels:
               severity: warning
               instance: localhost
-              groupname: rabbitmq
-              memtype: resident
             exp_annotations:
-              summary: "Potential service memory leak"
-              description: "Instance **localhost**, Service: rabbitmq, Memory: 154.5"
+              summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
+              description: "Instance **localhost**, Service RabbitMQ, Memory 18.16MiB"
+
+  - name: when memory increase by big step
+    interval: 1m
+    input_series:
+      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+        values: '0 6144010+0x30'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+        values: '0 6144010+0x30'
+      - series: 'rabbitmq_node_mem_used{instance="localhost"}'
+        values: '0 6144010+0x30'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: MemoryLeak
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeak
+        exp_alerts: []
+      - eval_time: 1m
+        alertname: MemoryLeakFromExporter
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeakFromExporter
+        exp_alerts: []
+      - eval_time: 1m
+        alertname: MemoryLeakFromRabbitMQ
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeakFromRabbitMQ
+        exp_alerts: []
+
+  - name: when memory increase by spike
+    interval: 1m
+    input_series:
+      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+        values: '0 6144010 0+0x29 '
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+        values: '0 6144010 0+0x29'
+      - series: 'rabbitmq_node_mem_used{instance="localhost"}'
+        values: '0 6144010 0+0x29'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: MemoryLeak
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeak
+        exp_alerts: []
+      - eval_time: 1m
+        alertname: MemoryLeakFromExporter
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeakFromExporter
+        exp_alerts: []
+      - eval_time: 1m
+        alertname: MemoryLeakFromRabbitMQ
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeakFromRabbitMQ
+        exp_alerts: []
+
+  - name: when memory decrease linearly
+    interval: 1m
+    input_series:
+      # to have value 0 after 31 min: 614401 * 31 = 19046431
+      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+        values: '19046431-614401x31'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+        values: '19046431-614401x31'
+      - series: 'rabbitmq_node_mem_used{instance="localhost"}'
+        values: '19046431-614401x31'
+    alert_rule_test:
+      - eval_time: 31m
+        alertname: MemoryLeak
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeakFromExporter
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeakFromRabbitMQ
+        exp_alerts: []
 
   - name: simultaneous calls
     interval: 1m
