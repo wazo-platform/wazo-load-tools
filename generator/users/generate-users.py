@@ -30,7 +30,6 @@ def generate_user(config, index):
     context = config['internal_context']
     incall_context = config['incall_context']
     incall_prefix = config['incall_prefix']
-    group_uuid = config['group_uuid']
     global_sip_template_uuid = config['global_sip_template_uuid']
     email_user, email_domain = config['email'].split('@', 1)
     exten = f'{config["users_range_start"] + index}'
@@ -72,7 +71,6 @@ def generate_user(config, index):
                 'extensions': [{'exten': exten}],
             }
         ],
-        'groups': [{'uuid': group_uuid}],
         'voicemail': {
             'number': exten,
             'context': context,
