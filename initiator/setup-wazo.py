@@ -159,14 +159,6 @@ def main():
     }
     internal_context = confd_client.contexts.create(body)
 
-    body = {
-        'label': 'callees',
-        'max_calls': 100,
-        'ring_in_use': False,
-        'ring_strategy': 'memorized_round_robin',
-    }
-    group = confd_client.groups.create(body)
-
     incall_prefix = '123'
     body = {
         'label': 'incoming',
@@ -212,7 +204,6 @@ def main():
         'internal_context': internal_context['name'],
         'incall_context': incall_context['name'],
         'incall_prefix': incall_prefix,
-        'group_uuid': group['uuid'],
     }
 
     with _open_output_file(config['output']) as output_file:
