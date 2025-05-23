@@ -142,13 +142,20 @@ def main():
             raise
         break
 
-    webrtc_sip_template_uuid = confd_tenant['webrtc_sip_template_uuid']
     global_sip_template_uuid = confd_tenant['global_sip_template_uuid']
+    global_sip_template = confd_client.endpoints_sip_templates.get(
+        global_sip_template_uuid
+    )
+    global_sip_template['aor_section_options'].append(['qualify_frequency', '0'])
+    global_sip_template['endpoint_section_options'].append(['rtp_symmetric', 'yes'])
+    global_sip_template['endpoint_section_options'].append(['rewrite_contact', 'yes'])
+    confd_client.endpoints_sip_templates.update(global_sip_template)
 
     body = {
         'label': 'internal',
         'type': 'internal',
         'user_ranges': [{'start': '10000', 'end': '99999'}],
+        'group_ranges': [{'start': '20000', 'end': '29999'}],
     }
     internal_context = confd_client.contexts.create(body)
 
@@ -156,7 +163,7 @@ def main():
     body = {
         'label': 'incoming',
         'type': 'incall',
-        'user_ranges': [
+        'incall_ranges': [
             {
                 'start': f'{incall_prefix}10000',
                 'end': f'{incall_prefix}99999',
@@ -193,7 +200,7 @@ def main():
 
     user_generator_config = {
         'tenant_uuid': tenant['uuid'],
-        'webrtc_sip_template_uuid': webrtc_sip_template_uuid,  # only to support format: json
+        'global_sip_template_uuid': global_sip_template_uuid,  # only to support format: json
         'internal_context': internal_context['name'],
         'incall_context': incall_context['name'],
         'incall_prefix': incall_prefix,
