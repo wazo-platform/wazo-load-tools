@@ -13,6 +13,12 @@ echo 'Configuring postgresql debug...'
 echo 'log_min_duration_statement = 0' >  /etc/postgresql/13/main/conf.d/wazo-acceptance-debug.conf
 systemctl reload postgresql
 
+echo 'Adding trafgen to fail2ban ignored ips...'
+cat > /etc/fail2ban/jail.d/ignoreip.conf <<EOF
+[DEFAULT]
+ignoreip = trafgen-sipp-1.load.wazo.io
+EOF
+
 WAZO_SERVICES=(
     'wazo-agentd'
     'wazo-agid'
