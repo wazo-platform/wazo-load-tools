@@ -1,0 +1,8 @@
+location = /api/load-testing/metrics/upload {
+    dav_methods PUT;
+    alias /var/www/load-testing/metrics;
+}
+location = /api/load-testing/metrics {
+    default_type text/plain;
+    alias /var/www/load-testing/metrics;
+}

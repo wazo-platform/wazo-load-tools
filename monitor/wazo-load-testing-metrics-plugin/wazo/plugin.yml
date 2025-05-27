@@ -1,0 +1,10 @@
+name: wazo-load-testing-metrics
+namespace: wazoplatform
+version: 1.0.0
+author: Wazo authors
+display_name: Add load testing metrics
+plugin_format_version: 1
+tags:
+  - load
+  - tests
+homepage: https://github.com/wazo-platform/wazo-load-tools/monitor/wazo-load-testing-metrics-plugin
