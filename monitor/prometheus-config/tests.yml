@@ -79,9 +79,9 @@ tests:
     interval: 1m
     input_series:
         # 10KiB/s (10*1024) * seconds from interval (60) + 1 (to exceed threshold) = 614401
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '0+614401x31'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '0+614401x31'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '0+614401x31'
@@ -94,21 +94,21 @@ tests:
           - exp_labels:
               severity: warning
               instance: localhost
-              groupname: rabbitmq
+              groupname: postgres
               memtype: resident
             exp_annotations:
               summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-              description: "Instance **localhost**, Service rabbitmq, Memory 18.16MiB"
+              description: "Instance **localhost**, Service postgres, Memory 18.16MiB"
       - eval_time: 31m
         alertname: MemoryLeakFromExporter
         exp_alerts:
           - exp_labels:
               severity: warning
               instance: localhost
-              job: rabbitmq
+              job: postgres
             exp_annotations:
               summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-              description: "Instance **localhost**, Exporter rabbitmq, Memory 18.16MiB"
+              description: "Instance **localhost**, Exporter postgres, Memory 18.16MiB"
       - eval_time: 31m
         alertname: MemoryLeakFromRabbitMQ
         exp_alerts:
@@ -122,9 +122,9 @@ tests:
   - name: when memory increase by big step
     interval: 1m
     input_series:
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '0 6144010+0x30'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '0 6144010+0x30'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '0 6144010+0x30'
@@ -153,9 +153,9 @@ tests:
   - name: when memory increase by spike
     interval: 1m
     input_series:
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '0 6144010 0+0x29 '
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '0 6144010 0+0x29'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '0 6144010 0+0x29'
@@ -185,9 +185,9 @@ tests:
     interval: 1m
     input_series:
       # to have value 0 after 31 min: 614401 * 31 = 19046431
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '19046431-614401x31'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '19046431-614401x31'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '19046431-614401x31'
@@ -207,9 +207,9 @@ tests:
   - name: when memory increase linearly but load testing disabled
     interval: 1m
     input_series:
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '0+614401x31'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '0+614401x31'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '0+614401x31'
