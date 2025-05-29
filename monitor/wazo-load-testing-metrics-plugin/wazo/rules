@@ -1,0 +1,34 @@
+#!/bin/sh
+# Copyright 2025 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0+
+
+case "$1" in
+    build)
+        ;;
+
+    package)
+        # shellcheck disable=SC2154
+        mkdir -p "${pkgdir}/var/www/load-testing"
+        cp metrics "${pkgdir}/var/www/load-testing/metrics"
+        cp -R etc "${pkgdir}/"
+        ;;
+
+    install)
+        chown -R www-data:www-data /var/www/load-testing
+        ln -sf  /etc/nginx/locations/https-available/load-testing /etc/nginx/locations/https-enabled/load-testing
+        systemctl reload nginx
+        ;;
+
+    uninstall)
+        rm -f  /etc/nginx/locations/https-enabled/load-testing
+        systemctl reload nginx
+        ;;
+
+    postrm)
+        ;;
+
+    *)
+        echo "$0 called with unknown argument '$1'" >&2
+        exit 1
+    ;;
+esac

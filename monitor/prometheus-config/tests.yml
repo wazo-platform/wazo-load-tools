@@ -79,12 +79,14 @@ tests:
     interval: 1m
     input_series:
         # 10KiB/s (10*1024) * seconds from interval (60) + 1 (to exceed threshold) = 614401
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '0+614401x31'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '0+614401x31'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '0+614401x31'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '1+0x31'
     alert_rule_test:
       - eval_time: 31m
         alertname: MemoryLeak
@@ -92,21 +94,21 @@ tests:
           - exp_labels:
               severity: warning
               instance: localhost
-              groupname: rabbitmq
+              groupname: postgres
               memtype: resident
             exp_annotations:
               summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-              description: "Instance **localhost**, Service rabbitmq, Memory 18.16MiB"
+              description: "Instance **localhost**, Service postgres, Memory 18.16MiB"
       - eval_time: 31m
         alertname: MemoryLeakFromExporter
         exp_alerts:
           - exp_labels:
               severity: warning
               instance: localhost
-              job: rabbitmq
+              job: postgres
             exp_annotations:
               summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-              description: "Instance **localhost**, Exporter rabbitmq, Memory 18.16MiB"
+              description: "Instance **localhost**, Exporter postgres, Memory 18.16MiB"
       - eval_time: 31m
         alertname: MemoryLeakFromRabbitMQ
         exp_alerts:
@@ -120,12 +122,14 @@ tests:
   - name: when memory increase by big step
     interval: 1m
     input_series:
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '0 6144010+0x30'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '0 6144010+0x30'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '0 6144010+0x30'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '1+0x31'
     alert_rule_test:
       - eval_time: 1m
         alertname: MemoryLeak
@@ -149,12 +153,14 @@ tests:
   - name: when memory increase by spike
     interval: 1m
     input_series:
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '0 6144010 0+0x29 '
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '0 6144010 0+0x29'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '0 6144010 0+0x29'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '1+0x31'
     alert_rule_test:
       - eval_time: 1m
         alertname: MemoryLeak
@@ -179,12 +185,36 @@ tests:
     interval: 1m
     input_series:
       # to have value 0 after 31 min: 614401 * 31 = 19046431
-      - series: 'process_resident_memory_bytes{job="rabbitmq", instance="localhost"}'
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
         values: '19046431-614401x31'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="rabbitmq", memtype="resident", instance="localhost"}'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
         values: '19046431-614401x31'
       - series: 'rabbitmq_node_mem_used{instance="localhost"}'
         values: '19046431-614401x31'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '1+0x31'
+    alert_rule_test:
+      - eval_time: 31m
+        alertname: MemoryLeak
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeakFromExporter
+        exp_alerts: []
+      - eval_time: 31m
+        alertname: MemoryLeakFromRabbitMQ
+        exp_alerts: []
+
+  - name: when memory increase linearly but load testing disabled
+    interval: 1m
+    input_series:
+      - series: 'process_resident_memory_bytes{job="postgres", instance="localhost"}'
+        values: '0+614401x31'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="localhost"}'
+        values: '0+614401x31'
+      - series: 'rabbitmq_node_mem_used{instance="localhost"}'
+        values: '0+614401x31'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '0+0x31'
     alert_rule_test:
       - eval_time: 31m
         alertname: MemoryLeak
@@ -201,6 +231,8 @@ tests:
     input_series:
       - series: 'asterisk_calls_count{instance="localhost"}'
         values: '0+0x9 42+0x9'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '1+0x20'
     alert_rule_test:
       - eval_time: 10m
         alertname: AsteriskSimultCalls
@@ -215,11 +247,25 @@ tests:
               summary: 'Simultaneous calls are higher than expected'
               description: 'Instance **localhost**, Calls: 42 > 35'
 
+  - name: simultaneous calls when load testing disabled
+    interval: 1m
+    input_series:
+      - series: 'asterisk_calls_count{instance="localhost"}'
+        values: '42+0x9'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '0+0x20'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: AsteriskSimultCalls
+        exp_alerts: []
+
   - name: total calls
     interval: 1m
     input_series:
       - series: 'asterisk_calls_sum{instance="localhost"}'
         values: '0+1x10 10+0x9'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '1+0x21'
     alert_rule_test:
       - eval_time: 10m
         alertname: AsteriskTotalCalls
@@ -241,6 +287,18 @@ tests:
         values: '0+1x10 0 0 0+1x7'
     alert_rule_test:
       - eval_time: 20m
+        alertname: AsteriskTotalCalls
+        exp_alerts: []
+
+  - name: total calls when load testing disabled
+    interval: 1m
+    input_series:
+      - series: 'asterisk_calls_sum{instance="localhost"}'
+        values: '10+0x9'
+      - series: 'load_testing_enabled{instance="localhost"}'
+        values: '0+0x10'
+    alert_rule_test:
+      - eval_time: 10m
         alertname: AsteriskTotalCalls
         exp_alerts: []
 

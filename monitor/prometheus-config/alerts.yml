@@ -5,7 +5,7 @@ groups:
 - name: Static Rules
   rules:
   - alert: MemoryLeak
-    expr: deriv(namedprocess_namegroup_memory_bytes{memtype="resident"}[10m]) > 10 * 1024
+    expr: (deriv(namedprocess_namegroup_memory_bytes{memtype="resident"}[10m]) > 10 * 1024) and on(instance) load_testing_enabled == 1
     for: 30m # taking at least one time of the window from the expr to remove "spike" and "big step"
     labels:
       severity: warning
@@ -17,7 +17,7 @@ groups:
         Memory {{ with printf "namedprocess_namegroup_memory_bytes{memtype='resident',groupname='%s'}" .Labels.groupname | query }}{{ . | first | value | humanize1024 }}{{ end }}B
 
   - alert: MemoryLeakFromExporter
-    expr: deriv(process_resident_memory_bytes[10m]) > 10 * 1024
+    expr: (deriv(process_resident_memory_bytes[10m]) > 10 * 1024) and on(instance) load_testing_enabled == 1
     for: 30m
     labels:
       severity: warning
@@ -29,7 +29,7 @@ groups:
         Memory {{ with printf "process_resident_memory_bytes{job='%s'}" .Labels.job | query }}{{ . | first | value | humanize1024 }}{{ end }}B
 
   - alert: MemoryLeakFromRabbitMQ
-    expr: deriv(rabbitmq_node_mem_used[10m]) > 10 * 1024
+    expr: (deriv(rabbitmq_node_mem_used[10m]) > 10 * 1024) and on(instance) load_testing_enabled == 1
     for: 30m
     labels:
       severity: warning
@@ -68,7 +68,7 @@ groups:
 
   - alert: AsteriskTotalCalls
     # Allow 10m without call
-    expr: increase(asterisk_calls_sum[10m]) == 0.0
+    expr: (increase(asterisk_calls_sum[10m]) == 0.0) and on(instance) load_testing_enabled == 1
     labels:
       severity: warning
     annotations:
@@ -96,7 +96,7 @@ groups:
 - name: Scenario Rules
   rules:
   - alert: AsteriskSimultCalls
-    expr: asterisk_calls_count > 35
+    expr: (asterisk_calls_count > 35) and on(instance) load_testing_enabled == 1
     for: 10m
     labels:
       severity: warning
