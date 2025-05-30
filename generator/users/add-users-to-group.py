@@ -99,14 +99,8 @@ def main():
     members = [
         {'uuid': user['user_uuid'], 'priority': i} for i, user in enumerate(users)
     ]
-    body = {
-        'label': 'callees',
-        'max_calls': 100,
-        'ring_in_use': False,
-        'ring_strategy': 'memorized_round_robin',
-    }
-    group = confd_client.groups.create(body)
-    confd_client.groups(group['uuid']).update_user_members(members)
+    group_uuid = config['group_uuid']
+    confd_client.groups(group_uuid).update_user_members(members)
 
 
 if __name__ == '__main__':
