@@ -12,7 +12,7 @@
 
   ```sh
   pip install -r ./prometheus-config-generator/requirements.txt
-  ./prometheus-config-generator/generate.py --wazo-host <wazo-ip> -o prometheus-config/prometheus.yml
+  ./prometheus-config-generator/generate.py --wazo-host <wazo-ip> --edge-host <edge-ip> -o prometheus-config/prometheus.yml
   ```
 
 - (Optional) Update Alertmanager configuration file:

@@ -21,16 +21,25 @@ def parse_cli_args(argv):
         required=True,
     )
     parser.add_argument(
+        '-e',
+        '--edge-host',
+        help='Edge host serveur. Use commas to separate multiple values.',
+    )
+    parser.add_argument(
         '-o',
         '--output',
         help='Output file to write. Default: stdout',
     )
     parsed_args = parser.parse_args(argv)
 
+    wazo_hosts = parsed_args.wazo_host.split(',')
     result = {
-        'wazo_host': parsed_args.wazo_host,
+        'wazo_hosts': wazo_hosts,
+        'edge_hosts': [],
         'output': parsed_args.output or None,
     }
+    if parsed_args.edge_host:
+        result['edge_hosts'] = parsed_args.edge_host.split(',')
 
     return result
 
@@ -54,7 +63,8 @@ def main():
     environment = Environment(loader=FileSystemLoader([os.path.dirname(__file__)]))
     template = environment.get_template('prometheus.yaml.jinja2')
     result = template.render(
-        servers=[{'host': host} for host in config['wazo_host'].split(',')],
+        wazo_servers=[{'host': host} for host in config['wazo_hosts']],
+        edge_servers=[{'host': host} for host in config['edge_hosts']],
     )
     with _open_output_file(config['output']) as output_file:
         output_file.write(result)
