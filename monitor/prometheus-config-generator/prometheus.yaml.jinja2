@@ -1,5 +1,8 @@
 {% macro dump_stacks(port) -%}
-{% for server in servers %}'{{ server.host }}:{{ port }}'{%- if loop.last %}{% else %}, {% endif %}{% endfor %}
+{% for server in wazo_servers %}'{{ server.host }}:{{ port }}'{%- if loop.last %}{% else %}, {% endif %}{% endfor %}
+{%- endmacro %}
+{% macro dump_edges(port) -%}
+{% for server in edge_servers %}'{{ server.host }}:{{ port }}'{%- if loop.last %}{% else %}, {% endif %}{% endfor %}
 {%- endmacro %}
 global:
   scrape_interval: 15s
@@ -181,3 +184,28 @@ scrape_configs:
     metrics_path: /api/process/metrics
     static_configs:
       - targets: [{{ dump_stacks(443) }}]
+{% if edge_servers %}
+  - job_name: edge-nginx
+    scheme: http
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /nginx/metrics
+    static_configs:
+      - targets: [{{ dump_edges(6387) }}]
+
+  - job_name: edge-kamailio
+    scheme: http
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /kamailio/metrics
+    static_configs:
+      - targets: [{{ dump_edges(6387) }}]
+
+  - job_name: edge-traefik
+    scheme: http
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /metrics
+    static_configs:
+      - targets: [{{ dump_edges(6387) }}]
+{% endif %}
