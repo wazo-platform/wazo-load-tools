@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: xbE4-voip
+    folder: 6uH0-archived
     name: jU3i-opensips
 spec:
     annotations:
