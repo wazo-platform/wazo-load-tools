@@ -51,7 +51,7 @@ spec:
                 showMiniMap: false
             content: "<img src=\"https://theme.zdassets.com/theme_assets/1871843/c8e815188e147f36375d3f4e52c2fb25558b1dec.png\"\n     alt=\"Wazo Icone\"\n     style=\"float: left; margin: 10px;\" />\n\n \n           "
             mode: markdown
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           title: ""
           type: text
         - datasource:
@@ -100,7 +100,7 @@ spec:
             text: {}
             textMode: auto
             wideLayout: true
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -148,7 +148,7 @@ spec:
                 titleSize: 1
             textMode: auto
             wideLayout: true
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -196,7 +196,7 @@ spec:
                 titleSize: 1
             textMode: auto
             wideLayout: true
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -244,7 +244,7 @@ spec:
                 titleSize: 1
             textMode: auto
             wideLayout: true
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -363,7 +363,7 @@ spec:
                 hideZeros: false
                 mode: single
                 sort: none
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -433,7 +433,7 @@ spec:
             showThresholdMarkers: false
             sizing: auto
             text: {}
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -479,7 +479,7 @@ spec:
             text: {}
             textMode: auto
             wideLayout: true
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -531,7 +531,7 @@ spec:
             showThresholdMarkers: false
             sizing: auto
             text: {}
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -583,7 +583,7 @@ spec:
             text: {}
             textMode: auto
             wideLayout: true
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -633,7 +633,7 @@ spec:
             showThresholdMarkers: false
             sizing: auto
             text: {}
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -682,7 +682,7 @@ spec:
             text: {}
             textMode: auto
             wideLayout: true
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -731,7 +731,7 @@ spec:
             showThresholdMarkers: true
             sizing: auto
             text: {}
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -784,7 +784,7 @@ spec:
             text: {}
             textMode: auto
             wideLayout: true
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
@@ -870,7 +870,7 @@ spec:
                 hideZeros: false
                 mode: single
                 sort: none
-          pluginVersion: 11.6.0
+          pluginVersion: 12.0.1
           targets:
             - datasource:
                 type: prometheus
