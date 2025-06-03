@@ -185,14 +185,6 @@ scrape_configs:
     static_configs:
       - targets: [{{ dump_stacks(443) }}]
 {% if edge_servers %}
-  - job_name: edge-nginx
-    scheme: http
-    tls_config:
-      insecure_skip_verify: true
-    metrics_path: /nginx/metrics
-    static_configs:
-      - targets: [{{ dump_edges(6387) }}]
-
   - job_name: edge-kamailio
     scheme: http
     tls_config:
