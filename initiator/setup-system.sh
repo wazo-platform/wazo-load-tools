@@ -3,7 +3,8 @@ set -e
 set -u  # fail if variable is undefined
 set -o pipefail  # fail if command before pipe fails
 
-PLUGIN_BRANCH="${1:-master}"
+PROMETHEUS_PLUGIN_BRANCH="${1:-master}"
+LOAD_TESTING_PLUGIN_BRANCH="${2:-main}"
 
 echo 'Installing debug tools...'
 apt-get update
@@ -49,4 +50,5 @@ for wazo_service in "${WAZO_SERVICES[@]}"; do
 done
 
 apt-get install -y wazo-plugind-cli
-wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheus-exporter-plugin --ref $PLUGIN_BRANCH"
+wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheus-exporter-plugin --ref $PROMETHEUS_PLUGIN_BRANCH"
+wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-load-tools --subdirectory monitor/wazo-load-testing-metrics-plugin --ref $LOAD_TESTING_PLUGIN_BRANCH "
