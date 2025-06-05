@@ -96,10 +96,12 @@ groups:
 - name: Scenario Rules
   rules:
   - alert: AsteriskSimultCalls
-    expr: (asterisk_calls_count > 35) and on(instance) load_testing_enabled == 1
+    expr: (asterisk_calls_count > load_testing_simultaneous_calls) and on(instance) load_testing_enabled == 1
     for: 10m
     labels:
       severity: warning
     annotations:
       summary: "Simultaneous calls are higher than expected"
-      description: "Instance **{{ $labels.instance }}**, Calls: {{ $value }} > 35"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        Calls {{ $value }} > {{ with printf "load_testing_simultaneous_calls{instance='%s'}" .Labels.instance | query }}{{ . | first | value }}{{ end }}
