@@ -1,6 +1,13 @@
 # Initiator
 
-## setup-system
+This directory contains scripts to prepare and configure a fresh Wazo
+Platform server. These scripts automate system initialization, API access
+configuration, and generate a reusable configuration file for subsequent
+provisioning steps (e.g., user creation).
+
+## Usage
+
+## Configure Server
 
 Install tools and enable debug on wazo services
 
@@ -8,10 +15,11 @@ Install tools and enable debug on wazo services
 cat setup-system.sh | ssh <wazo-ip>
 ```
 
-## setup-wazo
+## Configure Wazo
 
-Initialize wazo server by creating default resources
-The script will generate a configuration file used by users generators
+Initialize wazo server by creating default resources.
+The script will generate a configuration file used by by other scripts in the
+`generator` directory to create and manage users.
 
 ```shell
 ./setup-wazo.py -s <wazo-ip> -p <password> -o ../generator/users/config.yml
