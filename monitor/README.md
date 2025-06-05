@@ -1,5 +1,11 @@
 # Monitor
 
+This directory is intended to house environment designed to observe and analyze
+the performance of Wazo Platform servers, particularly under simulated load
+conditions. These tools assist in identifying system bottlenecks, ensuring
+optimal performance, and validating the platform's scalability during testing
+scenarios.
+
 ## Setup
 
 - Install [Docker](https://www.docker.com/)
