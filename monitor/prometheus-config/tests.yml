@@ -233,6 +233,8 @@ tests:
         values: '0+0x9 42+0x9'
       - series: 'load_testing_enabled{instance="localhost"}'
         values: '1+0x20'
+      - series: 'load_testing_simultaneous_calls{instance="localhost"}'
+        values: '35+0x20'
     alert_rule_test:
       - eval_time: 10m
         alertname: AsteriskSimultCalls
@@ -245,7 +247,7 @@ tests:
               instance: localhost
             exp_annotations:
               summary: 'Simultaneous calls are higher than expected'
-              description: 'Instance **localhost**, Calls: 42 > 35'
+              description: 'Instance **localhost**, Calls 42 > 35'
 
   - name: simultaneous calls when load testing disabled
     interval: 1m
@@ -254,6 +256,8 @@ tests:
         values: '42+0x9'
       - series: 'load_testing_enabled{instance="localhost"}'
         values: '0+0x20'
+      - series: 'load_testing_simultaneous_calls{instance="localhost"}'
+        values: '35+0x20'
     alert_rule_test:
       - eval_time: 10m
         alertname: AsteriskSimultCalls

@@ -184,6 +184,15 @@ scrape_configs:
     metrics_path: /api/process/metrics
     static_configs:
       - targets: [{{ dump_stacks(443) }}]
+{% if load_testing %}
+  - job_name: load-testing
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/load-testing/metrics
+    static_configs:
+      - targets: [{{ dump_stacks(443) }}]
+{%- endif %}
 {% if edge_servers %}
   - job_name: edge-kamailio
     scheme: http
