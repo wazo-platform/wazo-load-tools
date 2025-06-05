@@ -26,6 +26,12 @@ def parse_cli_args(argv):
         help='Edge host serveur. Use commas to separate multiple values.',
     )
     parser.add_argument(
+        '-t',
+        '--load-testing',
+        help='Generate entry for load testing metrics.',
+        action='store_true',
+    )
+    parser.add_argument(
         '-o',
         '--output',
         help='Output file to write. Default: stdout',
@@ -36,6 +42,7 @@ def parse_cli_args(argv):
     result = {
         'wazo_hosts': wazo_hosts,
         'edge_hosts': [],
+        'load_testing': parsed_args.load_testing or False,
         'output': parsed_args.output or None,
     }
     if parsed_args.edge_host:
@@ -65,6 +72,7 @@ def main():
     result = template.render(
         wazo_servers=[{'host': host} for host in config['wazo_hosts']],
         edge_servers=[{'host': host} for host in config['edge_hosts']],
+        load_testing=config['load_testing'],
     )
     with _open_output_file(config['output']) as output_file:
         output_file.write(result)
