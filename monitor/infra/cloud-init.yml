@@ -1,9 +1,12 @@
 #cloud-config
-runcmd:
-  - echo 'Mounting volume...'
-  - mkdir /mnt/prometheus
+mounts:
   # Workaround: Volumes are not always detected in the same order
-  - mount /dev/sda /mnt/prometheus || mount /dev/sdb /mnt/prometheus
+  - [ sda, /mnt/prometheus ]
+  - [ sdb, /mnt/prometheus ]
+
+runcmd:
+  - echo 'Fix mount permissions...'
+  - mkdir /mnt/prometheus
   - chmod 777 /mnt/prometheus
 
   - echo 'Installing docker...'
