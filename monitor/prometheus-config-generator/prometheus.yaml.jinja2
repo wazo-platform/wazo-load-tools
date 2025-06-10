@@ -17,20 +17,20 @@ alerting:
 
 scrape_configs:
   - job_name: 'asterisk'
-    metrics_path: /api/asterisk/metrics
+    metrics_path: /asterisk/metrics
     scheme: https
     tls_config:
       insecure_skip_verify: true
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: wazo-agentd
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/agentd/1.0/metrics
+    metrics_path: /agentd/1.0/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-agentd'
@@ -39,9 +39,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/amid/1.0/metrics
+    metrics_path: /amid/1.0/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-amid'
@@ -50,9 +50,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/auth/0.1/metrics
+    metrics_path: /auth/0.1/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-auth'
@@ -61,9 +61,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/call-logd/1.0/metrics
+    metrics_path: /call-logd/1.0/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-call-logd'
@@ -72,9 +72,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/calld/1.0/metrics
+    metrics_path: /calld/1.0/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-calld'
@@ -83,9 +83,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/chatd/1.0/metrics
+    metrics_path: /chatd/1.0/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-chatd'
@@ -94,9 +94,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/confd/1.1/metrics
+    metrics_path: /confd/1.1/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-confd'
@@ -105,9 +105,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/dird/0.1/metrics
+    metrics_path: /dird/0.1/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-dird'
@@ -116,9 +116,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/phoned/0.1/metrics
+    metrics_path: /phoned/0.1/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-phoned'
@@ -127,9 +127,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/sysconfd/metrics
+    metrics_path: /sysconfd/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'fastapi'
           service: 'wazo-sysconfd'
@@ -138,9 +138,9 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/webhookd/1.0/metrics
+    metrics_path: /webhookd/1.0/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
         labels:
           framework: 'flask'
           service: 'wazo-webhookd'
@@ -149,41 +149,41 @@ scrape_configs:
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/nginx/metrics
+    metrics_path: /nginx/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: rabbitmq
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/rabbitmq/metrics
+    metrics_path: /rabbitmq/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: postgresql
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/postgresql/metrics
+    metrics_path: /postgresql/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: node
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/node/metrics
+    metrics_path: /node/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: process
     scheme: https
     tls_config:
       insecure_skip_verify: true
-    metrics_path: /api/process/metrics
+    metrics_path: /process/metrics
     static_configs:
-      - targets: [{{ dump_stacks(443) }}]
+      - targets: [{{ dump_stacks(6387) }}]
 {% if load_testing %}
   - job_name: load-testing
     scheme: https
