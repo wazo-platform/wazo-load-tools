@@ -18,16 +18,12 @@ alerting:
 scrape_configs:
   - job_name: 'asterisk'
     metrics_path: /asterisk/metrics
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: wazo-agentd
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /agentd/1.0/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -36,9 +32,7 @@ scrape_configs:
           service: 'wazo-agentd'
 
   - job_name: wazo-amid
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /amid/1.0/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -47,9 +41,7 @@ scrape_configs:
           service: 'wazo-amid'
 
   - job_name: wazo-auth
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /auth/0.1/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -58,9 +50,7 @@ scrape_configs:
           service: 'wazo-auth'
 
   - job_name: wazo-call-logd
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /call-logd/1.0/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -69,9 +59,7 @@ scrape_configs:
           service: 'wazo-call-logd'
 
   - job_name: wazo-calld
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /calld/1.0/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -80,9 +68,7 @@ scrape_configs:
           service: 'wazo-calld'
 
   - job_name: wazo-chatd
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /chatd/1.0/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -91,9 +77,7 @@ scrape_configs:
           service: 'wazo-chatd'
 
   - job_name: wazo-confd
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /confd/1.1/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -102,9 +86,7 @@ scrape_configs:
           service: 'wazo-confd'
 
   - job_name: wazo-dird
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /dird/0.1/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -113,9 +95,7 @@ scrape_configs:
           service: 'wazo-dird'
 
   - job_name: wazo-phoned
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /phoned/0.1/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -124,9 +104,7 @@ scrape_configs:
           service: 'wazo-phoned'
 
   - job_name: wazo-sysconfd
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /sysconfd/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -135,9 +113,7 @@ scrape_configs:
           service: 'wazo-sysconfd'
 
   - job_name: wazo-webhookd
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /webhookd/1.0/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
@@ -146,41 +122,31 @@ scrape_configs:
           service: 'wazo-webhookd'
 
   - job_name: nginx
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /nginx/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: rabbitmq
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /rabbitmq/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: postgresql
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /postgresql/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: node
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /node/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
 
   - job_name: process
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
+    scheme: http
     metrics_path: /process/metrics
     static_configs:
       - targets: [{{ dump_stacks(6387) }}]
