@@ -27,6 +27,7 @@ _DEFAULT_CONFIG = {
     'confd': {
         'host': 'localhost',
         'verify_certificate': False,
+        'timeout': 20,  # Adding thousands users to a group can takes > 10s
     },
 }
 
