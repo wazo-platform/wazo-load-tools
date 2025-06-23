@@ -162,16 +162,12 @@ scrape_configs:
 {% if edge_servers %}
   - job_name: edge-kamailio
     scheme: http
-    tls_config:
-      insecure_skip_verify: true
     metrics_path: /kamailio/metrics
     static_configs:
       - targets: [{{ dump_edges(6387) }}]
 
   - job_name: edge-traefik
     scheme: http
-    tls_config:
-      insecure_skip_verify: true
     metrics_path: /metrics
     static_configs:
       - targets: [{{ dump_edges(6387) }}]
