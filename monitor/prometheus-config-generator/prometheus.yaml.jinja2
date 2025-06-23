@@ -1,9 +1,9 @@
 {% macro dump_stacks(port) -%}
 {% for server in wazo_servers %}'{{ server.host }}:{{ port }}'{%- if loop.last %}{% else %}, {% endif %}{% endfor %}
-{%- endmacro %}
+{%- endmacro -%}
 {% macro dump_edges(port) -%}
 {% for server in edge_servers %}'{{ server.host }}:{{ port }}'{%- if loop.last %}{% else %}, {% endif %}{% endfor %}
-{%- endmacro %}
+{%- endmacro -%}
 global:
   scrape_interval: 15s
 
