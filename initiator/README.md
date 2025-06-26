@@ -24,3 +24,15 @@ The script will generate a configuration file used by by other scripts in the
 ```shell
 ./setup-wazo.py -s <wazo-ip> -p <password> -o ../generator/users/config.yml
 ```
+
+### Specific Environment
+
+Configure wazo for specific environment
+
+```shell
+# Not behind SIP proxy
+./setup-wazo-noproxy.py -s <wazo-ip> -p <password>
+
+# Behind SIP proxy
+./setup-wazo-proxy.py -s <wazo-ip> -p <password>
+```
