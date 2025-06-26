@@ -142,14 +142,11 @@ def main():
             raise
         break
 
-    global_sip_template_uuid = confd_tenant['global_sip_template_uuid']
-    global_sip_template = confd_client.endpoints_sip_templates.get(
-        global_sip_template_uuid
-    )
-    global_sip_template['aor_section_options'].append(['qualify_frequency', '0'])
-    global_sip_template['endpoint_section_options'].append(['rtp_symmetric', 'yes'])
-    global_sip_template['endpoint_section_options'].append(['rewrite_contact', 'yes'])
-    confd_client.endpoints_sip_templates.update(global_sip_template)
+    global_sip_tpl_uuid = confd_tenant['global_sip_template_uuid']
+    global_sip_tpl = confd_client.endpoints_sip_templates.get(global_sip_tpl_uuid)
+    global_sip_tpl['aor_section_options'].append(['qualify_frequency', '0'])
+    global_sip_tpl['endpoint_section_options'].append(['rtp_symmetric', 'yes'])
+    confd_client.endpoints_sip_templates.update(global_sip_tpl)
 
     body = {
         'label': 'internal',
@@ -175,7 +172,7 @@ def main():
     body = {
         'label': 'loadtester',
         'name': 'loadtester',
-        "templates": [{"uuid": global_sip_template_uuid}],
+        "templates": [{"uuid": global_sip_tpl_uuid}],
         'auth_section_options': [
             ["username", "loadtester"],
             ["password", "loadtester"],
@@ -218,7 +215,7 @@ def main():
 
     user_generator_config = {
         'tenant_uuid': tenant['uuid'],
-        'global_sip_template_uuid': global_sip_template_uuid,  # only to support format: json
+        'global_sip_template_uuid': global_sip_tpl_uuid,  # only to support format: json
         'internal_context': internal_context['name'],
         'incall_context': incall_context['name'],
         'incall_prefix': incall_prefix,
