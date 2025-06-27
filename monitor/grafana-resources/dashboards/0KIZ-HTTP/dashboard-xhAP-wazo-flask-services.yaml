@@ -388,7 +388,7 @@ spec:
               format: time_series
               interval: ""
               intervalFactor: 1
-              legendFormat: '{{service}}  {{path}}'
+              legendFormat: '{{ service }} ({{ endpoint }})'
               range: true
               refId: A
           title: Requests per second
@@ -418,7 +418,7 @@ spec:
               format: time_series
               interval: ""
               intervalFactor: 1
-              legendFormat: '{{ service }} {{ path }}'
+              legendFormat: '{{ service }} ({{ endpoint }})'
               range: true
               refId: A
           title: Average response time [30s]
@@ -449,7 +449,7 @@ spec:
               instant: false
               interval: ""
               intervalFactor: 1
-              legendFormat: '{{ service }} {{ path }}'
+              legendFormat: '{{ service }} ({{ endpoint }})'
               refId: A
           title: status  under 250ms
           type: timeseries
@@ -538,7 +538,7 @@ spec:
               format: time_series
               interval: ""
               intervalFactor: 1
-              legendFormat: '{{ service }} {{ path }}'
+              legendFormat: '{{ service }} ({{ endpoint }})'
               range: true
               refId: A
           title: Request duration [s] - p50
@@ -568,7 +568,7 @@ spec:
               format: time_series
               interval: ""
               intervalFactor: 1
-              legendFormat: '{{ service }} {{ path }}'
+              legendFormat: '{{ service }} ({{ endpoint }})'
               range: true
               refId: A
           title: Request duration [s] - p90
