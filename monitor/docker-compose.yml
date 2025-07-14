@@ -13,7 +13,7 @@ services:
       - grafana-data:/var/lib/grafana:rw
     healthcheck:
       test: ["CMD", "wget", "-o", "/dev/null" , "-O", "/dev/null", "http://localhost:3000"]
-      start_period: 30s  # Let time for bootstrap (i.e. migration scripts)
+      start_period: 60s  # Let time for bootstrap (i.e. migration scripts)
       interval: 2s
       timeout: 1s
       retries: 5
