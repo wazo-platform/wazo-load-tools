@@ -38,6 +38,9 @@ def create_users_csv(confd_client, users_file, output_file):
         content = f.read()
 
     result = confd_client.users.import_csv(content, encoding='utf-8', timeout=1800)
+    if not isinstance(result, dict) or 'created' not in result:
+        raise Exception(f'Import error: {result}')
+
     output_file.write(json.dumps(result, indent=2))
 
 
