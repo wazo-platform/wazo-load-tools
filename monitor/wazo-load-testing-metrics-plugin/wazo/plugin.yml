@@ -7,4 +7,4 @@ plugin_format_version: 1
 tags:
   - load
   - tests
-homepage: https://github.com/wazo-platform/wazo-load-tools/monitor/wazo-load-testing-metrics-plugin
+homepage: https://github.com/wazo-platform/wazo-load-tools/tree/main/monitor/wazo-load-testing-metrics-plugin
