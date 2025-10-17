@@ -12,7 +12,7 @@ apt-get install -y htop
 
 # Useful for debugging new load scenarios, but excessive for continuous runs.
 # echo 'Configuring postgresql debug...'
-# echo 'log_min_duration_statement = 0' >  /etc/postgresql/13/main/conf.d/wazo-acceptance-debug.conf
+# echo 'log_min_duration_statement = 0' > /etc/postgresql/15/main/conf.d/wazo-acceptance-debug.conf
 # systemctl reload postgresql
 #
 # WAZO_SERVICES=(
