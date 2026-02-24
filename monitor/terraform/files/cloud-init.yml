@@ -1,8 +1,6 @@
 #cloud-config
 mounts:
-  # Workaround: Volumes are not always detected in the same order
-  - [ sda, /mnt/prometheus ]
-  - [ sdb, /mnt/prometheus ]
+  - [ nvme1n1, /mnt/prometheus ]
 
 runcmd:
   - echo 'Fix mount permissions...'

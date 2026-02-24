@@ -1,0 +1,57 @@
+provider "aws" {
+  region = var.region
+}
+
+resource "aws_key_pair" "monitor" {
+  key_name   = var.keypair_name
+  public_key = file(var.public_key_path)
+}
+
+data "template_cloudinit_config" "monitor" {
+  dynamic "part" {
+    for_each = concat(
+      ["${path.module}/files/cloud-init.yml"],
+      var.cloud_config_files,
+    )
+    iterator = filename
+    content {
+      content_type = "text/cloud-config"
+      content      = file(filename.value)
+      merge_type   = "list(append)+dict(recurse_list)+str()"
+    }
+  }
+}
+
+data "aws_ami" "monitor" {
+  most_recent = true
+  owners      = ["self", "amazon"]
+
+  filter {
+    name   = "name"
+    values = [var.ami_name_filter]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
+
+resource "aws_instance" "monitor" {
+  ami           = data.aws_ami.monitor.id
+  instance_type = var.instance_type
+  key_name      = aws_key_pair.monitor.key_name
+  subnet_id     = var.subnet_id
+
+  user_data_base64 = data.template_cloudinit_config.monitor.rendered
+
+  vpc_security_group_ids = var.security_group_ids
+}
+
+// Volume is not created by terraform to avoid to split data between volumes in
+// case we lose terraform state
+resource "aws_volume_attachment" "prometheus" {
+  device_name = "/dev/sdb"
+  volume_id   = var.volume_id
+  instance_id = aws_instance.monitor.id
+}
