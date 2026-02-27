@@ -13,6 +13,10 @@ variable "instance_type" {
   description = "AWS instance type."
 }
 
+variable "instance_user" {
+  description = "Default instance user"
+}
+
 variable "subnet_id" {
   description = "AWS subnet ID."
 }

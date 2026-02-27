@@ -16,7 +16,9 @@ data "template_cloudinit_config" "monitor" {
     iterator = filename
     content {
       content_type = "text/cloud-config"
-      content      = file(filename.value)
+      content      = templatefile(filename.value, {
+        user       = var.instance_user,
+      })
       merge_type   = "list(append)+dict(recurse_list)+str()"
     }
   }
