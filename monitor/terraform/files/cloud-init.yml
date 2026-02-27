@@ -1,10 +1,16 @@
 #cloud-config
+# nofail is required: the EBS volume may not be attached yet at boot time.
+# runcmd waits for the device and calls mount -a to complete the mount.
 mounts:
-  - [ nvme1n1, /mnt/prometheus ]
+  - [ /dev/sdb, /mnt/prometheus, auto, "defaults,nofail" ]
 
 runcmd:
+  - echo 'Waiting for Prometheus EBS volume to be attached...'
+  - while [ ! -b /dev/sdb ]; do sleep 2; done
+
   - echo 'Fix mount permissions...'
   - mkdir /mnt/prometheus
+  - mount -a
   - chmod 777 /mnt/prometheus
 
   - echo 'Installing docker...'
