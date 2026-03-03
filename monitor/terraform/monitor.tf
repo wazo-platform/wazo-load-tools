@@ -39,6 +39,10 @@ data "aws_ami" "monitor" {
   }
 }
 
+data "aws_subnet" "monitor" {
+  id = var.subnet_id
+}
+
 resource "aws_instance" "monitor" {
   ami           = data.aws_ami.monitor.id
   instance_type = var.instance_type
@@ -50,10 +54,13 @@ resource "aws_instance" "monitor" {
   vpc_security_group_ids = var.security_group_ids
 }
 
-// Volume is not created by terraform to avoid to split data between volumes in
-// case we lose terraform state
 resource "aws_volume_attachment" "prometheus" {
   device_name = "/dev/sdb"
-  volume_id   = var.volume_id
   instance_id = aws_instance.monitor.id
+  volume_id   = aws_ebs_volume.prometheus.id
+}
+
+resource "aws_ebs_volume" "prometheus" {
+  availability_zone = data.aws_subnet.monitor.availability_zone
+  size              = var.volume_size
 }

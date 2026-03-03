@@ -38,9 +38,9 @@ variable "security_group_ids" {
   default     = []
 }
 
-variable "volume_id" {
-  description = "EBS volume ID to use for prometheus data (must be created and formatted to ext4 manually)"
-  default     = []
+variable "volume_size" {
+  description = "EBS volume size to use for prometheus data"
+  default     = 20
 }
 
 variable "cloud_config_files" {
