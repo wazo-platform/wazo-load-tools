@@ -7,7 +7,7 @@ resource "aws_key_pair" "monitor" {
   public_key = file(var.public_key_path)
 }
 
-data "template_cloudinit_config" "monitor" {
+data "cloudinit_config" "monitor" {
   dynamic "part" {
     for_each = concat(
       ["${path.module}/files/cloud-init.yml"],
@@ -49,7 +49,7 @@ resource "aws_instance" "monitor" {
   key_name      = aws_key_pair.monitor.key_name
   subnet_id     = var.subnet_id
 
-  user_data_base64 = data.template_cloudinit_config.monitor.rendered
+  user_data_base64 = data.cloudinit_config.monitor.rendered
 
   vpc_security_group_ids = var.security_group_ids
 }
