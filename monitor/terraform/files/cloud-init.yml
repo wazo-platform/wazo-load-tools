@@ -7,6 +7,8 @@ mounts:
 runcmd:
   - echo 'Waiting for Prometheus EBS volume to be attached...'
   - while [ ! -b /dev/sdb ]; do sleep 2; done
+  - echo 'Formating volume if needed...'
+  - lsblk -n -o FSTYPE /dev/sdb | grep -q ext4 || mkfs.ext4 -L prometheus /dev/sdb
 
   - echo 'Fix mount permissions...'
   - mkdir /mnt/prometheus
