@@ -3,6 +3,11 @@ variable "region" {
   description = "AWS region."
 }
 
+variable "default_tags" {
+  description = "AWS default tags"
+  default     = {}
+}
+
 variable "ami_name_filter" {
   description = "Filter to apply on names to retrieve AMI"
   type        = string

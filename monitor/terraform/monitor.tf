@@ -1,5 +1,8 @@
 provider "aws" {
   region = var.region
+  default_tags {
+    tags = var.default_tags
+  }
 }
 
 resource "aws_key_pair" "monitor" {
