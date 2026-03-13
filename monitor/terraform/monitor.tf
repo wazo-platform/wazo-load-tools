@@ -52,7 +52,8 @@ resource "aws_instance" "monitor" {
   key_name      = aws_key_pair.monitor.key_name
   subnet_id     = var.subnet_id
 
-  user_data_base64 = data.cloudinit_config.monitor.rendered
+  user_data_base64            = data.cloudinit_config.monitor.rendered
+  user_data_replace_on_change = true
 
   vpc_security_group_ids = var.security_group_ids
 }
