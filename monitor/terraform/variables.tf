@@ -45,11 +45,12 @@ variable "security_group_ids" {
 
 variable "volume_size" {
   description = "EBS volume size to use for prometheus data"
+  type        = number
   default     = 20
 }
 
 variable "cloud_config_files" {
-  type        = list
+  type        = list(string)
   description = "cloud-config files to append to monitor instance cloud-config."
   default     = []
 }
