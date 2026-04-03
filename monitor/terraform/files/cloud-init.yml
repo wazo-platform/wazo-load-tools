@@ -1,12 +1,18 @@
 #cloud-config
+# nofail is required: the EBS volume may not be attached yet at boot time.
+# runcmd waits for the device and calls mount -a to complete the mount.
 mounts:
-  # Workaround: Volumes are not always detected in the same order
-  - [ sda, /mnt/prometheus ]
-  - [ sdb, /mnt/prometheus ]
+  - [ /dev/sdb, /mnt/prometheus, auto, "defaults,nofail" ]
 
 runcmd:
+  - echo 'Waiting for Prometheus EBS volume to be attached...'
+  - while [ ! -b /dev/sdb ]; do sleep 2; done
+  - echo 'Formating volume if needed...'
+  - lsblk -n -o FSTYPE /dev/sdb | grep -q ext4 || mkfs.ext4 -L prometheus /dev/sdb
+
   - echo 'Fix mount permissions...'
   - mkdir /mnt/prometheus
+  - mount -a
   - chmod 777 /mnt/prometheus
 
   - echo 'Installing docker...'
@@ -18,6 +24,8 @@ runcmd:
   - echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
   - apt-get update
   - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  - groupadd -f docker
+  - usermod -aG docker ${user}
 
   - echo 'Installing grizzly...'
   - curl -fSL -o "/usr/local/bin/grr" "https://github.com/grafana/grizzly/releases/download/v0.7.1/grr-linux-amd64"
