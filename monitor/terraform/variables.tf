@@ -54,3 +54,9 @@ variable "cloud_config_files" {
   description = "cloud-config files to append to monitor instance cloud-config."
   default     = []
 }
+
+variable "instance_tags" {
+  type        = map(string)
+  description = "Tags to set on the monitor instance only, in addition to default_tags."
+  default     = {}
+}

@@ -56,6 +56,8 @@ resource "aws_instance" "monitor" {
   user_data_replace_on_change = true
 
   vpc_security_group_ids = var.security_group_ids
+
+  tags = var.instance_tags
 }
 
 resource "aws_volume_attachment" "prometheus" {
