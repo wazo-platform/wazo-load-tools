@@ -51,5 +51,5 @@ apt-get install -y htop
 # done
 
 apt-get install -y wazo-plugind-cli
-wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheus-exporter-plugin --ref $PROMETHEUS_PLUGIN_BRANCH"
-wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-load-tools --subdirectory monitor/wazo-load-testing-metrics-plugin --ref $LOAD_TESTING_PLUGIN_BRANCH "
+wazo-plugind-cli install git https://github.com/wazo-platform/wazo-prometheus-exporter-plugin --ref "$PROMETHEUS_PLUGIN_BRANCH"
+wazo-plugind-cli install git https://github.com/wazo-platform/wazo-load-tools --subdirectory monitor/wazo-load-testing-metrics-plugin --ref "$LOAD_TESTING_PLUGIN_BRANCH"
