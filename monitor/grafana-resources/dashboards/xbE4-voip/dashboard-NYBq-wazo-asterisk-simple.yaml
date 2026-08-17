@@ -937,17 +937,16 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: |
-                count(asterisk_endpoints_state{instance="$instance"}==0)
+              expr: count(asterisk_endpoints_state{instance="$instance"}==0) or vector(0)
               format: time_series
               interval: ""
-              legendFormat: Enpoints Unknown
+              legendFormat: Endpoints Unknown
               refId: A
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: count(asterisk_endpoints_state{instance="$instance"}==1)
+              expr: count(asterisk_endpoints_state{instance="$instance"}==1) or vector(0)
               format: time_series
               hide: false
               interval: ""
@@ -957,7 +956,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: count(asterisk_endpoints_state{instance="$instance"}==2)
+              expr: count(asterisk_endpoints_state{instance="$instance"}==2) or vector(0)
               format: time_series
               hide: false
               interval: ""
