@@ -39,3 +39,25 @@ Provision the generated users onto the Wazo server:
 ```shell
 ./users/create-users.py -s <wazo-ip> -p <password> -u users/users.csv -f csv -c users/config.yml
 ```
+
+#### Provision Mobile Push
+
+Make created users usable for the mobile push workflow (see
+`xivo-load-tester/scenarios/mobile-register-then-answer`).
+
+Install the dialplan subroutine on the Wazo server (once):
+
+```shell
+scp users/wazo-loadtest-mobile.conf root@<wazo-ip>:/etc/asterisk/extensions_extra.d/
+ssh root@<wazo-ip> "asterisk -rx 'dialplan reload'"
+```
+
+Then, for each user of the CSV, set the `wazo-loadtest-mobile` preprocess
+subroutine, create a mobile refresh token in wazo-auth and register a fake FCM
+token equal to the SIP username:
+
+```shell
+./users/provision-mobile.py -s <wazo-ip> -p <password> -u users/users.csv -c users/config.yml -o users/provisioned-mobile.json
+```
+
+The script is idempotent, so it is safe to re-run after partial failures.
