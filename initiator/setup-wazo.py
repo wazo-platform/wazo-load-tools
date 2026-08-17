@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2025-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import argparse
@@ -181,6 +181,8 @@ def main():
             ["username", "loadtester"],
             ["password", "loadtester"],
         ],
+        # identify by IP (catch-all): the From user is a caller ID, not the endpoint name
+        'identify_section_options': [['match', '0.0.0.0/0']],
     }
     trunk_endpoint_sip = confd_client.endpoints_sip.create(
         body, tenant_uuid=tenant['uuid']
