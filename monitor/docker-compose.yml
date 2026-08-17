@@ -9,6 +9,8 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin # grants admin role to anonymous access
       - GF_AUTH_ANONYMOUS_ENABLED=true # removes login 1/2
       - GF_AUTH_BASIC_ENABLED=false # removes login 2/2
+      # Grafana 13 disabled the numeric-id datasource API that Grizzly still uses
+      - GF_FEATURE_TOGGLES_ENABLE=datasourceLegacyIdApi
     volumes:
       - grafana-data:/var/lib/grafana:rw
     healthcheck:
