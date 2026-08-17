@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2025-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import argparse
@@ -37,7 +37,7 @@ def generate_user(config, index):
     return {
         'firstname': 'User',
         'lastname': f'{index}',
-        'caller_id': f'"User {index}"',
+        'caller_id': f'"User {index}" <+1555{exten:0>7}>',
         'subscription_type': 1,
         'email': email,
         'auth': {
