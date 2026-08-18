@@ -552,7 +552,6 @@ spec:
                     fixedColor: semi-dark-orange
                     mode: fixed
                 mappings: []
-                max: 100
                 noValue: N/A
                 thresholds:
                     mode: absolute
@@ -752,7 +751,6 @@ spec:
                     fixedColor: semi-dark-blue
                     mode: fixed
                 mappings: []
-                max: 100
                 min: 0
                 noValue: N/A
                 thresholds:
@@ -941,17 +939,16 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: |
-                count(asterisk_endpoints_state{instance="$instance"}==0)
+              expr: count(asterisk_endpoints_state{instance="$instance"}==0) or vector(0)
               format: time_series
               interval: ""
-              legendFormat: Enpoints Unknown
+              legendFormat: Endpoints Unknown
               refId: A
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: count(asterisk_endpoints_state{instance="$instance"}==1)
+              expr: count(asterisk_endpoints_state{instance="$instance"}==1) or vector(0)
               format: time_series
               hide: false
               interval: ""
@@ -961,7 +958,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: count(asterisk_endpoints_state{instance="$instance"}==2)
+              expr: count(asterisk_endpoints_state{instance="$instance"}==2) or vector(0)
               format: time_series
               hide: false
               interval: ""
@@ -981,7 +978,6 @@ spec:
                     fixedColor: semi-dark-blue
                     mode: fixed
                 mappings: []
-                max: 100
                 min: 0
                 noValue: N/A
                 thresholds:
@@ -1163,7 +1159,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: asterisk_endpoints_channels_count{instance="$instance"}
+              expr: topk(20, asterisk_endpoints_channels_count{instance="$instance"})
               format: table
               interval: ""
               legendFormat: ""
@@ -1615,7 +1611,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==6)
+                  expr: count(asterisk_channels_state{instance="$instance"}==6) or vector(0)
                   hide: false
                   interval: ""
                   legendFormat: Channels up
@@ -1624,8 +1620,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: |
-                    count(asterisk_channels_state{instance="$instance"}==0)
+                  expr: count(asterisk_channels_state{instance="$instance"}==0) or vector(0)
                   format: time_series
                   interval: ""
                   legendFormat: Channels down
@@ -1634,7 +1629,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==1)
+                  expr: count(asterisk_channels_state{instance="$instance"}==1) or vector(0)
                   format: time_series
                   hide: false
                   interval: ""
@@ -1644,7 +1639,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==2)
+                  expr: count(asterisk_channels_state{instance="$instance"}==2) or vector(0)
                   format: time_series
                   hide: false
                   interval: ""
@@ -1654,7 +1649,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==3)
+                  expr: count(asterisk_channels_state{instance="$instance"}==3) or vector(0)
                   hide: false
                   interval: ""
                   legendFormat: Channels dialings
@@ -1663,7 +1658,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==4)
+                  expr: count(asterisk_channels_state{instance="$instance"}==4) or vector(0)
                   hide: false
                   interval: ""
                   legendFormat: Channels ring
@@ -1672,7 +1667,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==5)
+                  expr: count(asterisk_channels_state{instance="$instance"}==5) or vector(0)
                   hide: false
                   interval: ""
                   legendFormat: Channels ringing
@@ -1681,7 +1676,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==7)
+                  expr: count(asterisk_channels_state{instance="$instance"}==7) or vector(0)
                   hide: false
                   interval: ""
                   legendFormat: Channels busy
@@ -1690,7 +1685,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==8)
+                  expr: count(asterisk_channels_state{instance="$instance"}==8) or vector(0)
                   hide: false
                   interval: ""
                   legendFormat: Channels dialing_offhook
@@ -1699,7 +1694,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: count(asterisk_channels_state{instance="$instance"}==9)
+                  expr: count(asterisk_channels_state{instance="$instance"}==9) or vector(0)
                   hide: false
                   interval: ""
                   legendFormat: Channels prering
@@ -1792,7 +1787,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: asterisk_channels_state{instance="$instance"}
+                  expr: asterisk_channels_state{instance="$instance"} and on(id) topk(20, asterisk_channels_duration_seconds{instance="$instance"})
                   format: table
                   interval: ""
                   legendFormat: ""
@@ -1801,7 +1796,7 @@ spec:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
                   exemplar: true
-                  expr: asterisk_channels_duration_seconds{instance="$instance"}
+                  expr: topk(20, asterisk_channels_duration_seconds{instance="$instance"})
                   format: table
                   hide: false
                   interval: ""
