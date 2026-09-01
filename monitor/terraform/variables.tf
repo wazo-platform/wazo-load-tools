@@ -1,3 +1,8 @@
+variable "name" {
+  description = "Name of the IAM role and instance profile"
+  type        = string
+  default     = "monitor"
+}
 
 variable "region" {
   description = "AWS region."

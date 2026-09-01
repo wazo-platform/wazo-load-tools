@@ -46,16 +46,57 @@ data "aws_subnet" "monitor" {
   id = var.subnet_id
 }
 
+# Prometheus discovers its targets with ec2_sd_configs
+data "aws_iam_policy_document" "monitor_assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "monitor_discovery" {
+  statement {
+    actions   = ["ec2:DescribeInstances", "ec2:DescribeAvailabilityZones"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role" "monitor" {
+  name               = var.name
+  assume_role_policy = data.aws_iam_policy_document.monitor_assume_role.json
+}
+
+resource "aws_iam_role_policy" "monitor_discovery" {
+  name   = "ec2-discovery"
+  role   = aws_iam_role.monitor.id
+  policy = data.aws_iam_policy_document.monitor_discovery.json
+}
+
+resource "aws_iam_instance_profile" "monitor" {
+  name = var.name
+  role = aws_iam_role.monitor.name
+}
+
 resource "aws_instance" "monitor" {
-  ami           = data.aws_ami.monitor.id
-  instance_type = var.instance_type
-  key_name      = aws_key_pair.monitor.key_name
-  subnet_id     = var.subnet_id
+  ami                  = data.aws_ami.monitor.id
+  instance_type        = var.instance_type
+  key_name             = aws_key_pair.monitor.key_name
+  subnet_id            = var.subnet_id
+  iam_instance_profile = aws_iam_instance_profile.monitor.name
 
   user_data_base64            = data.cloudinit_config.monitor.rendered
   user_data_replace_on_change = true
 
   vpc_security_group_ids = var.security_group_ids
+
+  # Prometheus runs in a docker bridge network, one hop away from IMDS
+  metadata_options {
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 2
+  }
 
   tags = var.instance_tags
 }
