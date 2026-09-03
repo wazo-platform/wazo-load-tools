@@ -46,38 +46,9 @@ data "aws_subnet" "monitor" {
   id = var.subnet_id
 }
 
-# Prometheus discovers its targets with ec2_sd_configs
-data "aws_iam_policy_document" "monitor_assume_role" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "monitor_discovery" {
-  statement {
-    actions   = ["ec2:DescribeInstances", "ec2:DescribeAvailabilityZones"]
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_role" "monitor" {
-  name               = var.name
-  assume_role_policy = data.aws_iam_policy_document.monitor_assume_role.json
-}
-
-resource "aws_iam_role_policy" "monitor_discovery" {
-  name   = "ec2-discovery"
-  role   = aws_iam_role.monitor.id
-  policy = data.aws_iam_policy_document.monitor_discovery.json
-}
-
 resource "aws_iam_instance_profile" "monitor" {
   name = var.name
-  role = aws_iam_role.monitor.name
+  role = var.iam_role_name
 }
 
 resource "aws_instance" "monitor" {
