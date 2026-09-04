@@ -1,11 +1,11 @@
 variable "name" {
-  description = "Name of the instance profile"
+  description = "Name of the monitor instance"
   type        = string
   default     = "monitor"
 }
 
-variable "iam_role_name" {
-  description = "Existing IAM role bound to the instance profile. Prometheus EC2 discovery needs ec2:DescribeInstances and ec2:DescribeAvailabilityZones."
+variable "iam_instance_profile_name" {
+  description = "Existing instance profile bound to the instance. Its role must allow ec2:DescribeInstances and ec2:DescribeAvailabilityZones for prometheus EC2 discovery."
   type        = string
 }
 

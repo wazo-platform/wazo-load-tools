@@ -65,10 +65,11 @@ To review dashboards with production data, you can use `grr`:
 Contains the Terraform files used to provision the orchestrator instance, which
 hosts the monitoring services.
 
-The instance is bound to an existing IAM role given by `iam_role_name`. The
-role is not managed here: it must trust `ec2.amazonaws.com` and allow
-`ec2:DescribeInstances` and `ec2:DescribeAvailabilityZones` for prometheus
-EC2 discovery.
+The instance is bound to an existing instance profile given by
+`iam_instance_profile_name`. Neither the profile nor its role is managed here:
+the role must allow `ec2:DescribeInstances` and `ec2:DescribeAvailabilityZones`
+for prometheus EC2 discovery. Creating the profile in the same apply as the
+instance would race IAM propagation and leave the instance without a role.
 
 ```sh
 terraform init
