@@ -1,0 +1,200 @@
+global:
+  scrape_interval: 15s
+
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets: ['alertmanager:9093']
+
+# Targets are EC2 instances tagged LoadRole (wazo or edge) and Fqdn, plus any
+# host listed in targets/ (see README)
+scrape_configs:
+  - job_name: asterisk
+    metrics_path: /asterisk/metrics
+    ec2_sd_configs: &stack_ec2
+      - region: eu-west-1
+        port: 6387
+        filters:
+          - name: tag:LoadRole
+            values: [wazo]
+          - name: instance-state-name
+            values: [running]
+    file_sd_configs: &stack_file
+      - files: [/etc/prometheus/targets/stack.yml]
+    relabel_configs:
+      - &stack_address
+        source_labels: [__meta_ec2_tag_Fqdn]
+        regex: '(.+)'
+        target_label: __address__
+        replacement: '${1}:6387'
+
+  - job_name: wazo-agentd
+    metrics_path: /agentd/1.0/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-agentd}
+
+  - job_name: wazo-amid
+    metrics_path: /amid/1.0/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-amid}
+
+  - job_name: wazo-auth
+    metrics_path: /auth/0.1/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-auth}
+
+  - job_name: wazo-call-logd
+    metrics_path: /call-logd/1.0/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-call-logd}
+
+  - job_name: wazo-calld
+    metrics_path: /calld/1.0/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-calld}
+
+  - job_name: wazo-chatd
+    metrics_path: /chatd/1.0/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-chatd}
+
+  - job_name: wazo-confd
+    metrics_path: /confd/1.1/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-confd}
+
+  - job_name: wazo-dird
+    metrics_path: /dird/0.1/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-dird}
+
+  - job_name: wazo-phoned
+    metrics_path: /phoned/0.1/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-phoned}
+
+  - job_name: wazo-sysconfd
+    metrics_path: /sysconfd/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: fastapi}
+      - {target_label: service, replacement: wazo-sysconfd}
+
+  - job_name: wazo-webhookd
+    metrics_path: /webhookd/1.0/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - {target_label: framework, replacement: flask}
+      - {target_label: service, replacement: wazo-webhookd}
+
+  - job_name: nginx
+    metrics_path: /nginx/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs: [*stack_address]
+
+  - job_name: rabbitmq
+    metrics_path: /rabbitmq/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs: [*stack_address]
+
+  - job_name: postgresql
+    metrics_path: /postgresql/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs: [*stack_address]
+
+  - job_name: node
+    metrics_path: /node/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs: [*stack_address]
+
+  - job_name: process
+    metrics_path: /process/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs: [*stack_address]
+
+  - job_name: load-testing
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/load-testing/metrics
+    ec2_sd_configs: *stack_ec2
+    file_sd_configs: *stack_file
+    relabel_configs:
+      - *stack_address
+      - source_labels: [__address__]
+        regex: '(.+):\d+'
+        target_label: __address__
+        replacement: '${1}:443'
+
+  - job_name: edge-kamailio
+    metrics_path: /kamailio/metrics
+    ec2_sd_configs: &edge_ec2
+      - region: eu-west-1
+        port: 6387
+        filters:
+          - name: tag:LoadRole
+            values: [edge]
+          - name: instance-state-name
+            values: [running]
+    file_sd_configs: &edge_file
+      - files: [/etc/prometheus/targets/edge.yml]
+    relabel_configs:
+      - &edge_address
+        source_labels: [__meta_ec2_tag_Fqdn]
+        regex: '(.+)'
+        target_label: __address__
+        replacement: '${1}:6387'
+
+  - job_name: edge-traefik
+    metrics_path: /metrics
+    ec2_sd_configs: *edge_ec2
+    file_sd_configs: *edge_file
+    relabel_configs: [*edge_address]

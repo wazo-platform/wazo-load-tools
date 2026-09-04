@@ -46,16 +46,28 @@ data "aws_subnet" "monitor" {
   id = var.subnet_id
 }
 
+resource "aws_iam_instance_profile" "monitor" {
+  name = var.name
+  role = var.iam_role_name
+}
+
 resource "aws_instance" "monitor" {
-  ami           = data.aws_ami.monitor.id
-  instance_type = var.instance_type
-  key_name      = aws_key_pair.monitor.key_name
-  subnet_id     = var.subnet_id
+  ami                  = data.aws_ami.monitor.id
+  instance_type        = var.instance_type
+  key_name             = aws_key_pair.monitor.key_name
+  subnet_id            = var.subnet_id
+  iam_instance_profile = aws_iam_instance_profile.monitor.name
 
   user_data_base64            = data.cloudinit_config.monitor.rendered
   user_data_replace_on_change = true
 
   vpc_security_group_ids = var.security_group_ids
+
+  # Prometheus runs in a docker bridge network, one hop away from IMDS
+  metadata_options {
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 2
+  }
 
   tags = var.instance_tags
 }

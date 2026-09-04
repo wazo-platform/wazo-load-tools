@@ -14,11 +14,24 @@ scenarios.
   - `grr config set grafana.url http://localhost:3000`
   - `grr config set targets Dashboard,Dashboardfolder,Datasource`
 
-- Generate Prometheus configuration file
+- Declare the hosts to scrape. Prometheus discovers EC2 instances tagged
+  `LoadRole` (`wazo` or `edge`) and `Fqdn` in `eu-west-1`, which needs AWS
+  credentials: an instance profile on AWS, or exported in the shell that
+  starts the containers:
 
   ```sh
-  pip install -r ./prometheus-config-generator/requirements.txt
-  ./prometheus-config-generator/generate.py --wazo-host <wazo-ip> --edge-host <edge-ip> -o prometheus-config/prometheus.yml
+  eval "$(aws configure export-credentials --format env)"
+  ```
+
+  Without credentials, discovery logs an error every minute and finds
+  nothing; list hosts by hand instead in `prometheus-config/targets/`
+  (gitignored):
+
+  ```yaml
+  # prometheus-config/targets/stack.yml
+  - targets: ['<wazo-ip>:6387']
+  # prometheus-config/targets/edge.yml
+  - targets: ['<edge-ip>:6387']
   ```
 
 - (Optional) Update Alertmanager configuration file:
@@ -51,6 +64,11 @@ To review dashboards with production data, you can use `grr`:
 
 Contains the Terraform files used to provision the orchestrator instance, which
 hosts the monitoring services.
+
+The instance is bound to an existing IAM role given by `iam_role_name`. The
+role is not managed here: it must trust `ec2.amazonaws.com` and allow
+`ec2:DescribeInstances` and `ec2:DescribeAvailabilityZones` for prometheus
+EC2 discovery.
 
 ```sh
 terraform init
