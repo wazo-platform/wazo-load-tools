@@ -21,7 +21,7 @@ variable "default_tags" {
 variable "ami_name_filter" {
   description = "Filter to apply on names to retrieve AMI"
   type        = string
-  default     = "debian-12*"
+  default     = "debian-12-amd64-*"
 }
 
 variable "instance_type" {
