@@ -65,6 +65,10 @@ resource "aws_instance" "monitor" {
   }
 
   tags = var.instance_tags
+
+  lifecycle {
+    ignore_changes = [ami]
+  }
 }
 
 resource "aws_volume_attachment" "prometheus" {
