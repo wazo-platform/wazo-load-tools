@@ -77,6 +77,14 @@ terraform plan -var-file=<file>
 terraform apply -var-file=<file>
 ```
 
+The AMI is resolved from `ami_name_filter` only when the instance is created.
+A newer AMI matching the filter does not replace an existing instance. To move
+an instance to the latest AMI:
+
+```sh
+terraform apply -var-file=<file> -replace=aws_instance.monitor
+```
+
 ## Alerting Rules
 
 To debug, write or test alerting rules, use `promtool`:
