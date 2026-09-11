@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 _BATCH_SIZE = 1000
+_HOUR = 60 * 60
 
 _DEFAULT_CONFIG = {
     'output': None,  # (default: stdout)
@@ -152,7 +153,7 @@ def main():
     config = load_config(sys.argv[1:])
     auth_client = AuthClient(**config['auth'])
     confd_client = ConfdClient(**config['confd'])
-    token = auth_client.token.new(expiration=3600)['token']
+    token = auth_client.token.new(expiration=6 * _HOUR)['token']
     confd_client.set_token(token)
     confd_client.tenant_uuid = config['tenant_uuid']
     with _open_output_file(config['output']) as output_file:
