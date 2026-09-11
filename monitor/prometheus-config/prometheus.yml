@@ -30,6 +30,9 @@ scrape_configs:
         regex: '(.+)'
         target_label: __address__
         replacement: '${1}:6387'
+      - &stack_profile
+        source_labels: [__meta_ec2_tag_LoadProfile]
+        target_label: profile
 
   - job_name: wazo-agentd
     metrics_path: /agentd/1.0/metrics
@@ -37,6 +40,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-agentd}
 
@@ -46,6 +50,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-amid}
 
@@ -55,6 +60,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-auth}
 
@@ -64,6 +70,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-call-logd}
 
@@ -73,6 +80,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-calld}
 
@@ -82,6 +90,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-chatd}
 
@@ -91,6 +100,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-confd}
 
@@ -100,6 +110,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-dird}
 
@@ -109,6 +120,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-phoned}
 
@@ -118,6 +130,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: fastapi}
       - {target_label: service, replacement: wazo-sysconfd}
 
@@ -127,6 +140,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-webhookd}
 
@@ -134,31 +148,31 @@ scrape_configs:
     metrics_path: /nginx/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address]
+    relabel_configs: [*stack_address, *stack_profile]
 
   - job_name: rabbitmq
     metrics_path: /rabbitmq/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address]
+    relabel_configs: [*stack_address, *stack_profile]
 
   - job_name: postgresql
     metrics_path: /postgresql/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address]
+    relabel_configs: [*stack_address, *stack_profile]
 
   - job_name: node
     metrics_path: /node/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address]
+    relabel_configs: [*stack_address, *stack_profile]
 
   - job_name: process
     metrics_path: /process/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address]
+    relabel_configs: [*stack_address, *stack_profile]
 
   - job_name: load-testing
     scheme: https
@@ -169,6 +183,7 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs:
       - *stack_address
+      - *stack_profile
       - source_labels: [__address__]
         regex: '(.+):\d+'
         target_label: __address__
