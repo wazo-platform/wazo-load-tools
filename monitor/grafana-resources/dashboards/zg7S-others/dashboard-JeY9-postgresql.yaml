@@ -1172,7 +1172,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: bytes
+                unit: short
             overrides: []
           gridPos:
             h: 7
@@ -1198,7 +1198,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: pg_stat_database_tup_updated{datname=~"$datname", instance=~"$instance"} != 0
+              expr: rate(pg_stat_database_tup_updated{datname=~"$datname", instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{datname}}'
@@ -1248,7 +1248,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: bytes
+                unit: short
             overrides: []
           gridPos:
             h: 7
@@ -1274,7 +1274,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: pg_stat_database_tup_fetched{datname=~"$datname", instance=~"$instance"} != 0
+              expr: rate(pg_stat_database_tup_fetched{datname=~"$datname", instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{datname}}'
@@ -1324,7 +1324,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: bytes
+                unit: short
             overrides: []
           gridPos:
             h: 7
@@ -1350,7 +1350,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: pg_stat_database_tup_inserted{datname=~"$datname", instance=~"$instance"} != 0
+              expr: rate(pg_stat_database_tup_inserted{datname=~"$datname", instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{datname}}'
@@ -1439,7 +1439,8 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 7
@@ -1452,7 +1453,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: pg_stat_database_tup_returned{datname=~"$datname", instance=~"$instance"} != 0
+              expr: rate(pg_stat_database_tup_returned{datname=~"$datname", instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{datname}}'
@@ -1489,7 +1490,8 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 7
@@ -1502,7 +1504,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: pg_stat_database_tup_deleted{datname=~"$datname", instance=~"$instance"} != 0
+              expr: rate(pg_stat_database_tup_deleted{datname=~"$datname", instance=~"$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{datname}}'
