@@ -24,7 +24,8 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: bytes
             overrides: []
           gridPos:
             h: 10
@@ -53,7 +54,8 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: percentunit
             overrides: []
           gridPos:
             h: 10
@@ -190,7 +192,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: s
+                unit: percentunit
             overrides: []
           gridPos:
             h: 10
@@ -432,7 +434,8 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
@@ -454,7 +457,8 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
@@ -476,7 +480,8 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
@@ -493,12 +498,13 @@ spec:
               intervalFactor: 2
               legendFormat: '{{groupname}}'
               refId: A
-          title: file descripters
+          title: file descriptors
           type: timeseries
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: binBps
             overrides: []
           gridPos:
             h: 10
@@ -520,7 +526,8 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: binBps
             overrides: []
           gridPos:
             h: 10
@@ -542,7 +549,8 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
@@ -564,7 +572,8 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
