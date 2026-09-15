@@ -489,7 +489,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Max  Calls over the day
+          title: Max Calls over the day
           type: stat
         - datasource:
             type: prometheus
@@ -741,7 +741,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Current online  Endpoints
+          title: Current online Endpoints
           type: gauge
         - datasource:
             type: prometheus
@@ -962,7 +962,7 @@ spec:
               interval: ""
               legendFormat: Endpoint Online
               refId: C
-          title: Current Endpoints State ( 0=unknown; 1=offline; 2=online)
+          title: Current Endpoints State (0=unknown; 1=offline; 2=online)
           transformations:
             - id: organize
               options: {}
@@ -1015,7 +1015,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Current defined  Endpoints
+          title: Current defined Endpoints
           type: stat
         - datasource:
             type: prometheus

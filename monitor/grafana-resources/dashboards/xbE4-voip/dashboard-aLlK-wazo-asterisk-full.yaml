@@ -489,7 +489,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Max  Calls over the day
+          title: Max Calls over the day
           type: stat
         - datasource:
             type: prometheus
@@ -740,7 +740,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Current online  Endpoints
+          title: Current online Endpoints
           type: gauge
         - datasource:
             type: prometheus
@@ -964,7 +964,7 @@ spec:
               interval: ""
               legendFormat: Endpoint Online
               refId: C
-          title: Current Endpoints State ( 0=unknown; 1=offline; 2=online)
+          title: Current Endpoints State (0=unknown; 1=offline; 2=online)
           transformations:
             - id: organize
               options: {}
@@ -1164,7 +1164,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Historical  Endpoints Detail (Numbered of / Channels used over the period)
+          title: Historical Endpoints Detail (Numbered of / Channels used over the period)
           transformations:
             - id: organize
               options:
@@ -1699,7 +1699,7 @@ spec:
                   interval: ""
                   legendFormat: Channels prering
                   refId: J
-              title: Current Channels State  (0=down; 1=reserved; 2=offhook; 3=dialing; 4=ring; 5=ringing; 6=up; 7=busy; 8=dialing_offhook; 9=prering.)
+              title: Current Channels State (0=down; 1=reserved; 2=offhook; 3=dialing; 4=ring; 5=ringing; 6=up; 7=busy; 8=dialing_offhook; 9=prering.)
               type: piechart
             - datasource:
                 type: prometheus
@@ -1802,7 +1802,7 @@ spec:
                   interval: ""
                   legendFormat: ""
                   refId: B
-              title: Historical Individuals Channels Detail (0=down; 1=reserved; 2=offhook; 3=dialing; 4=ring; 5=ringing; 6=up; 7=busy; 8=dialing_offhook; 9=prering.)
+              title: Historical Individual Channels Detail (0=down; 1=reserved; 2=offhook; 3=dialing; 4=ring; 5=ringing; 6=up; 7=busy; 8=dialing_offhook; 9=prering.)
               transformations:
                 - id: seriesToColumns
                   options:
@@ -1909,7 +1909,7 @@ spec:
                   interval: "300"
                   legendFormat: ""
                   refId: A
-              title: Active Briges Historical
+              title: Active Bridges Historical
               type: timeseries
           title: Bridges Information
           type: row
