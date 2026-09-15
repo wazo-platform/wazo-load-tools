@@ -555,6 +555,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
+                unit: bytes
             overrides: []
           gridPos:
             h: 3
@@ -603,6 +604,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
+                unit: bytes
             overrides: []
           gridPos:
             h: 3
@@ -651,6 +653,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
+                unit: bytes
             overrides: []
           gridPos:
             h: 3
@@ -699,6 +702,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
+                unit: bytes
             overrides: []
           gridPos:
             h: 3
@@ -747,6 +751,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
+                unit: bytes
             overrides: []
           gridPos:
             h: 3
