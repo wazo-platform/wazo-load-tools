@@ -121,7 +121,7 @@ spec:
               refId: A
               step: 2
           timeFrom: 30s
-          title: 'Service  RabbitMQ '
+          title: Service RabbitMQ
           type: stat
         - datasource:
             type: prometheus
@@ -294,7 +294,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Number of Websoketd queues
+          title: Number of Websocketd queues
           type: stat
         - datasource:
             type: prometheus
@@ -349,7 +349,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Number of celey queues
+          title: Number of celery queues
           type: stat
         - datasource:
             type: prometheus
@@ -1172,7 +1172,7 @@ spec:
               intervalFactor: 2
               legendFormat: consumers
               refId: C
-          title: ' channels and consumers'
+          title: Channels and consumers
           type: timeseries
         - collapsed: true
           gridPos:
@@ -1182,7 +1182,7 @@ spec:
             "y": 65
           id: 32
           panels: []
-          title: Websoketd queues
+          title: Websocketd queues
           type: row
         - datasource:
             type: prometheus
