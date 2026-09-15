@@ -167,7 +167,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: code
-              expr: sum by (service) (rate(flask_http_request_duration_seconds_count{status!~"200|204", method=~"$method", instance="$instance"}[30s]))
+              expr: sum by (service) (rate(flask_http_request_duration_seconds_count{status!~"200|201|204", method=~"$method", instance="$instance"}[30s]))
               format: time_series
               interval: ""
               intervalFactor: 1
