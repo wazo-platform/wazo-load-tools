@@ -529,38 +529,19 @@ spec:
             - current:
                 text: "200"
                 value: "200"
+              datasource:
+                type: prometheus
+                uid: ${DS_PROMETHEUS}
+              definition: label_values(flask_http_request_total, status)
               includeAll: false
               name: return_code
-              options:
-                - selected: true
-                  text: "200"
-                  value: "200"
-                - selected: false
-                  text: "204"
-                  value: "204"
-                - selected: false
-                  text: "401"
-                  value: "401"
-                - selected: false
-                  text: "403"
-                  value: "403"
-                - selected: false
-                  text: "404"
-                  value: "404"
-                - selected: false
-                  text: "500"
-                  value: "500"
-                - selected: false
-                  text: "502"
-                  value: "502"
-                - selected: false
-                  text: "503"
-                  value: "503"
-                - selected: false
-                  text: "504"
-                  value: "504"
-              query: 200,204,401,403,404,500,502,503,504
-              type: custom
+              options: []
+              query:
+                query: label_values(flask_http_request_total, status)
+                refId: StandardVariableQuery
+              refresh: 1
+              regex: ""
+              type: query
     time:
         from: now-5m
         to: now
