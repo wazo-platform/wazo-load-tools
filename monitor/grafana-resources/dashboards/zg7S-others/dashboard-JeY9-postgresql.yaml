@@ -92,6 +92,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
+                unit: short
             overrides: []
           gridPos:
             h: 4
@@ -141,6 +142,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
+                unit: short
             overrides: []
           gridPos:
             h: 4
@@ -190,6 +192,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
+                unit: short
             overrides: []
           gridPos:
             h: 4
