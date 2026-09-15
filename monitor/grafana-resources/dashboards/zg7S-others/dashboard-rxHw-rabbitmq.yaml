@@ -142,10 +142,10 @@ spec:
                     steps:
                         - color: '#299c46'
                         - color: rgba(237, 129, 40, 0.89)
-                          value: 1024
+                          value: 1073741824
                         - color: '#d44a3a'
-                          value: 2048
-                unit: decmbytes
+                          value: 2147483648
+                unit: bytes
             overrides: []
           gridPos:
             h: 5
@@ -175,12 +175,12 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: rabbitmq_node_mem_used{instance="$instance", node=~"$node"}/1024/1024
+              expr: rabbitmq_node_mem_used{instance="$instance", node=~"$node"}
               instant: true
               interval: ""
               legendFormat: ""
               refId: A
-          title: Memory used (MB)
+          title: Memory used
           type: stat
         - datasource:
             type: prometheus
@@ -715,7 +715,7 @@ spec:
                           value: 50
                         - color: red
                           value: 80
-                unit: mbytes
+                unit: bytes
             overrides: []
           gridPos:
             h: 7
@@ -739,7 +739,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: sum(rabbitmq_node_mem_used{instance="$instance", node=~"$node"}) by (node) /1024/1024
+              expr: sum(rabbitmq_node_mem_used{instance="$instance", node=~"$node"}) by (node)
               format: time_series
               interval: ""
               intervalFactor: 2
@@ -747,7 +747,7 @@ spec:
               metric: rabbitmq_node_mem_used
               refId: A
               step: 2
-          title: Memory usage (MB)
+          title: Memory used per node
           type: timeseries
         - collapsed: true
           gridPos:
