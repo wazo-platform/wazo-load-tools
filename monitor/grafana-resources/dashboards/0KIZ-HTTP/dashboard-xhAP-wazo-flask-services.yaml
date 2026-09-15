@@ -222,8 +222,8 @@ spec:
                 unit: short
             overrides:
                 - matcher:
-                    id: byName
-                    options: HTTP 500
+                    id: byRegexp
+                    options: /^HTTP 5.. /
                   properties:
                     - id: color
                       value:
