@@ -609,27 +609,20 @@ spec:
                     - GET
                 value:
                     - GET
+              datasource:
+                type: prometheus
+                uid: ${DS_PROMETHEUS}
+              definition: label_values(flask_http_request_total, method)
               includeAll: true
               multi: true
               name: method
-              options:
-                - selected: true
-                  text: GET
-                  value: GET
-                - selected: false
-                  text: POST
-                  value: POST
-                - selected: false
-                  text: HEAD
-                  value: HEAD
-                - selected: false
-                  text: DELETE
-                  value: DELETE
-                - selected: false
-                  text: PATCH
-                  value: PATCH
-              query: GET,POST,HEAD,DELETE,PATCH
-              type: custom
+              options: []
+              query:
+                query: label_values(flask_http_request_total, method)
+                refId: StandardVariableQuery
+              refresh: 1
+              regex: ""
+              type: query
             - current:
                 text: "200"
                 value: "200"
