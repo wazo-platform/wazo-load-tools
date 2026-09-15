@@ -376,14 +376,13 @@ spec:
               regex: ""
               type: datasource
             - current:
-                text: All
-                value: $__all
+                text: ""
+                value: ""
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               definition: label_values(nginx_up, instance)
-              includeAll: true
-              multi: true
+              includeAll: false
               name: instance
               options: []
               query:
