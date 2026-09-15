@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-# Copyright 2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2025-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import argparse
 import contextlib
+import csv
+import io
 import json
 import logging
 import sys
@@ -17,6 +19,9 @@ logger.setLevel(logging.INFO)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
+
+_BATCH_SIZE = 1000
+_HOUR = 60 * 60
 
 _DEFAULT_CONFIG = {
     'output': None,  # (default: stdout)
@@ -33,15 +38,31 @@ _DEFAULT_CONFIG = {
 }
 
 
+def _serialize_csv(header, rows):
+    buffer = io.StringIO()
+    csv.writer(buffer).writerows([header, *rows])
+    return buffer.getvalue()
+
+
 def create_users_csv(confd_client, users_file, output_file):
     with open(users_file) as f:
-        content = f.read()
+        header, *rows = csv.reader(f)
 
-    result = confd_client.users.import_csv(content, encoding='utf-8', timeout=1800)
-    if not isinstance(result, dict) or 'created' not in result:
-        raise Exception(f'Import error: {result}')
+    created = []
+    for start in range(0, len(rows), _BATCH_SIZE):
+        end = start + _BATCH_SIZE
+        batch = rows[start:end]
+        logger.info(
+            'Importing users %s-%s of %s', start + 1, start + len(batch), len(rows)
+        )
+        result = confd_client.users.import_csv(
+            _serialize_csv(header, batch), encoding='utf-8', timeout=1800
+        )
+        if not isinstance(result, dict) or 'created' not in result:
+            raise Exception(f'Import error: {result}')
+        created.extend(result['created'])
 
-    output_file.write(json.dumps(result, indent=2))
+    output_file.write(json.dumps({'created': created}, indent=2))
 
 
 def create_users_json(confd_client, users_file):
@@ -132,7 +153,7 @@ def main():
     config = load_config(sys.argv[1:])
     auth_client = AuthClient(**config['auth'])
     confd_client = ConfdClient(**config['confd'])
-    token = auth_client.token.new(expiration=3600)['token']
+    token = auth_client.token.new(expiration=6 * _HOUR)['token']
     confd_client.set_token(token)
     confd_client.tenant_uuid = config['tenant_uuid']
     with _open_output_file(config['output']) as output_file:
