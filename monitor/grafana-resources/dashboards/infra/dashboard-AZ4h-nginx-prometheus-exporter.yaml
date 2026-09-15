@@ -1,8 +1,8 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: 6uH0-archived
-    name: MsjffzSZy
+    folder: infra
+    name: AZ4h-nginx-prometheus-exporter
 spec:
     annotations:
         list:
@@ -86,7 +86,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: nginx_up{instance=~"$instance"}
+              expr: nginx_up{instance="$instance"}
               format: time_series
               instant: false
               intervalFactor: 1
@@ -171,7 +171,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: irate(nginx_connections_accepted{instance=~"$instance"}[5m])
+              expr: rate(nginx_connections_accepted{instance="$instance"}[1m])
               format: time_series
               instant: false
               intervalFactor: 1
@@ -180,7 +180,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: irate(nginx_connections_handled{instance=~"$instance"}[5m])
+              expr: rate(nginx_connections_handled{instance="$instance"}[1m])
               format: time_series
               instant: false
               intervalFactor: 1
@@ -255,7 +255,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: nginx_connections_active{instance=~"$instance"}
+              expr: nginx_connections_active{instance="$instance"}
               format: time_series
               intervalFactor: 1
               legendFormat: '{{instance}} active'
@@ -263,7 +263,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: nginx_connections_reading{instance=~"$instance"}
+              expr: nginx_connections_reading{instance="$instance"}
               format: time_series
               intervalFactor: 1
               legendFormat: '{{instance}} reading'
@@ -271,7 +271,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: nginx_connections_waiting{instance=~"$instance"}
+              expr: nginx_connections_waiting{instance="$instance"}
               format: time_series
               intervalFactor: 1
               legendFormat: '{{instance}} waiting'
@@ -279,7 +279,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: nginx_connections_writing{instance=~"$instance"}
+              expr: nginx_connections_writing{instance="$instance"}
               format: time_series
               intervalFactor: 1
               legendFormat: '{{instance}} writing'
@@ -352,7 +352,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: irate(nginx_http_requests_total{instance=~"$instance"}[5m])
+              expr: rate(nginx_http_requests_total{instance="$instance"}[1m])
               format: time_series
               intervalFactor: 1
               legendFormat: '{{instance}} total requests'
@@ -364,8 +364,6 @@ spec:
     schemaVersion: 41
     tags:
         - nginx
-        - prometheus
-        - nginx prometheus exporter
     templating:
         list:
             - includeAll: false
@@ -377,14 +375,13 @@ spec:
               regex: ""
               type: datasource
             - current:
-                text: All
-                value: $__all
+                text: ""
+                value: ""
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               definition: label_values(nginx_up, instance)
-              includeAll: true
-              multi: true
+              includeAll: false
               name: instance
               options: []
               query:
@@ -398,5 +395,5 @@ spec:
         to: now
     timepicker: {}
     timezone: ""
-    title: NGINX
-    uid: MsjffzSZy
+    title: NGINX - Prometheus Exporter
+    uid: AZ4h-nginx-prometheus-exporter

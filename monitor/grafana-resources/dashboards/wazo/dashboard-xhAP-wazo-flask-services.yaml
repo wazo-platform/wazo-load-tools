@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: 0KIZ-HTTP
+    folder: wazo
     name: xhAP-wazo-flask-services
 spec:
     annotations:
@@ -67,22 +67,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-            overrides:
-                - __systemRef: hideSeriesFrom
-                  matcher:
-                    id: byNames
-                    options:
-                        mode: exclude
-                        names:
-                            - auth 401
-                        prefix: 'All except:'
-                        readOnly: true
-                  properties:
-                    - id: custom.hideFrom
-                      value:
-                        legend: false
-                        tooltip: false
-                        viz: true
+            overrides: []
           gridPos:
             h: 9
             w: 24
@@ -109,7 +94,7 @@ spec:
               legendFormat: '{{service}} {{status}}'
               range: true
               refId: A
-          title: all methods
+          title: Total requests per minute - all methods
           type: timeseries
         - datasource:
             type: prometheus
@@ -154,15 +139,7 @@ spec:
                         - color: red
                           value: 80
                 unit: short
-            overrides:
-                - matcher:
-                    id: byName
-                    options: errors
-                  properties:
-                    - id: color
-                      value:
-                        fixedColor: '#c15c17'
-                        mode: fixed
+            overrides: []
           gridPos:
             h: 6
             w: 24
@@ -189,12 +166,12 @@ spec:
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              editorMode: builder
-              expr: sum(rate(flask_http_request_duration_seconds_count{status!="200|204", method="$method", instance="$instance"}[30s]))
+              editorMode: code
+              expr: sum by (service) (rate(flask_http_request_duration_seconds_count{status!~"200|201|204", method=~"$method", instance="$instance"}[30s]))
               format: time_series
               interval: ""
               intervalFactor: 1
-              legendFormat: errors
+              legendFormat: '{{ service }}'
               range: true
               refId: A
           title: Errors per second
@@ -245,8 +222,8 @@ spec:
                 unit: short
             overrides:
                 - matcher:
-                    id: byName
-                    options: HTTP 500
+                    id: byRegexp
+                    options: /^HTTP 5.. /
                   properties:
                     - id: color
                       value:
@@ -278,7 +255,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: code
-              expr: increase(flask_http_request_total{instance="$instance", method="$method"}[1m])
+              expr: increase(flask_http_request_total{instance="$instance", method=~"$method"}[1m])
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -291,89 +268,13 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults:
-                color:
-                    mode: palette-classic
-                custom:
-                    axisBorderShow: false
-                    axisCenteredZero: false
-                    axisColorMode: text
-                    axisLabel: ""
-                    axisPlacement: auto
-                    barAlignment: 0
-                    barWidthFactor: 0.6
-                    drawStyle: line
-                    fillOpacity: 0
-                    gradientMode: none
-                    hideFrom:
-                        legend: false
-                        tooltip: false
-                        viz: false
-                    insertNulls: false
-                    lineInterpolation: linear
-                    lineWidth: 1
-                    pointSize: 5
-                    scaleDistribution:
-                        type: linear
-                    showPoints: auto
-                    spanNulls: false
-                    stacking:
-                        group: A
-                        mode: none
-                    thresholdsStyle:
-                        mode: "off"
-                mappings: []
-                thresholds:
-                    mode: absolute
-                    steps:
-                        - color: green
-                        - color: red
-                          value: 80
-            overrides: []
-          gridPos:
-            h: 9
-            w: 24
-            x: 0
-            "y": 24
-          id: 19
-          options:
-            alertThreshold: true
-            legend:
-                calcs: []
-                displayMode: list
-                placement: bottom
-                showLegend: true
-            tooltip:
-                hideZeros: false
-                mode: single
-                sort: none
-          pluginVersion: 11.6.0
-          targets:
-            - $$hashKey: object:140
-              datasource:
-                type: prometheus
-                uid: ${DS_PROMETHEUS}
-              editorMode: builder
-              expr: increase(flask_http_request_total{instance="$instance"}[1m])
-              format: time_series
-              interval: ""
-              intervalFactor: 1
-              legendFormat: '{{ status }} {{ service }}'
-              range: true
-              refId: A
-          title: Total requests per minute all methods
-          type: timeseries
-        - datasource:
-            type: prometheus
-            uid: ${DS_PROMETHEUS}
-          fieldConfig:
             defaults: {}
             overrides: []
           gridPos:
             h: 9
             w: 24
             x: 0
-            "y": 33
+            "y": 24
           id: 2
           options:
             alertThreshold: true
@@ -384,7 +285,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: rate(flask_http_request_duration_seconds_count{status="$return_code", method="$method", instance="$instance"}[30s])
+              expr: rate(flask_http_request_duration_seconds_count{status="$return_code", method=~"$method", instance="$instance"}[30s])
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -397,13 +298,14 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: s
             overrides: []
           gridPos:
             h: 10
             w: 24
             x: 0
-            "y": 42
+            "y": 33
           id: 6
           options:
             alertThreshold: true
@@ -413,8 +315,8 @@ spec:
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              editorMode: builder
-              expr: rate(flask_http_request_duration_seconds_sum{status="$return_code", instance="$instance", method="$method"}[30s]) / rate(flask_http_request_duration_seconds_count{status="200"}[30s])
+              editorMode: code
+              expr: rate(flask_http_request_duration_seconds_sum{status="$return_code", instance="$instance", method=~"$method"}[30s]) / rate(flask_http_request_duration_seconds_count{status="$return_code", instance="$instance", method=~"$method"}[30s])
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -427,13 +329,14 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: percentunit
             overrides: []
           gridPos:
             h: 7
             w: 24
             x: 0
-            "y": 52
+            "y": 43
           id: 11
           options:
             alertThreshold: true
@@ -443,27 +346,28 @@ spec:
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              editorMode: builder
-              expr: increase(flask_http_request_duration_seconds_bucket{status="$return_code", le="0.25", instance="$instance"}[30s]) / ignoring(le) increase(flask_http_request_duration_seconds_count{status="200"}[30s])
+              editorMode: code
+              expr: increase(flask_http_request_duration_seconds_bucket{le="0.25", instance="$instance", method=~"$method"}[30s]) / ignoring(le) increase(flask_http_request_duration_seconds_count{instance="$instance", method=~"$method"}[30s])
               format: time_series
               instant: false
               interval: ""
               intervalFactor: 1
               legendFormat: '{{ service }} ({{ endpoint }})'
               refId: A
-          title: status  under 250ms
+          title: Requests under 250ms
           type: timeseries
         - datasource:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: percentunit
             overrides: []
           gridPos:
             h: 10
             w: 12
             x: 0
-            "y": 59
+            "y": 50
           id: 9
           options:
             alertThreshold: true
@@ -474,7 +378,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: rate(process_cpu_seconds_total{instance="$instance"}[30s])
+              expr: rate(process_cpu_seconds_total{instance="$instance", service=~"wazo-.+"}[30s])
               format: time_series
               intervalFactor: 1
               legendFormat: '{{service}}'
@@ -486,13 +390,14 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: bytes
             overrides: []
           gridPos:
             h: 10
             w: 12
             x: 12
-            "y": 59
+            "y": 50
           id: 8
           options:
             alertThreshold: true
@@ -503,7 +408,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: code
-              expr: process_resident_memory_bytes{instance="$instance"}
+              expr: process_resident_memory_bytes{instance="$instance", service=~"wazo-.+"}
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -523,7 +428,7 @@ spec:
             h: 10
             w: 24
             x: 0
-            "y": 69
+            "y": 60
           id: 15
           options:
             alertThreshold: true
@@ -534,7 +439,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: histogram_quantile(0.5, rate(flask_http_request_duration_seconds_bucket{status="200", instance="$instance", method="$method"}[30s]))
+              expr: histogram_quantile(0.5, rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s]))
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -553,7 +458,7 @@ spec:
             h: 9
             w: 24
             x: 0
-            "y": 79
+            "y": 70
           id: 16
           options:
             alertThreshold: true
@@ -564,7 +469,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: histogram_quantile(0.9, rate(flask_http_request_duration_seconds_bucket{status="200", instance="$instance", method="$method"}[30s]))
+              expr: histogram_quantile(0.9, rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s]))
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -609,62 +514,36 @@ spec:
                     - GET
                 value:
                     - GET
+              datasource:
+                type: prometheus
+                uid: ${DS_PROMETHEUS}
+              definition: label_values(flask_http_request_total, method)
               includeAll: true
               multi: true
               name: method
-              options:
-                - selected: true
-                  text: GET
-                  value: GET
-                - selected: false
-                  text: POST
-                  value: POST
-                - selected: false
-                  text: HEAD
-                  value: HEAD
-                - selected: false
-                  text: DELETE
-                  value: DELETE
-                - selected: false
-                  text: PATCH
-                  value: PATCH
-              query: GET,POST,HEAD,DELETE,PATCH
-              type: custom
+              options: []
+              query:
+                query: label_values(flask_http_request_total, method)
+                refId: StandardVariableQuery
+              refresh: 1
+              regex: ""
+              type: query
             - current:
                 text: "200"
                 value: "200"
+              datasource:
+                type: prometheus
+                uid: ${DS_PROMETHEUS}
+              definition: label_values(flask_http_request_total, status)
               includeAll: false
               name: return_code
-              options:
-                - selected: true
-                  text: "200"
-                  value: "200"
-                - selected: false
-                  text: "204"
-                  value: "204"
-                - selected: false
-                  text: "401"
-                  value: "401"
-                - selected: false
-                  text: "403"
-                  value: "403"
-                - selected: false
-                  text: "404"
-                  value: "404"
-                - selected: false
-                  text: "500"
-                  value: "500"
-                - selected: false
-                  text: "502"
-                  value: "502"
-                - selected: false
-                  text: "503"
-                  value: "503"
-                - selected: false
-                  text: "504"
-                  value: "504"
-              query: 200,204,401,403,404,500,502,503,504
-              type: custom
+              options: []
+              query:
+                query: label_values(flask_http_request_total, status)
+                refId: StandardVariableQuery
+              refresh: 1
+              regex: ""
+              type: query
     time:
         from: now-5m
         to: now

@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: DlO4-system
+    folder: infra
     name: sWPP-process-exporter-treemap
 spec:
     annotations:
@@ -24,61 +24,58 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                color:
+                    mode: thresholds
+                mappings:
+                    - options:
+                        "0":
+                            color: red
+                            index: 0
+                            text: Down
+                        "1":
+                            color: green
+                            index: 1
+                            text: Up
+                      type: value
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: red
+                        - color: green
+                          value: 1
             overrides: []
           gridPos:
-            h: 10
-            w: 12
+            h: 3
+            w: 24
             x: 0
             "y": 0
-          id: 2
+          id: 17
           options:
-            colorByField: Value
-            colorField: groupname
-            sizeField: Value
-            textField: groupname
-            tiling: treemapSquarify
+            colorMode: background
+            graphMode: none
+            justifyMode: auto
+            orientation: horizontal
+            percentChangeColorMode: standard
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showPercentChange: false
+            text: {}
+            textMode: auto
+            wideLayout: true
           pluginVersion: 11.6.0
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: sum(namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="proportionalResident"} > 0) by (groupname)
-              format: table
-              instant: true
+              expr: max(up{instance="$instance", job="process"}) or vector(0)
               interval: ""
-              legendFormat: '{{groupname}}'
+              legendFormat: ""
               refId: A
-          title: proportional resident memory map
-          type: marcusolsson-treemap-panel
-        - datasource:
-            uid: ${DS_PROMETHEUS}
-          fieldConfig:
-            defaults: {}
-            overrides: []
-          gridPos:
-            h: 10
-            w: 12
-            x: 12
-            "y": 0
-          id: 3
-          options:
-            colorByField: Value
-            colorField: groupname
-            sizeField: Value
-            textField: groupname
-            tiling: treemapSquarify
-          pluginVersion: 11.6.0
-          targets:
-            - datasource:
-                uid: ${DS_PROMETHEUS}
-              expr: sum(rate(namedprocess_namegroup_cpu_seconds_total{instance=~"$instance"}[$__rate_interval] ))  by (groupname)
-              format: table
-              instant: true
-              interval: ""
-              legendFormat: '{{groupname}}'
-              refId: A
-          title: cpu map
-          type: marcusolsson-treemap-panel
+          title: Process exporter status
+          type: stat
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
@@ -126,7 +123,7 @@ spec:
             h: 10
             w: 12
             x: 0
-            "y": 10
+            "y": 3
           id: 4
           options:
             legend:
@@ -142,7 +139,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="proportionalResident"} > 0
+              expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="proportionalResident"} > 0
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -190,13 +187,13 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: s
+                unit: percentunit
             overrides: []
           gridPos:
             h: 10
             w: 12
             x: 12
-            "y": 10
+            "y": 3
           id: 5
           options:
             legend:
@@ -212,7 +209,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: sum (rate(namedprocess_namegroup_cpu_seconds_total{instance=~"$instance"}[$__rate_interval]) )without (mode) > 0
+              expr: sum (rate(namedprocess_namegroup_cpu_seconds_total{instance="$instance"}[$__rate_interval]) )without (mode) > 0
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -266,7 +263,7 @@ spec:
             h: 10
             w: 8
             x: 0
-            "y": 20
+            "y": 13
           id: 6
           options:
             legend:
@@ -282,7 +279,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="resident"} / ignoring(memtype) namedprocess_namegroup_num_procs > 0
+              expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="resident"} / ignoring(memtype) namedprocess_namegroup_num_procs > 0
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -336,7 +333,7 @@ spec:
             h: 10
             w: 8
             x: 8
-            "y": 20
+            "y": 13
           id: 7
           options:
             legend:
@@ -352,7 +349,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_num_procs{instance=~"$instance"}
+              expr: namedprocess_namegroup_num_procs{instance="$instance"}
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -406,7 +403,7 @@ spec:
             h: 10
             w: 8
             x: 16
-            "y": 20
+            "y": 13
           id: 8
           options:
             legend:
@@ -422,7 +419,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="virtual"}
+              expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="virtual"}
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -432,19 +429,20 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
             w: 8
             x: 0
-            "y": 30
+            "y": 23
           id: 9
           options: {}
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_context_switches_total{instance=~"$instance", ctxswitchtype="voluntary"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_context_switches_total{instance="$instance", ctxswitchtype="voluntary"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -454,19 +452,20 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
             w: 8
             x: 8
-            "y": 30
+            "y": 23
           id: 10
           options: {}
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_context_switches_total{instance=~"$instance", ctxswitchtype="nonvoluntary"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_context_switches_total{instance="$instance", ctxswitchtype="nonvoluntary"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -476,41 +475,43 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
             w: 8
             x: 16
-            "y": 30
+            "y": 23
           id: 11
           options: {}
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_open_filedesc{instance=~"$instance"}
+              expr: namedprocess_namegroup_open_filedesc{instance="$instance"}
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
               refId: A
-          title: file descripters
+          title: file descriptors
           type: timeseries
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: binBps
             overrides: []
           gridPos:
             h: 10
             w: 12
             x: 0
-            "y": 40
+            "y": 33
           id: 12
           options: {}
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_read_bytes_total{instance=~"$instance"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_read_bytes_total{instance="$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -520,19 +521,20 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: binBps
             overrides: []
           gridPos:
             h: 10
             w: 12
             x: 12
-            "y": 40
+            "y": 33
           id: 13
           options: {}
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_write_bytes_total{instance=~"$instance"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_write_bytes_total{instance="$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -542,19 +544,20 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
             w: 12
             x: 0
-            "y": 50
+            "y": 43
           id: 14
           options: {}
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_major_page_faults_total{instance=~"$instance"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_major_page_faults_total{instance="$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -564,19 +567,20 @@ spec:
         - datasource:
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: short
             overrides: []
           gridPos:
             h: 10
             w: 12
             x: 12
-            "y": 50
+            "y": 43
           id: 15
           options: {}
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_minor_page_faults_total{instance=~"$instance"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_minor_page_faults_total{instance="$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -593,7 +597,7 @@ spec:
             h: 10
             w: 24
             x: 0
-            "y": 60
+            "y": 53
           id: 16
           options:
             frameIndex: 0
@@ -604,8 +608,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              exemplar: true
-              expr: time() - (avg by (groupname) (namedprocess_namegroup_oldest_start_time_seconds{instance=~"$instance"} > 0))
+              expr: time() - (avg by (groupname) (namedprocess_namegroup_oldest_start_time_seconds{instance="$instance"} > 0))
               format: table
               instant: true
               interval: ""
@@ -613,10 +616,16 @@ spec:
               refId: A
           title: uptime(oldest)
           transformations:
-            - id: renameByRegex
+            - id: labelsToFields
+              options: {}
+            - id: merge
+              options: {}
+            - id: organize
               options:
-                regex: Value.*
-                renamePattern: uptime
+                excludeByName:
+                    Time: true
+                renameByName:
+                    Value: uptime
           type: table
     preload: false
     refresh: ""
@@ -649,5 +658,5 @@ spec:
         to: now
     timepicker: {}
     timezone: browser
-    title: Process Exporter - Treemap
+    title: Process Exporter
     uid: sWPP-process-exporter-treemap

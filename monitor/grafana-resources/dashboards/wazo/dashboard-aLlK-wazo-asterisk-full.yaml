@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: xbE4-voip
+    folder: wazo
     name: aLlK-wazo-asterisk-full
 spec:
     annotations:
@@ -106,7 +106,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: up{instance="$instance",job="asterisk"}
+              expr: max(up{instance="$instance",job="asterisk"}) or vector(0)
               interval: ""
               legendFormat: ""
               refId: A
@@ -220,7 +220,7 @@ spec:
                     mode: absolute
                     steps:
                         - color: blue
-                unit: none
+                unit: ms
             overrides: []
           gridPos:
             h: 4
@@ -254,7 +254,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Asterisk core scrape time (ms)
+          title: Asterisk core scrape time
           type: stat
         - collapsed: false
           gridPos:
@@ -489,7 +489,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Max  Calls over the day
+          title: Max Calls over the day
           type: stat
         - datasource:
             type: prometheus
@@ -740,7 +740,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Current online  Endpoints
+          title: Current online Endpoints
           type: gauge
         - datasource:
             type: prometheus
@@ -964,7 +964,7 @@ spec:
               interval: ""
               legendFormat: Endpoint Online
               refId: C
-          title: Current Endpoints State ( 0=unknown; 1=offline; 2=online)
+          title: Current Endpoints State (0=unknown; 1=offline; 2=online)
           transformations:
             - id: organize
               options: {}
@@ -1164,7 +1164,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Historical  Endpoints Detail (Numbered of / Channels used over the period)
+          title: Historical Endpoints Detail (Numbered of / Channels used over the period)
           transformations:
             - id: organize
               options:
@@ -1699,7 +1699,7 @@ spec:
                   interval: ""
                   legendFormat: Channels prering
                   refId: J
-              title: Current Channels State  (0=down; 1=reserved; 2=offhook; 3=dialing; 4=ring; 5=ringing; 6=up; 7=busy; 8=dialing_offhook; 9=prering.)
+              title: Current Channels State (0=down; 1=reserved; 2=offhook; 3=dialing; 4=ring; 5=ringing; 6=up; 7=busy; 8=dialing_offhook; 9=prering.)
               type: piechart
             - datasource:
                 type: prometheus
@@ -1802,7 +1802,7 @@ spec:
                   interval: ""
                   legendFormat: ""
                   refId: B
-              title: Historical Individuals Channels Detail (0=down; 1=reserved; 2=offhook; 3=dialing; 4=ring; 5=ringing; 6=up; 7=busy; 8=dialing_offhook; 9=prering.)
+              title: Historical Individual Channels Detail (0=down; 1=reserved; 2=offhook; 3=dialing; 4=ring; 5=ringing; 6=up; 7=busy; 8=dialing_offhook; 9=prering.)
               transformations:
                 - id: seriesToColumns
                   options:
@@ -1909,7 +1909,7 @@ spec:
                   interval: "300"
                   legendFormat: ""
                   refId: A
-              title: Active Briges Historical
+              title: Active Bridges Historical
               type: timeseries
           title: Bridges Information
           type: row
@@ -1936,13 +1936,13 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               definition: |
-                label_values(asterisk_bridges_count{instance=~".*"}, instance)
+                label_values(asterisk_bridges_count, instance)
               includeAll: false
               name: instance
               options: []
               query:
                 query: |
-                    label_values(asterisk_bridges_count{instance=~".*"}, instance)
+                    label_values(asterisk_bridges_count, instance)
                 refId: StandardVariableQuery
               refresh: 1
               regex: ""

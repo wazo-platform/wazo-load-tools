@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: xbE4-voip
+    folder: wazo
     name: NYBq-wazo-asterisk-simple
 spec:
     annotations:
@@ -106,7 +106,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: up{instance="$instance",job="asterisk"}
+              expr: max(up{instance="$instance",job="asterisk"}) or vector(0)
               interval: ""
               legendFormat: ""
               refId: A
@@ -220,7 +220,7 @@ spec:
                     mode: absolute
                     steps:
                         - color: blue
-                unit: none
+                unit: ms
             overrides: []
           gridPos:
             h: 4
@@ -254,7 +254,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Asterisk core scrape time (ms)
+          title: Asterisk core scrape time
           type: stat
         - collapsed: false
           gridPos:
@@ -489,7 +489,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Max  Calls over the day
+          title: Max Calls over the day
           type: stat
         - datasource:
             type: prometheus
@@ -741,7 +741,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Current online  Endpoints
+          title: Current online Endpoints
           type: gauge
         - datasource:
             type: prometheus
@@ -962,7 +962,7 @@ spec:
               interval: ""
               legendFormat: Endpoint Online
               refId: C
-          title: Current Endpoints State ( 0=unknown; 1=offline; 2=online)
+          title: Current Endpoints State (0=unknown; 1=offline; 2=online)
           transformations:
             - id: organize
               options: {}
@@ -1015,7 +1015,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Current defined  Endpoints
+          title: Current defined Endpoints
           type: stat
         - datasource:
             type: prometheus
@@ -1108,13 +1108,13 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               definition: |
-                label_values(asterisk_bridges_count{instance=~".*"}, instance)
+                label_values(asterisk_bridges_count, instance)
               includeAll: false
               name: instance
               options: []
               query:
                 query: |
-                    label_values(asterisk_bridges_count{instance=~".*"}, instance)
+                    label_values(asterisk_bridges_count, instance)
                 refId: StandardVariableQuery
               refresh: 1
               regex: ""
