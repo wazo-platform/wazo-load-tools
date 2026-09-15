@@ -34,7 +34,7 @@ spec:
             "y": 0
           id: 28
           panels: []
-          title: Status de RabbitMQ
+          title: RabbitMQ status
           type: row
         - fieldConfig:
             defaults: {}
@@ -579,7 +579,7 @@ spec:
             "y": 11
           id: 26
           panels: []
-          title: Utilisation de la mémoire
+          title: Memory usage
           type: row
         - datasource:
             type: prometheus
@@ -757,7 +757,7 @@ spec:
             "y": 26
           id: 37
           panels: []
-          title: Utilisation des FD
+          title: File descriptor usage
           type: row
         - datasource:
             type: prometheus
@@ -872,7 +872,7 @@ spec:
               metric: rabbitmq_node_mem_used
               refId: B
               step: 2
-          title: Utilisation des File Descriptor
+          title: File descriptors
           type: timeseries
         - collapsed: true
           gridPos:
@@ -882,7 +882,7 @@ spec:
             "y": 35
           id: 30
           panels: []
-          title: Utilisation du disque
+          title: Disk usage
           type: row
         - datasource:
             type: prometheus
