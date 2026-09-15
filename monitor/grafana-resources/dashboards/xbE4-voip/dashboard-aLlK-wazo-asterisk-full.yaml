@@ -1936,13 +1936,13 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               definition: |
-                label_values(asterisk_bridges_count{instance=~".*"}, instance)
+                label_values(asterisk_bridges_count, instance)
               includeAll: false
               name: instance
               options: []
               query:
                 query: |
-                    label_values(asterisk_bridges_count{instance=~".*"}, instance)
+                    label_values(asterisk_bridges_count, instance)
                 refId: StandardVariableQuery
               refresh: 1
               regex: ""
