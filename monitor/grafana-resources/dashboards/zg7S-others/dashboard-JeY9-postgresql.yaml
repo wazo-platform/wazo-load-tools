@@ -1633,7 +1633,8 @@ spec:
             uid: ${DS_PROMETHEUS}
           description: Total amount of data written to temporary files by queries in this database. All temporary files are counted, regardless of why the temporary file was created, and regardless of the log_temp_files setting.
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: binBps
             overrides: []
           gridPos:
             h: 7
@@ -1651,7 +1652,7 @@ spec:
               intervalFactor: 1
               legendFormat: '{{datname}}'
               refId: A
-          title: Temp File (Bytes)
+          title: Temp files
           type: timeseries
         - datasource:
             type: prometheus
