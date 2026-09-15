@@ -553,7 +553,6 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              exemplar: true
               expr: time() - (avg by (groupname) (namedprocess_namegroup_oldest_start_time_seconds{instance="$instance"} > 0))
               format: table
               instant: true
@@ -562,10 +561,16 @@ spec:
               refId: A
           title: uptime(oldest)
           transformations:
-            - id: renameByRegex
+            - id: labelsToFields
+              options: {}
+            - id: merge
+              options: {}
+            - id: organize
               options:
-                regex: Value.*
-                renamePattern: uptime
+                excludeByName:
+                    Time: true
+                renameByName:
+                    Value: uptime
           type: table
     preload: false
     refresh: ""
