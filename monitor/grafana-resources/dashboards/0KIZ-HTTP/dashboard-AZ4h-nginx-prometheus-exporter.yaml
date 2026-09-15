@@ -171,7 +171,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: irate(nginx_connections_accepted{instance=~"$instance"}[5m])
+              expr: rate(nginx_connections_accepted{instance=~"$instance"}[1m])
               format: time_series
               instant: false
               intervalFactor: 1
@@ -180,7 +180,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: irate(nginx_connections_handled{instance=~"$instance"}[5m])
+              expr: rate(nginx_connections_handled{instance=~"$instance"}[1m])
               format: time_series
               instant: false
               intervalFactor: 1
@@ -352,7 +352,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: irate(nginx_http_requests_total{instance=~"$instance"}[5m])
+              expr: rate(nginx_http_requests_total{instance=~"$instance"}[1m])
               format: time_series
               intervalFactor: 1
               legendFormat: '{{instance}} total requests'
