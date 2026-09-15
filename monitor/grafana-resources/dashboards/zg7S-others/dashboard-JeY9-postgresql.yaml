@@ -1519,7 +1519,8 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: percentunit
             overrides: []
           gridPos:
             h: 7
@@ -1532,7 +1533,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: pg_stat_database_blks_hit{instance="$instance", datname=~"$datname"} / (pg_stat_database_blks_read{instance="$instance", datname=~"$datname"} + pg_stat_database_blks_hit{instance="$instance", datname=~"$datname"})
+              expr: rate(pg_stat_database_blks_hit{instance="$instance", datname=~"$datname"}[$__rate_interval]) / (rate(pg_stat_database_blks_read{instance="$instance", datname=~"$datname"}[$__rate_interval]) + rate(pg_stat_database_blks_hit{instance="$instance", datname=~"$datname"}[$__rate_interval]))
               format: time_series
               intervalFactor: 1
               legendFormat: '{{ datname }}'
