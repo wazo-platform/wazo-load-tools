@@ -386,7 +386,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: s
+                unit: percentunit
             overrides: []
           gridPos:
             h: 7
@@ -413,12 +413,12 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: avg(rate(process_cpu_seconds_total{release="$release", instance="$instance"}[5m]) * 1000)
+              expr: sum by (mode) (rate(namedprocess_namegroup_cpu_seconds_total{instance="$instance", groupname="postgres"}[5m]))
               format: time_series
               intervalFactor: 2
-              legendFormat: CPU Time
+              legendFormat: '{{ mode }}'
               refId: A
-          title: Average CPU Usage
+          title: CPU usage
           type: timeseries
         - datasource:
             type: prometheus
@@ -463,7 +463,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: decbytes
+                unit: bytes
             overrides: []
           gridPos:
             h: 7
@@ -490,20 +490,20 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: avg(rate(process_resident_memory_bytes{release="$release", instance="$instance"}[5m]))
+              expr: sum(namedprocess_namegroup_memory_bytes{instance="$instance", groupname="postgres", memtype="resident"})
               format: time_series
               intervalFactor: 2
-              legendFormat: Resident Mem
+              legendFormat: resident
               refId: A
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: avg(rate(process_virtual_memory_bytes{release="$release", instance="$instance"}[5m]))
+              expr: sum(namedprocess_namegroup_memory_bytes{instance="$instance", groupname="postgres", memtype="virtual"})
               format: time_series
               intervalFactor: 2
-              legendFormat: Virtual Mem
+              legendFormat: virtual
               refId: B
-          title: Average Memory Usage
+          title: Memory usage
           type: timeseries
         - datasource:
             type: prometheus
@@ -575,10 +575,10 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: process_open_fds{release="$release", instance="$instance"}
+              expr: sum(namedprocess_namegroup_open_filedesc{instance="$instance", groupname="postgres"})
               format: time_series
               intervalFactor: 2
-              legendFormat: Open FD
+              legendFormat: open
               refId: A
           title: Open File Descriptors
           type: timeseries
