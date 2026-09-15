@@ -797,7 +797,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: bits
+                unit: short
             overrides:
                 - matcher:
                     id: byName
@@ -922,7 +922,7 @@ spec:
                         - color: green
                         - color: red
                           value: 80
-                unit: bits
+                unit: bytes
             overrides:
                 - matcher:
                     id: byName
