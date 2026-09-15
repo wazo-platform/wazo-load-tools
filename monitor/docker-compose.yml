@@ -11,8 +11,6 @@ services:
       - GF_AUTH_BASIC_ENABLED=false # removes login 2/2
       # Grafana 13 disabled the numeric-id datasource API that Grizzly still uses
       - GF_FEATURE_TOGGLES_ENABLE=datasourceLegacyIdApi
-      # the treemap panels of the process exporter dashboard
-      - GF_INSTALL_PLUGINS=marcusolsson-treemap-panel
     volumes:
       - grafana-data:/var/lib/grafana:rw
     healthcheck:
