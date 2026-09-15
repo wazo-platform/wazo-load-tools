@@ -364,7 +364,6 @@ spec:
     schemaVersion: 41
     tags:
         - nginx
-        - prometheus
     templating:
         list:
             - includeAll: false
