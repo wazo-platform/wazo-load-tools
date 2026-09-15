@@ -43,7 +43,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: sum(namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="proportionalResident"} > 0) by (groupname)
+              expr: sum(namedprocess_namegroup_memory_bytes{instance="$instance", memtype="proportionalResident"} > 0) by (groupname)
               format: table
               instant: true
               interval: ""
@@ -73,7 +73,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: sum(rate(namedprocess_namegroup_cpu_seconds_total{instance=~"$instance"}[$__rate_interval] ))  by (groupname)
+              expr: sum(rate(namedprocess_namegroup_cpu_seconds_total{instance="$instance"}[$__rate_interval] ))  by (groupname)
               format: table
               instant: true
               interval: ""
@@ -144,7 +144,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="proportionalResident"} > 0
+              expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="proportionalResident"} > 0
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -214,7 +214,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: sum (rate(namedprocess_namegroup_cpu_seconds_total{instance=~"$instance"}[$__rate_interval]) )without (mode) > 0
+              expr: sum (rate(namedprocess_namegroup_cpu_seconds_total{instance="$instance"}[$__rate_interval]) )without (mode) > 0
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -284,7 +284,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="resident"} / ignoring(memtype) namedprocess_namegroup_num_procs > 0
+              expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="resident"} / ignoring(memtype) namedprocess_namegroup_num_procs > 0
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -354,7 +354,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_num_procs{instance=~"$instance"}
+              expr: namedprocess_namegroup_num_procs{instance="$instance"}
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -424,7 +424,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_memory_bytes{instance=~"$instance", memtype="virtual"}
+              expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="virtual"}
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -447,7 +447,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_context_switches_total{instance=~"$instance", ctxswitchtype="voluntary"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_context_switches_total{instance="$instance", ctxswitchtype="voluntary"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -470,7 +470,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_context_switches_total{instance=~"$instance", ctxswitchtype="nonvoluntary"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_context_switches_total{instance="$instance", ctxswitchtype="nonvoluntary"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -493,7 +493,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: namedprocess_namegroup_open_filedesc{instance=~"$instance"}
+              expr: namedprocess_namegroup_open_filedesc{instance="$instance"}
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -516,7 +516,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_read_bytes_total{instance=~"$instance"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_read_bytes_total{instance="$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -539,7 +539,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_write_bytes_total{instance=~"$instance"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_write_bytes_total{instance="$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -562,7 +562,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_major_page_faults_total{instance=~"$instance"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_major_page_faults_total{instance="$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -585,7 +585,7 @@ spec:
           targets:
             - datasource:
                 uid: ${DS_PROMETHEUS}
-              expr: rate(namedprocess_namegroup_minor_page_faults_total{instance=~"$instance"}[$__rate_interval])
+              expr: rate(namedprocess_namegroup_minor_page_faults_total{instance="$instance"}[$__rate_interval])
               format: time_series
               intervalFactor: 2
               legendFormat: '{{groupname}}'
@@ -614,7 +614,7 @@ spec:
             - datasource:
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: time() - (avg by (groupname) (namedprocess_namegroup_oldest_start_time_seconds{instance=~"$instance"} > 0))
+              expr: time() - (avg by (groupname) (namedprocess_namegroup_oldest_start_time_seconds{instance="$instance"} > 0))
               format: table
               instant: true
               interval: ""
