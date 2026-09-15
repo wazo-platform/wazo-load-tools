@@ -278,7 +278,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: code
-              expr: increase(flask_http_request_total{instance="$instance", method="$method"}[1m])
+              expr: increase(flask_http_request_total{instance="$instance", method=~"$method"}[1m])
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -384,7 +384,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: rate(flask_http_request_duration_seconds_count{status="$return_code", method="$method", instance="$instance"}[30s])
+              expr: rate(flask_http_request_duration_seconds_count{status="$return_code", method=~"$method", instance="$instance"}[30s])
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -414,7 +414,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: rate(flask_http_request_duration_seconds_sum{status="$return_code", instance="$instance", method="$method"}[30s]) / rate(flask_http_request_duration_seconds_count{status="200"}[30s])
+              expr: rate(flask_http_request_duration_seconds_sum{status="$return_code", instance="$instance", method=~"$method"}[30s]) / rate(flask_http_request_duration_seconds_count{status="200"}[30s])
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -534,7 +534,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: histogram_quantile(0.5, rate(flask_http_request_duration_seconds_bucket{status="200", instance="$instance", method="$method"}[30s]))
+              expr: histogram_quantile(0.5, rate(flask_http_request_duration_seconds_bucket{status="200", instance="$instance", method=~"$method"}[30s]))
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -564,7 +564,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: histogram_quantile(0.9, rate(flask_http_request_duration_seconds_bucket{status="200", instance="$instance", method="$method"}[30s]))
+              expr: histogram_quantile(0.9, rate(flask_http_request_duration_seconds_bucket{status="200", instance="$instance", method=~"$method"}[30s]))
               format: time_series
               interval: ""
               intervalFactor: 1
