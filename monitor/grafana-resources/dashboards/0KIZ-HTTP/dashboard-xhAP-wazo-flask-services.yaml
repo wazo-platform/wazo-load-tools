@@ -360,7 +360,8 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: percentunit
             overrides: []
           gridPos:
             h: 10
@@ -377,7 +378,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: builder
-              expr: rate(process_cpu_seconds_total{instance="$instance"}[30s])
+              expr: rate(process_cpu_seconds_total{instance="$instance", service=~"wazo-.+"}[30s])
               format: time_series
               intervalFactor: 1
               legendFormat: '{{service}}'
