@@ -220,7 +220,7 @@ spec:
                     mode: absolute
                     steps:
                         - color: blue
-                unit: none
+                unit: ms
             overrides: []
           gridPos:
             h: 4
@@ -254,7 +254,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Asterisk core scrape time (ms)
+          title: Asterisk core scrape time
           type: stat
         - collapsed: false
           gridPos:
