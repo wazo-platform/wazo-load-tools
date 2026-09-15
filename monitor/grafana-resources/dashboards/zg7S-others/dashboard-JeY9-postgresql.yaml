@@ -72,7 +72,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: pg_static{release="$release", instance="$instance"}
+              expr: pg_static{instance="$instance"}
               format: time_series
               instant: true
               intervalFactor: 1
@@ -171,7 +171,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: SUM(pg_stat_database_tup_inserted{release="$release", datname=~"$datname", instance=~"$instance"})
+              expr: SUM(pg_stat_database_tup_inserted{datname=~"$datname", instance=~"$instance"})
               format: time_series
               intervalFactor: 2
               refId: A
@@ -269,7 +269,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: pg_settings_max_connections{release="$release", instance="$instance"}
+              expr: pg_settings_max_connections{instance="$instance"}
               format: time_series
               intervalFactor: 1
               refId: A
@@ -1733,48 +1733,14 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               includeAll: false
-              label: Namespace
-              name: namespace
-              options: []
-              query:
-                query: query_result(pg_exporter_last_scrape_duration_seconds)
-                refId: Prometheus-namespace-Variable-Query
-              refresh: 2
-              regex: /.*kubernetes_namespace="([^"]+).*/
-              sort: 1
-              type: query
-            - current:
-                text: ""
-                value: ""
-              datasource:
-                type: prometheus
-                uid: ${DS_PROMETHEUS}
-              includeAll: false
-              label: Release
-              name: release
-              options: []
-              query:
-                query: query_result(pg_exporter_last_scrape_duration_seconds{kubernetes_namespace="$namespace"})
-                refId: Prometheus-release-Variable-Query
-              refresh: 2
-              regex: /.*release="([^"]+)/
-              sort: 1
-              type: query
-            - current:
-                text: ""
-                value: ""
-              datasource:
-                type: prometheus
-                uid: ${DS_PROMETHEUS}
-              includeAll: false
               label: Instance
               name: instance
               options: []
               query:
-                query: query_result(pg_up{release="$release"})
+                query: label_values(pg_up, instance)
                 refId: Prometheus-instance-Variable-Query
               refresh: 1
-              regex: /.*instance="([^"]+).*/
+              regex: ""
               sort: 1
               type: query
             - current:
