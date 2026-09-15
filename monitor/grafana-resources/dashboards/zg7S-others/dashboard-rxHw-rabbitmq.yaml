@@ -1534,7 +1534,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: max(rabbitmq_queue_messages_published_total{instance="$instance", queue!~".*websocket.*"}) by (queue)
+              expr: max(rate(rabbitmq_queue_messages_published_total{instance="$instance", queue!~".*websocket.*"}[$__rate_interval])) by (queue)
               format: time_series
               interval: ""
               intervalFactor: 2
@@ -1546,7 +1546,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               exemplar: true
-              expr: max(rabbitmq_queue_messages_delivered_total{instance="$instance", queue!~".*websocket.*"}) by (queue)
+              expr: max(rate(rabbitmq_queue_messages_delivered_total{instance="$instance", queue!~".*websocket.*"}[$__rate_interval])) by (queue)
               format: time_series
               interval: ""
               intervalFactor: 2
