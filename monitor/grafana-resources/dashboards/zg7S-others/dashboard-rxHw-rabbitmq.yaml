@@ -142,9 +142,9 @@ spec:
                     steps:
                         - color: '#299c46'
                         - color: rgba(237, 129, 40, 0.89)
-                          value: 1073741824
+                          value: 1.073741824e+09
                         - color: '#d44a3a'
-                          value: 2147483648
+                          value: 2.147483648e+09
                 unit: bytes
             overrides: []
           gridPos:
