@@ -7609,7 +7609,7 @@ spec:
                             - color: green
                             - color: red
                               value: 80
-                    unit: decbytes
+                    unit: bytes
                 overrides:
                     - matcher:
                         id: byRegexp
@@ -7641,42 +7641,22 @@ spec:
                 - datasource:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
-                  expr: irate(process_virtual_memory_bytes{instance="$node",job="$job"}[$__rate_interval])
+                  expr: process_virtual_memory_bytes{instance="$node",job="$job"}
                   hide: false
                   interval: ""
                   intervalFactor: 1
-                  legendFormat: Processes virtual memory size in bytes
+                  legendFormat: virtual memory
                   refId: A
                   step: 240
                 - datasource:
                     type: prometheus
                     uid: ${DS_PROMETHEUS}
-                  expr: process_resident_memory_max_bytes{instance="$node",job="$job"}
+                  expr: process_virtual_memory_max_bytes{instance="$node",job="$job"}
                   hide: false
                   interval: ""
                   intervalFactor: 1
-                  legendFormat: Maximum amount of virtual memory available in bytes
+                  legendFormat: virtual memory limit
                   refId: B
-                  step: 240
-                - datasource:
-                    type: prometheus
-                    uid: ${DS_PROMETHEUS}
-                  expr: irate(process_virtual_memory_bytes{instance="$node",job="$job"}[$__rate_interval])
-                  hide: false
-                  interval: ""
-                  intervalFactor: 1
-                  legendFormat: Processes virtual memory size in bytes
-                  refId: C
-                  step: 240
-                - datasource:
-                    type: prometheus
-                    uid: ${DS_PROMETHEUS}
-                  expr: irate(process_virtual_memory_max_bytes{instance="$node",job="$job"}[$__rate_interval])
-                  hide: false
-                  interval: ""
-                  intervalFactor: 1
-                  legendFormat: Maximum amount of virtual memory available in bytes
-                  refId: D
                   step: 240
               title: Processes Memory
               type: timeseries
