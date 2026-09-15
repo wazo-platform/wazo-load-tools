@@ -389,7 +389,8 @@ spec:
             type: prometheus
             uid: ${DS_PROMETHEUS}
           fieldConfig:
-            defaults: {}
+            defaults:
+                unit: bytes
             overrides: []
           gridPos:
             h: 10
@@ -406,7 +407,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: code
-              expr: process_resident_memory_bytes{instance="$instance"}
+              expr: process_resident_memory_bytes{instance="$instance", service=~"wazo-.+"}
               format: time_series
               interval: ""
               intervalFactor: 1
