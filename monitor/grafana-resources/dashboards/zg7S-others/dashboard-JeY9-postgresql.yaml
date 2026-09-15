@@ -123,7 +123,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: SUM(pg_stat_database_tup_fetched{datname=~"$datname", instance=~"$instance"})
+              expr: SUM(rate(pg_stat_database_tup_fetched{datname=~"$datname", instance=~"$instance"}[$__rate_interval]))
               format: time_series
               intervalFactor: 2
               refId: A
@@ -173,7 +173,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: SUM(pg_stat_database_tup_inserted{datname=~"$datname", instance=~"$instance"})
+              expr: SUM(rate(pg_stat_database_tup_inserted{datname=~"$datname", instance=~"$instance"}[$__rate_interval]))
               format: time_series
               intervalFactor: 2
               refId: A
@@ -223,7 +223,7 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              expr: SUM(pg_stat_database_tup_updated{datname=~"$datname", instance=~"$instance"})
+              expr: SUM(rate(pg_stat_database_tup_updated{datname=~"$datname", instance=~"$instance"}[$__rate_interval]))
               format: time_series
               intervalFactor: 2
               refId: A
