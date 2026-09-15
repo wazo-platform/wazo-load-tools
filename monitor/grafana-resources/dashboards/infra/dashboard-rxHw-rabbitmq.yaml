@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: zg7S-others
+    folder: infra
     name: rxHw-rabbitmq
 spec:
     annotations:

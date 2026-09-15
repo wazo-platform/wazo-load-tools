@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: zg7S-others
+    folder: infra
     name: JeY9-postgresql
 spec:
     annotations:

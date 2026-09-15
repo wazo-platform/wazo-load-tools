@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: 0KIZ-HTTP
+    folder: wazo
     name: xhAP-wazo-flask-services
 spec:
     annotations:

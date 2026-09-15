@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: DlO4-system
+    folder: infra
     name: ePaq-node-exporter-full
 spec:
     annotations:

@@ -1,7 +1,7 @@
 apiVersion: grizzly.grafana.com/v1alpha1
 kind: Dashboard
 metadata:
-    folder: xbE4-voip
+    folder: wazo
     name: NYBq-wazo-asterisk-simple
 spec:
     annotations:
