@@ -15,25 +15,6 @@ spec:
               iconColor: rgba(0, 211, 255, 1)
               name: Annotations & Alerts
               type: dashboard
-            - datasource:
-                type: datasource
-                uid: grafana
-              enable: true
-              expr: ""
-              hide: false
-              iconColor: rgba(0, 211, 255, 1)
-              iconSize: 0
-              lineColor: ""
-              name: Annotations & Alerts
-              query: ""
-              showLine: false
-              step: ""
-              tagKeys: ""
-              tagsField: ""
-              textField: ""
-              textFormat: ""
-              titleFormat: ""
-              type: dashboard
     editable: true
     fiscalYearStartMonth: 0
     graphTooltip: 0
