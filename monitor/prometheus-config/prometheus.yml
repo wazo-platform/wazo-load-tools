@@ -25,10 +25,10 @@ scrape_configs:
     file_sd_configs: &stack_file
       - files: [/etc/prometheus/targets/stack.yml]
     relabel_configs:
-      - &stack_address
+      - &stack_instance
         source_labels: [__meta_ec2_tag_Fqdn]
         regex: '(.+)'
-        target_label: __address__
+        target_label: instance
         replacement: '${1}:6387'
       - &stack_profile
         source_labels: [__meta_ec2_tag_LoadProfile]
@@ -39,7 +39,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-agentd}
@@ -49,7 +49,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-amid}
@@ -59,7 +59,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-auth}
@@ -69,7 +69,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-call-logd}
@@ -79,7 +79,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-calld}
@@ -89,7 +89,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-chatd}
@@ -99,7 +99,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-confd}
@@ -109,7 +109,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-dird}
@@ -119,7 +119,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-phoned}
@@ -129,7 +129,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: fastapi}
       - {target_label: service, replacement: wazo-sysconfd}
@@ -139,7 +139,7 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - *stack_instance
       - *stack_profile
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-webhookd}
@@ -148,31 +148,31 @@ scrape_configs:
     metrics_path: /nginx/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile]
 
   - job_name: rabbitmq
     metrics_path: /rabbitmq/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile]
 
   - job_name: postgresql
     metrics_path: /postgresql/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile]
 
   - job_name: node
     metrics_path: /node/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile]
 
   - job_name: process
     metrics_path: /process/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_address, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile]
 
   - job_name: load-testing
     scheme: https
@@ -182,7 +182,10 @@ scrape_configs:
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
     relabel_configs:
-      - *stack_address
+      - source_labels: [__meta_ec2_tag_Fqdn]
+        regex: '(.+)'
+        target_label: instance
+        replacement: '${1}:443'
       - *stack_profile
       - source_labels: [__address__]
         regex: '(.+):\d+'
@@ -202,14 +205,14 @@ scrape_configs:
     file_sd_configs: &edge_file
       - files: [/etc/prometheus/targets/edge.yml]
     relabel_configs:
-      - &edge_address
+      - &edge_instance
         source_labels: [__meta_ec2_tag_Fqdn]
         regex: '(.+)'
-        target_label: __address__
+        target_label: instance
         replacement: '${1}:6387'
 
   - job_name: edge-traefik
     metrics_path: /metrics
     ec2_sd_configs: *edge_ec2
     file_sd_configs: *edge_file
-    relabel_configs: [*edge_address]
+    relabel_configs: [*edge_instance]
