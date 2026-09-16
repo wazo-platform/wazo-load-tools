@@ -43,6 +43,11 @@ scenarios.
 - Import dashboards: `grr apply grafana-resources`
 - Connect to `http://localhost:3000`
 
+The `Load Tests` folder holds the k6 dashboard
+([18030](https://grafana.com/grafana/dashboards/18030-k6-prometheus-native-histograms/)).
+It reads trend metrics as native histograms, so the k6 runners must push with
+`K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM=true`.
+
 ## Edit Dashboards
 
 - Edit dashboard using `grr` or in grafana
