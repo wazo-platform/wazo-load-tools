@@ -438,8 +438,8 @@ spec:
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              editorMode: builder
-              expr: histogram_quantile(0.5, rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s]))
+              editorMode: code
+              expr: histogram_quantile(0.5, sum by (le, service, endpoint) (rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s])))
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -468,8 +468,8 @@ spec:
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              editorMode: builder
-              expr: histogram_quantile(0.9, rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s]))
+              editorMode: code
+              expr: histogram_quantile(0.9, sum by (le, service, endpoint) (rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s])))
               format: time_series
               interval: ""
               intervalFactor: 1
