@@ -347,7 +347,7 @@ spec:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
               editorMode: code
-              expr: increase(flask_http_request_duration_seconds_bucket{le="0.25", instance="$instance", method=~"$method"}[30s]) / ignoring(le) increase(flask_http_request_duration_seconds_count{instance="$instance", method=~"$method"}[30s])
+              expr: sum by (service, endpoint) (increase(flask_http_request_duration_seconds_bucket{le="0.25", instance="$instance", method=~"$method"}[30s])) / sum by (service, endpoint) (increase(flask_http_request_duration_seconds_count{instance="$instance", method=~"$method"}[30s]))
               format: time_series
               instant: false
               interval: ""
@@ -438,8 +438,8 @@ spec:
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              editorMode: builder
-              expr: histogram_quantile(0.5, rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s]))
+              editorMode: code
+              expr: histogram_quantile(0.5, sum by (le, service, endpoint) (rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s])))
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -468,8 +468,8 @@ spec:
               datasource:
                 type: prometheus
                 uid: ${DS_PROMETHEUS}
-              editorMode: builder
-              expr: histogram_quantile(0.9, rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s]))
+              editorMode: code
+              expr: histogram_quantile(0.9, sum by (le, service, endpoint) (rate(flask_http_request_duration_seconds_bucket{instance="$instance", method=~"$method"}[30s])))
               format: time_series
               interval: ""
               intervalFactor: 1
@@ -506,7 +506,7 @@ spec:
               query:
                 query: label_values(python_info, instance)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
             - current:
@@ -525,7 +525,7 @@ spec:
               query:
                 query: label_values(flask_http_request_total, method)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
             - current:
@@ -541,7 +541,7 @@ spec:
               query:
                 query: label_values(flask_http_request_total, status)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
     time:

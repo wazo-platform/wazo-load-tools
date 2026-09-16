@@ -1746,7 +1746,7 @@ spec:
               query:
                 query: label_values(pg_up, instance)
                 refId: Prometheus-instance-Variable-Query
-              refresh: 1
+              refresh: 2
               regex: ""
               sort: 1
               type: query
@@ -1765,7 +1765,7 @@ spec:
               query:
                 query: label_values(pg_stat_database_numbackends{instance="$instance"}, datname)
                 refId: Prometheus-datname-Variable-Query
-              refresh: 1
+              refresh: 2
               regex: ""
               sort: 1
               type: query
@@ -1784,7 +1784,7 @@ spec:
               query:
                 query: label_values(pg_locks_count{instance="$instance"}, mode)
                 refId: Prometheus-mode-Variable-Query
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
     time:

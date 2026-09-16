@@ -1592,7 +1592,7 @@ spec:
               query:
                 query: label_values(rabbitmq_running, instance)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
             - current:
@@ -1608,7 +1608,7 @@ spec:
               query:
                 query: label_values(rabbitmq_running{instance="$instance"}, node)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
     time:

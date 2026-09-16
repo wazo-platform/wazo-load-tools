@@ -1527,7 +1527,7 @@ spec:
               name: node
               options: []
               query: label_values(opensips_up, instance)
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
             - current:
@@ -1540,7 +1540,7 @@ spec:
               name: process
               options: []
               query: label_values(opensips_up, process)
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
             - auto: true

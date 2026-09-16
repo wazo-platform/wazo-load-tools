@@ -1116,7 +1116,7 @@ spec:
                 query: |
                     label_values(asterisk_bridges_count, instance)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
     time:
