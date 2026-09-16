@@ -650,7 +650,7 @@ spec:
               name: instance
               options: []
               query: label_values(namedprocess_namegroup_cpu_seconds_total,instance)
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
     time:

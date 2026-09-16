@@ -506,7 +506,7 @@ spec:
               query:
                 query: label_values(python_info, instance)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
             - current:
@@ -525,7 +525,7 @@ spec:
               query:
                 query: label_values(flask_http_request_total, method)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
             - current:
@@ -541,7 +541,7 @@ spec:
               query:
                 query: label_values(flask_http_request_total, status)
                 refId: StandardVariableQuery
-              refresh: 1
+              refresh: 2
               regex: ""
               type: query
     time:
