@@ -1,0 +1,15 @@
+apiVersion: prometheus.datasource.grafana.app/v0alpha1
+kind: DataSource
+metadata:
+  annotations: null
+  labels: null
+  name: NY8knvLVz
+  namespace: default
+spec:
+  access: proxy
+  isDefault: true
+  jsonData:
+    httpMethod: POST
+  title: Prometheus
+  type: prometheus
+  url: http://prometheus:9090

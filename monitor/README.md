@@ -9,10 +9,7 @@ scenarios.
 ## Setup
 
 - Install [Docker](https://www.docker.com/)
-- Install [Grizzly](https://grafana.github.io/grizzly/)
-- Configure Grizzly
-  - `grr config set grafana.url http://localhost:3000`
-  - `grr config set targets Dashboard,Dashboardfolder,Datasource`
+- Install [gcx](https://grafana.com/docs/grafana/latest/as-code/observability-as-code/grafana-cli/gcx/installation/)
 
 - Declare the hosts to scrape. Prometheus discovers EC2 instances tagged
   `LoadRole` (`wazo` or `edge`) and `Fqdn` in `eu-west-1`, which needs AWS
@@ -40,7 +37,21 @@ scenarios.
 ## Run Environment
 
 - Start containers: `docker compose up -d`
-- Import dashboards: `grr apply grafana-resources`
+- Give `gcx` a token. Anonymous access is admin, so no login is needed to
+  create one. The token lives in the grafana volume: create it again after a
+  `docker compose down -v`.
+
+  ```sh
+  id=$(curl -s -X POST http://localhost:3000/api/serviceaccounts \
+    -H 'Content-Type: application/json' \
+    -d '{"name": "gcx", "role": "Admin"}' | jq -r .id)
+  key=$(curl -s -X POST "http://localhost:3000/api/serviceaccounts/$id/tokens" \
+    -H 'Content-Type: application/json' -d '{"name": "gcx"}' | jq -r .key)
+  gcx login load-local --server http://localhost:3000 --token "$key" --yes
+  ```
+
+- Import dashboards:
+  `gcx resources push --context load-local -p grafana-resources`
 - Connect to `http://localhost:3000`
 
 The `Load Tests` folder holds the k6 dashboard
@@ -50,20 +61,22 @@ It reads trend metrics as native histograms, so the k6 runners must push with
 
 ## Edit Dashboards
 
-- Edit dashboard using `grr` or in grafana
-- Pull changes: `grr pull grafana-resources`
+- Edit dashboard in grafana
+- Pull changes: `gcx resources pull --context load-local dashboards folders
+  datasources -p grafana-resources -o yaml`
+
+Pulling rewrites every file from the server, so `git diff` shows what changed.
+A dashboard belongs to the folder named by its
+`metadata.annotations["grafana.app/folder"]`.
 
 ## Review Dashboards
 
-To review dashboards with production data, you can use `grr`:
+To review dashboards with production data, serve the files in this repository
+against another instance:
 
-- Configure Grizzly
-  - `grr config set grafana.url http://<production>`
-  - `grr config set grafana.user admin`
-  - `grr config set grafana.token <token or password>`
-
-- `grr serve grafana-resources`
-- Open `http://localhost:8080`
+- `gcx login <name> --server http://<production> --token <token> --yes`
+- `gcx dev serve --context <name> grafana-resources`
+- Open `http://localhost:8080` and pick a dashboard in the index
 
 ## Terraform
 

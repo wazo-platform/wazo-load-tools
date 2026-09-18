@@ -1,8 +1,0 @@
-apiVersion: grizzly.grafana.com/v1alpha1
-kind: DashboardFolder
-metadata:
-    name: infra
-spec:
-    orgId: 1
-    title: Infrastructure
-    uid: infra
