@@ -1,8 +1,0 @@
-apiVersion: grizzly.grafana.com/v1alpha1
-kind: DashboardFolder
-metadata:
-    name: archived
-spec:
-    orgId: 1
-    title: Archived
-    uid: archived
