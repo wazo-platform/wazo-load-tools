@@ -27,6 +27,9 @@ runcmd:
   - groupadd -f docker
   - usermod -aG docker ${user}
 
+  - echo 'Installing jq...'
+  - apt-get install -y jq
+
   - echo 'Installing gcx...'
   - curl -fSL "https://github.com/grafana/gcx/releases/download/v1.3.0/gcx_1.3.0_linux_amd64.tar.gz" | tar -xz -C /usr/local/bin gcx
   - chmod a+x "/usr/local/bin/gcx"
