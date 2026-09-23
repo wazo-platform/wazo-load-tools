@@ -199,7 +199,7 @@ def main():
 
     body = {
         'label': 'callees',
-        'max_calls': 100,
+        'max_calls': 1000,
         'ring_in_use': False,
         'ring_strategy': 'memorized_round_robin',
     }
