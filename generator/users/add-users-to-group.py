@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2025-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import argparse
@@ -56,6 +56,12 @@ def parse_cli_args(argv):
         '--created-users-file',
         help='File with all generated users',
     )
+    parser.add_argument(
+        '-n',
+        '--number',
+        type=int,
+        help='Only assign the first <number> users of the file (default: all)',
+    )
     parsed_args = parser.parse_args(argv)
 
     result = {}
@@ -67,6 +73,8 @@ def parse_cli_args(argv):
         result['extra_config'] = parsed_args.extra_config
     if parsed_args.created_users_file:
         result['created_users_file'] = parsed_args.created_users_file
+    if parsed_args.number is not None:
+        result['number'] = parsed_args.number
 
     return result
 
@@ -96,6 +104,8 @@ def main():
 
     with open(config['created_users_file']) as f:
         users = json.load(f)['created']
+    if 'number' in config:
+        users = users[: config['number']]
 
     members = [
         {'uuid': user['user_uuid'], 'priority': i} for i, user in enumerate(users)

@@ -58,5 +58,8 @@ how output from one step feeds into the next.
     --host <wazo-host> \
     --password <password> \
     --created-users-file generator/users/created-users.json \
-    --extra-config generator/users/config.yml
+    --extra-config generator/users/config.yml \
+    --number <#group-users>
   ```
+
+`--number` is optional: without it, every created user joins the group.
