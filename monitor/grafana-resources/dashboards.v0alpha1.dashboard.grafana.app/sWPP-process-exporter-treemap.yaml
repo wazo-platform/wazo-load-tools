@@ -73,7 +73,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: max(up{instance="$instance", job="process"}) or vector(0)
+      expr: max(up{instance="$instance",testid=~"$testid", job="process"}) or vector(0)
       interval: ""
       legendFormat: ""
       refId: A
@@ -142,7 +142,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="proportionalResident"}
+      expr: namedprocess_namegroup_memory_bytes{instance="$instance",testid=~"$testid", memtype="proportionalResident"}
         > 0
       format: time_series
       intervalFactor: 2
@@ -213,7 +213,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: sum (rate(namedprocess_namegroup_cpu_seconds_total{instance="$instance"}[$__rate_interval])
+      expr: sum (rate(namedprocess_namegroup_cpu_seconds_total{instance="$instance",testid=~"$testid"}[$__rate_interval])
         )without (mode) > 0
       format: time_series
       intervalFactor: 2
@@ -284,7 +284,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="resident"}
+      expr: namedprocess_namegroup_memory_bytes{instance="$instance",testid=~"$testid", memtype="resident"}
         / ignoring(memtype) namedprocess_namegroup_num_procs > 0
       format: time_series
       intervalFactor: 2
@@ -355,7 +355,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: namedprocess_namegroup_num_procs{instance="$instance"}
+      expr: namedprocess_namegroup_num_procs{instance="$instance",testid=~"$testid"}
       format: time_series
       intervalFactor: 2
       legendFormat: '{{groupname}}'
@@ -425,7 +425,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: namedprocess_namegroup_memory_bytes{instance="$instance", memtype="virtual"}
+      expr: namedprocess_namegroup_memory_bytes{instance="$instance",testid=~"$testid", memtype="virtual"}
       format: time_series
       intervalFactor: 2
       legendFormat: '{{groupname}}'
@@ -448,7 +448,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: rate(namedprocess_namegroup_context_switches_total{instance="$instance",
+      expr: rate(namedprocess_namegroup_context_switches_total{instance="$instance",testid=~"$testid",
         ctxswitchtype="voluntary"}[$__rate_interval])
       format: time_series
       intervalFactor: 2
@@ -472,7 +472,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: rate(namedprocess_namegroup_context_switches_total{instance="$instance",
+      expr: rate(namedprocess_namegroup_context_switches_total{instance="$instance",testid=~"$testid",
         ctxswitchtype="nonvoluntary"}[$__rate_interval])
       format: time_series
       intervalFactor: 2
@@ -496,7 +496,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: namedprocess_namegroup_open_filedesc{instance="$instance"}
+      expr: namedprocess_namegroup_open_filedesc{instance="$instance",testid=~"$testid"}
       format: time_series
       intervalFactor: 2
       legendFormat: '{{groupname}}'
@@ -519,7 +519,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: rate(namedprocess_namegroup_read_bytes_total{instance="$instance"}[$__rate_interval])
+      expr: rate(namedprocess_namegroup_read_bytes_total{instance="$instance",testid=~"$testid"}[$__rate_interval])
       format: time_series
       intervalFactor: 2
       legendFormat: '{{groupname}}'
@@ -542,7 +542,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: rate(namedprocess_namegroup_write_bytes_total{instance="$instance"}[$__rate_interval])
+      expr: rate(namedprocess_namegroup_write_bytes_total{instance="$instance",testid=~"$testid"}[$__rate_interval])
       format: time_series
       intervalFactor: 2
       legendFormat: '{{groupname}}'
@@ -565,7 +565,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: rate(namedprocess_namegroup_major_page_faults_total{instance="$instance"}[$__rate_interval])
+      expr: rate(namedprocess_namegroup_major_page_faults_total{instance="$instance",testid=~"$testid"}[$__rate_interval])
       format: time_series
       intervalFactor: 2
       legendFormat: '{{groupname}}'
@@ -588,7 +588,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: rate(namedprocess_namegroup_minor_page_faults_total{instance="$instance"}[$__rate_interval])
+      expr: rate(namedprocess_namegroup_minor_page_faults_total{instance="$instance",testid=~"$testid"}[$__rate_interval])
       format: time_series
       intervalFactor: 2
       legendFormat: '{{groupname}}'
@@ -616,7 +616,7 @@ spec:
     targets:
     - datasource:
         uid: ${DS_PROMETHEUS}
-      expr: time() - (avg by (groupname) (namedprocess_namegroup_oldest_start_time_seconds{instance="$instance"}
+      expr: time() - (avg by (groupname) (namedprocess_namegroup_oldest_start_time_seconds{instance="$instance",testid=~"$testid"}
         > 0))
       format: table
       instant: true
@@ -651,6 +651,26 @@ spec:
       refresh: 1
       regex: ""
       type: datasource
+    - allValue: ".*"
+      current:
+        text: All
+        value: $__all
+      datasource:
+        type: prometheus
+        uid: ${DS_PROMETHEUS}
+      definition: label_values(namedprocess_namegroup_cpu_seconds_total, testid)
+      description: Run of a stack created for it; All also shows the stacks that outlive runs
+      includeAll: true
+      label: Test ID
+      name: testid
+      options: []
+      query:
+        query: label_values(namedprocess_namegroup_cpu_seconds_total, testid)
+        refId: PrometheusVariableQueryEditor-VariableQuery
+      refresh: 2
+      regex: ""
+      sort: 2
+      type: query
     - current:
         text: ""
         value: ""
@@ -658,7 +678,7 @@ spec:
       includeAll: false
       name: instance
       options: []
-      query: label_values(namedprocess_namegroup_cpu_seconds_total,instance)
+      query: label_values(namedprocess_namegroup_cpu_seconds_total{testid=~"$testid"},instance)
       refresh: 2
       regex: ""
       type: query
