@@ -542,10 +542,9 @@ spec:
       regex: ""
       type: query
     - current:
-        text:
-        - GET
+        text: All
         value:
-        - GET
+        - $__all
       datasource:
         type: prometheus
         uid: ${DS_PROMETHEUS}
