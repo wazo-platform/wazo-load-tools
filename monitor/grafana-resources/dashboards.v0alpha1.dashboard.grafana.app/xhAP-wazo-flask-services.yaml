@@ -93,7 +93,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: builder
-      expr: increase(flask_http_request_total{instance="$instance"}[1m])
+      expr: increase(flask_http_request_total{instance="$instance",testid=~"$testid"}[1m])
       legendFormat: '{{service}} {{status}}'
       range: true
       refId: A
@@ -171,7 +171,7 @@ spec:
         uid: ${DS_PROMETHEUS}
       editorMode: code
       expr: sum by (service) (rate(flask_http_request_duration_seconds_count{status!~"200|201|204",
-        method=~"$method", instance="$instance"}[30s]))
+        method=~"$method", instance="$instance",testid=~"$testid"}[30s]))
       format: time_series
       interval: ""
       intervalFactor: 1
@@ -259,7 +259,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: code
-      expr: increase(flask_http_request_total{instance="$instance", method=~"$method"}[1m])
+      expr: increase(flask_http_request_total{instance="$instance",testid=~"$testid", method=~"$method"}[1m])
       format: time_series
       interval: ""
       intervalFactor: 1
@@ -290,7 +290,7 @@ spec:
         uid: ${DS_PROMETHEUS}
       editorMode: builder
       expr: rate(flask_http_request_duration_seconds_count{status="$return_code",
-        method=~"$method", instance="$instance"}[30s])
+        method=~"$method", instance="$instance",testid=~"$testid"}[30s])
       format: time_series
       interval: ""
       intervalFactor: 1
@@ -321,9 +321,9 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: code
-      expr: rate(flask_http_request_duration_seconds_sum{status="$return_code", instance="$instance",
+      expr: rate(flask_http_request_duration_seconds_sum{status="$return_code", instance="$instance",testid=~"$testid",
         method=~"$method"}[30s]) / rate(flask_http_request_duration_seconds_count{status="$return_code",
-        instance="$instance", method=~"$method"}[30s])
+        instance="$instance",testid=~"$testid", method=~"$method"}[30s])
       format: time_series
       interval: ""
       intervalFactor: 1
@@ -355,8 +355,8 @@ spec:
         uid: ${DS_PROMETHEUS}
       editorMode: code
       expr: sum by (service, endpoint) (increase(flask_http_request_duration_seconds_bucket{le="0.25",
-        instance="$instance", method=~"$method"}[30s])) / sum by (service, endpoint)
-        (increase(flask_http_request_duration_seconds_count{instance="$instance",
+        instance="$instance",testid=~"$testid", method=~"$method"}[30s])) / sum by (service, endpoint)
+        (increase(flask_http_request_duration_seconds_count{instance="$instance",testid=~"$testid",
         method=~"$method"}[30s]))
       format: time_series
       instant: false
@@ -388,7 +388,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: builder
-      expr: rate(process_cpu_seconds_total{instance="$instance", service=~"wazo-.+"}[30s])
+      expr: rate(process_cpu_seconds_total{instance="$instance",testid=~"$testid", service=~"wazo-.+"}[30s])
       format: time_series
       intervalFactor: 1
       legendFormat: '{{service}}'
@@ -418,7 +418,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: code
-      expr: process_resident_memory_bytes{instance="$instance", service=~"wazo-.+"}
+      expr: process_resident_memory_bytes{instance="$instance",testid=~"$testid", service=~"wazo-.+"}
       format: time_series
       interval: ""
       intervalFactor: 1
@@ -449,7 +449,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: code
-      expr: histogram_quantile(0.5, sum by (le, service, endpoint) (rate(flask_http_request_duration_seconds_bucket{instance="$instance",
+      expr: histogram_quantile(0.5, sum by (le, service, endpoint) (rate(flask_http_request_duration_seconds_bucket{instance="$instance",testid=~"$testid",
         method=~"$method"}[30s])))
       format: time_series
       interval: ""
@@ -480,7 +480,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: code
-      expr: histogram_quantile(0.9, sum by (le, service, endpoint) (rate(flask_http_request_duration_seconds_bucket{instance="$instance",
+      expr: histogram_quantile(0.9, sum by (le, service, endpoint) (rate(flask_http_request_duration_seconds_bucket{instance="$instance",testid=~"$testid",
         method=~"$method"}[30s])))
       format: time_series
       interval: ""
@@ -505,18 +505,38 @@ spec:
       refresh: 1
       regex: ""
       type: datasource
+    - allValue: ".*"
+      current:
+        text: All
+        value: $__all
+      datasource:
+        type: prometheus
+        uid: ${DS_PROMETHEUS}
+      definition: label_values(python_info, testid)
+      description: Run of a stack created for it; All also shows the stacks that outlive runs
+      includeAll: true
+      label: Test ID
+      name: testid
+      options: []
+      query:
+        query: label_values(python_info, testid)
+        refId: PrometheusVariableQueryEditor-VariableQuery
+      refresh: 2
+      regex: ""
+      sort: 2
+      type: query
     - current:
         text: ""
         value: ""
       datasource:
         type: prometheus
         uid: ${DS_PROMETHEUS}
-      definition: label_values(python_info, instance)
+      definition: label_values(python_info{testid=~"$testid"}, instance)
       includeAll: false
       name: instance
       options: []
       query:
-        query: label_values(python_info, instance)
+        query: label_values(python_info{testid=~"$testid"}, instance)
         refId: StandardVariableQuery
       refresh: 2
       regex: ""

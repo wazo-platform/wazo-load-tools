@@ -111,7 +111,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max(up{instance="$instance",job="asterisk"}) or vector(0)
+      expr: max(up{instance="$instance",testid=~"$testid",job="asterisk"}) or vector(0)
       interval: ""
       legendFormat: ""
       refId: A
@@ -159,7 +159,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_core_uptime_seconds{instance="$instance"}
+      expr: asterisk_core_uptime_seconds{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -207,7 +207,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_core_last_reload_seconds{instance="$instance"}
+      expr: asterisk_core_last_reload_seconds{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -255,7 +255,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_core_scrape_time_ms{instance="$instance"}
+      expr: asterisk_core_scrape_time_ms{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -374,7 +374,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_calls_count{instance="$instance"}
+      expr: asterisk_calls_count{instance="$instance",testid=~"$testid"}
       format: time_series
       instant: false
       interval: "300"
@@ -385,7 +385,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_channels_count{instance="$instance"}
+      expr: asterisk_channels_count{instance="$instance",testid=~"$testid"}
       hide: false
       interval: "300"
       legendFormat: ""
@@ -394,7 +394,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_bridges_count{instance="$instance"}
+      expr: asterisk_bridges_count{instance="$instance",testid=~"$testid"}
       hide: false
       interval: "300"
       legendFormat: ""
@@ -444,7 +444,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_calls_count{instance="$instance"}
+      expr: asterisk_calls_count{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -490,7 +490,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max_over_time(asterisk_calls_count{instance="$instance"}[1d])
+      expr: max_over_time(asterisk_calls_count{instance="$instance",testid=~"$testid"}[1d])
       interval: ""
       legendFormat: ""
       refId: A
@@ -542,7 +542,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_channels_count{instance="$instance"}
+      expr: asterisk_channels_count{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -594,7 +594,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max_over_time(asterisk_channels_count{instance="$instance"}[1d])
+      expr: max_over_time(asterisk_channels_count{instance="$instance",testid=~"$testid"}[1d])
       interval: ""
       legendFormat: ""
       refId: A
@@ -644,7 +644,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_bridges_count{instance="$instance"}
+      expr: asterisk_bridges_count{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -693,7 +693,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max_over_time(asterisk_bridges_count{instance="$instance"}[1d])
+      expr: max_over_time(asterisk_bridges_count{instance="$instance",testid=~"$testid"}[1d])
       interval: ""
       legendFormat: ""
       refId: A
@@ -742,7 +742,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(asterisk_endpoints_state{instance="$instance"}==2)
+      expr: count(asterisk_endpoints_state{instance="$instance",testid=~"$testid"}==2)
       interval: ""
       legendFormat: ""
       refId: A
@@ -791,7 +791,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max_over_time(count(asterisk_endpoints_state{instance="$instance"}==2)[1d:10m])
+      expr: max_over_time(count(asterisk_endpoints_state{instance="$instance",testid=~"$testid"}==2)[1d:10m])
       interval: ""
       legendFormat: ""
       refId: A
@@ -877,7 +877,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(asterisk_endpoints_state{instance="$instance"}==2)
+      expr: count(asterisk_endpoints_state{instance="$instance",testid=~"$testid"}==2)
       interval: "300"
       legendFormat: ""
       refId: A
@@ -942,7 +942,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(asterisk_endpoints_state{instance="$instance"}==0) or vector(0)
+      expr: count(asterisk_endpoints_state{instance="$instance",testid=~"$testid"}==0) or vector(0)
       format: time_series
       interval: ""
       legendFormat: Endpoints Unknown
@@ -951,7 +951,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(asterisk_endpoints_state{instance="$instance"}==1) or vector(0)
+      expr: count(asterisk_endpoints_state{instance="$instance",testid=~"$testid"}==1) or vector(0)
       format: time_series
       hide: false
       interval: ""
@@ -961,7 +961,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(asterisk_endpoints_state{instance="$instance"}==2) or vector(0)
+      expr: count(asterisk_endpoints_state{instance="$instance",testid=~"$testid"}==2) or vector(0)
       format: time_series
       hide: false
       interval: ""
@@ -1016,7 +1016,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_endpoints_count{instance="$instance"}
+      expr: asterisk_endpoints_count{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -1084,7 +1084,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: asterisk_endpoints_count{instance="$instance"}
+      expr: asterisk_endpoints_count{instance="$instance",testid=~"$testid"}
       interval: "300"
       legendFormat: ""
       refId: A
@@ -1106,6 +1106,26 @@ spec:
       refresh: 1
       regex: ""
       type: datasource
+    - allValue: ".*"
+      current:
+        text: All
+        value: $__all
+      datasource:
+        type: prometheus
+        uid: ${DS_PROMETHEUS}
+      definition: label_values(asterisk_bridges_count, testid)
+      description: Run of a stack created for it; All also shows the stacks that outlive runs
+      includeAll: true
+      label: Test ID
+      name: testid
+      options: []
+      query:
+        query: label_values(asterisk_bridges_count, testid)
+        refId: PrometheusVariableQueryEditor-VariableQuery
+      refresh: 2
+      regex: ""
+      sort: 2
+      type: query
     - current:
         text: ""
         value: ""
@@ -1113,13 +1133,13 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       definition: |
-        label_values(asterisk_bridges_count, instance)
+        label_values(asterisk_bridges_count{testid=~"$testid"}, instance)
       includeAll: false
       name: instance
       options: []
       query:
         query: |
-          label_values(asterisk_bridges_count, instance)
+          label_values(asterisk_bridges_count{testid=~"$testid"}, instance)
         refId: StandardVariableQuery
       refresh: 2
       regex: ""

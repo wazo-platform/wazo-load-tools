@@ -115,7 +115,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: rabbitmq_running{instance="$instance"}
+      expr: rabbitmq_running{instance="$instance",testid=~"$testid"}
       format: time_series
       interval: ""
       intervalFactor: 2
@@ -178,7 +178,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: rabbitmq_node_mem_used{instance="$instance", node=~"$node"}
+      expr: rabbitmq_node_mem_used{instance="$instance",testid=~"$testid", node=~"$node"}
       instant: true
       interval: ""
       legendFormat: ""
@@ -237,7 +237,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: process_open_fds{instance="$instance",job="rabbitmq"}
+      expr: process_open_fds{instance="$instance",testid=~"$testid",job="rabbitmq"}
       instant: true
       interval: ""
       legendFormat: ""
@@ -292,7 +292,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(rabbitmq_queue_messages{instance="$instance", queue=~".*websocket.*"})
+      expr: count(rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue=~".*websocket.*"})
       instant: true
       interval: ""
       legendFormat: ""
@@ -347,7 +347,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(rabbitmq_queue_messages{instance="$instance", queue=~".*celery.*"})
+      expr: count(rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue=~".*celery.*"})
       instant: true
       interval: ""
       legendFormat: ""
@@ -402,7 +402,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(rabbitmq_queue_messages{instance="$instance", queue=~".*wazo-confd.*"})
+      expr: count(rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue=~".*wazo-confd.*"})
       instant: true
       interval: ""
       legendFormat: ""
@@ -457,7 +457,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(rabbitmq_queue_messages{instance="$instance", queue=~".*wazo-dird.*"})
+      expr: count(rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue=~".*wazo-dird.*"})
       instant: true
       interval: ""
       legendFormat: ""
@@ -512,7 +512,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(rabbitmq_queue_messages{instance="$instance", queue=~".*wazo-chatd.*"})
+      expr: count(rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue=~".*wazo-chatd.*"})
       instant: true
       interval: ""
       legendFormat: ""
@@ -567,7 +567,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(rabbitmq_queue_messages{instance="$instance", queue=~".*wazo-calld.*"})
+      expr: count(rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue=~".*wazo-calld.*"})
       instant: true
       interval: ""
       legendFormat: ""
@@ -662,8 +662,8 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum(rabbitmq_node_mem_used{instance="$instance", node=~"$node"}) by (node)
-        / sum(rabbitmq_node_mem_limit{instance="$instance",node=~"$node"}) by (node)
+      expr: sum(rabbitmq_node_mem_used{instance="$instance",testid=~"$testid", node=~"$node"}) by (node)
+        / sum(rabbitmq_node_mem_limit{instance="$instance",testid=~"$testid",node=~"$node"}) by (node)
         * 100
       format: time_series
       interval: ""
@@ -740,7 +740,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum(rabbitmq_node_mem_used{instance="$instance", node=~"$node"}) by (node)
+      expr: sum(rabbitmq_node_mem_used{instance="$instance",testid=~"$testid", node=~"$node"}) by (node)
       format: time_series
       interval: ""
       intervalFactor: 2
@@ -853,7 +853,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: process_max_fds{instance="$instance"}
+      expr: process_max_fds{instance="$instance",testid=~"$testid"}
       format: time_series
       interval: ""
       intervalFactor: 2
@@ -865,7 +865,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: process_open_fds{instance="$instance"}
+      expr: process_open_fds{instance="$instance",testid=~"$testid"}
       format: time_series
       interval: ""
       intervalFactor: 2
@@ -961,7 +961,7 @@ spec:
     - datasource:
         type: prometheus
         uid: ${DS_PROMETHEUS}
-      expr: min(rabbitmq_node_disk_free{instance="$instance", node=~"$node"}) by (node)
+      expr: min(rabbitmq_node_disk_free{instance="$instance",testid=~"$testid", node=~"$node"}) by (node)
       format: time_series
       intervalFactor: 2
       legendFormat: '{{instance}}/{{node}}:free'
@@ -972,7 +972,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: min(rabbitmq_node_disk_free_limit{instance="$instance", node=~"$node"})
+      expr: min(rabbitmq_node_disk_free_limit{instance="$instance",testid=~"$testid", node=~"$node"})
         by (node)
       format: time_series
       interval: ""
@@ -1080,7 +1080,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum(rabbitmq_connections{instance="$instance"})
+      expr: sum(rabbitmq_connections{instance="$instance",testid=~"$testid"})
       format: time_series
       interval: ""
       intervalFactor: 2
@@ -1161,7 +1161,7 @@ spec:
     - datasource:
         type: prometheus
         uid: ${DS_PROMETHEUS}
-      expr: sum(rabbitmq_channels{instance="$instance"})
+      expr: sum(rabbitmq_channels{instance="$instance",testid=~"$testid"})
       format: time_series
       intervalFactor: 2
       legendFormat: channels
@@ -1169,7 +1169,7 @@ spec:
     - datasource:
         type: prometheus
         uid: ${DS_PROMETHEUS}
-      expr: sum(rabbitmq_queue_consumers{instance="$instance"})
+      expr: sum(rabbitmq_queue_consumers{instance="$instance",testid=~"$testid"})
       format: time_series
       intervalFactor: 2
       legendFormat: consumers
@@ -1251,7 +1251,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: count(rabbitmq_queue_messages{instance="$instance", queue=~".*websocket.*"})
+      expr: count(rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue=~".*websocket.*"})
       hide: false
       interval: ""
       legendFormat: nb websocketd queues
@@ -1260,7 +1260,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum(rabbitmq_queue_messages{instance="$instance", queue=~".*websocket.*"})
+      expr: sum(rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue=~".*websocket.*"})
       hide: false
       interval: ""
       legendFormat: nb websocketd messages
@@ -1330,7 +1330,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum(rabbitmq_queue_messages_ready{instance="$instance", queue=~".*websocket.*"})
+      expr: sum(rabbitmq_queue_messages_ready{instance="$instance",testid=~"$testid", queue=~".*websocket.*"})
       format: time_series
       interval: ""
       intervalFactor: 2
@@ -1342,7 +1342,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum(rate(rabbitmq_queue_messages_published_total{instance="$instance",
+      expr: sum(rate(rabbitmq_queue_messages_published_total{instance="$instance",testid=~"$testid",
         queue=~".*websocket.*"}[$__rate_interval]))
       format: time_series
       interval: ""
@@ -1355,7 +1355,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum(rate(rabbitmq_queue_messages_delivered_total{instance="$instance",
+      expr: sum(rate(rabbitmq_queue_messages_delivered_total{instance="$instance",testid=~"$testid",
         queue=~".*websocket.*"}[$__rate_interval]))
       format: time_series
       interval: ""
@@ -1368,7 +1368,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum(rabbitmq_queue_messages_unacknowledged{instance="$instance", queue=~".*websocket.*"})
+      expr: sum(rabbitmq_queue_messages_unacknowledged{instance="$instance",testid=~"$testid", queue=~".*websocket.*"})
       format: time_series
       interval: ""
       intervalFactor: 2
@@ -1453,7 +1453,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: rabbitmq_queue_messages{instance="$instance", queue!~".*websocket.*"}
+      expr: rabbitmq_queue_messages{instance="$instance",testid=~"$testid", queue!~".*websocket.*"}
       format: time_series
       interval: ""
       intervalFactor: 2
@@ -1526,7 +1526,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max(rabbitmq_queue_messages_ready{instance="$instance", queue!~".*websocket.*"})
+      expr: max(rabbitmq_queue_messages_ready{instance="$instance",testid=~"$testid", queue!~".*websocket.*"})
         by (queue)
       format: time_series
       interval: ""
@@ -1539,7 +1539,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max(rate(rabbitmq_queue_messages_published_total{instance="$instance",
+      expr: max(rate(rabbitmq_queue_messages_published_total{instance="$instance",testid=~"$testid",
         queue!~".*websocket.*"}[$__rate_interval])) by (queue)
       format: time_series
       interval: ""
@@ -1552,7 +1552,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max(rate(rabbitmq_queue_messages_delivered_total{instance="$instance",
+      expr: max(rate(rabbitmq_queue_messages_delivered_total{instance="$instance",testid=~"$testid",
         queue!~".*websocket.*"}[$__rate_interval])) by (queue)
       format: time_series
       interval: ""
@@ -1565,7 +1565,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: sum by (queue)(rabbitmq_queue_messages_unacknowledged{instance="$instance",
+      expr: sum by (queue)(rabbitmq_queue_messages_unacknowledged{instance="$instance",testid=~"$testid",
         queue!~".*websocket.*"})
       format: time_series
       interval: ""
@@ -1591,18 +1591,38 @@ spec:
       refresh: 1
       regex: ""
       type: datasource
+    - allValue: ".*"
+      current:
+        text: All
+        value: $__all
+      datasource:
+        type: prometheus
+        uid: ${DS_PROMETHEUS}
+      definition: label_values(rabbitmq_running, testid)
+      description: Run of a stack created for it; All also shows the stacks that outlive runs
+      includeAll: true
+      label: Test ID
+      name: testid
+      options: []
+      query:
+        query: label_values(rabbitmq_running, testid)
+        refId: PrometheusVariableQueryEditor-VariableQuery
+      refresh: 2
+      regex: ""
+      sort: 2
+      type: query
     - current:
         text: ""
         value: ""
       datasource:
         type: prometheus
         uid: ${DS_PROMETHEUS}
-      definition: label_values(rabbitmq_running, instance)
+      definition: label_values(rabbitmq_running{testid=~"$testid"}, instance)
       includeAll: false
       name: instance
       options: []
       query:
-        query: label_values(rabbitmq_running, instance)
+        query: label_values(rabbitmq_running{testid=~"$testid"}, instance)
         refId: StandardVariableQuery
       refresh: 2
       regex: ""
@@ -1613,12 +1633,12 @@ spec:
       datasource:
         type: prometheus
         uid: ${DS_PROMETHEUS}
-      definition: label_values(rabbitmq_running{instance="$instance"}, node)
+      definition: label_values(rabbitmq_running{instance="$instance",testid=~"$testid"}, node)
       includeAll: true
       name: node
       options: []
       query:
-        query: label_values(rabbitmq_running{instance="$instance"}, node)
+        query: label_values(rabbitmq_running{instance="$instance",testid=~"$testid"}, node)
         refId: StandardVariableQuery
       refresh: 2
       regex: ""
