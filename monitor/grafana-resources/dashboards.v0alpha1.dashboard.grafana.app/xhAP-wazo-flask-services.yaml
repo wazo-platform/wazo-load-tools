@@ -289,7 +289,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: builder
-      expr: rate(flask_http_request_duration_seconds_count{status="$return_code",
+      expr: rate(flask_http_request_duration_seconds_count{status=~"$return_code",
         method=~"$method", instance="$instance",testid=~"$testid"}[30s])
       format: time_series
       interval: ""
@@ -321,8 +321,8 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       editorMode: code
-      expr: rate(flask_http_request_duration_seconds_sum{status="$return_code", instance="$instance",testid=~"$testid",
-        method=~"$method"}[30s]) / rate(flask_http_request_duration_seconds_count{status="$return_code",
+      expr: rate(flask_http_request_duration_seconds_sum{status=~"$return_code", instance="$instance",testid=~"$testid",
+        method=~"$method"}[30s]) / rate(flask_http_request_duration_seconds_count{status=~"$return_code",
         instance="$instance",testid=~"$testid", method=~"$method"}[30s])
       format: time_series
       interval: ""
@@ -560,13 +560,13 @@ spec:
       regex: ""
       type: query
     - current:
-        text: "200"
-        value: "200"
+        text: All
+        value: $__all
       datasource:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       definition: label_values(flask_http_request_total, status)
-      includeAll: false
+      includeAll: true
       name: return_code
       options: []
       query:
