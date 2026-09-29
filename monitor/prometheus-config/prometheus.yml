@@ -9,8 +9,8 @@ alerting:
     - static_configs:
       - targets: ['alertmanager:9093']
 
-# Targets are EC2 instances tagged LoadRole (wazo or edge) and Fqdn, plus any
-# host listed in targets/ (see README)
+# Targets are EC2 instances tagged LoadRole (wazo or edge), plus any host
+# listed in targets/ (see README)
 scrape_configs:
   - job_name: asterisk
     metrics_path: /asterisk/metrics
@@ -33,6 +33,15 @@ scrape_configs:
       - &stack_profile
         source_labels: [__meta_ec2_tag_LoadProfile]
         target_label: profile
+      - &stack_testid
+        source_labels: [__meta_ec2_tag_LoadTestId]
+        target_label: testid
+      # A stack created for one run is named by its testid, not its instance
+      - &stack_ephemeral
+        source_labels: [__meta_ec2_tag_LoadTestId]
+        regex: '.+'
+        target_label: instance
+        replacement: ephemeral
 
   - job_name: wazo-agentd
     metrics_path: /agentd/1.0/metrics
@@ -41,6 +50,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-agentd}
 
@@ -51,6 +62,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-amid}
 
@@ -61,6 +74,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-auth}
 
@@ -71,6 +86,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-call-logd}
 
@@ -81,6 +98,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-calld}
 
@@ -91,6 +110,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-chatd}
 
@@ -101,6 +122,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-confd}
 
@@ -111,6 +134,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-dird}
 
@@ -121,6 +146,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-phoned}
 
@@ -131,6 +158,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: fastapi}
       - {target_label: service, replacement: wazo-sysconfd}
 
@@ -141,6 +170,8 @@ scrape_configs:
     relabel_configs:
       - *stack_instance
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - {target_label: framework, replacement: flask}
       - {target_label: service, replacement: wazo-webhookd}
 
@@ -148,31 +179,31 @@ scrape_configs:
     metrics_path: /nginx/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_instance, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile, *stack_testid, *stack_ephemeral]
 
   - job_name: rabbitmq
     metrics_path: /rabbitmq/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_instance, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile, *stack_testid, *stack_ephemeral]
 
   - job_name: postgresql
     metrics_path: /postgresql/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_instance, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile, *stack_testid, *stack_ephemeral]
 
   - job_name: node
     metrics_path: /node/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_instance, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile, *stack_testid, *stack_ephemeral]
 
   - job_name: process
     metrics_path: /process/metrics
     ec2_sd_configs: *stack_ec2
     file_sd_configs: *stack_file
-    relabel_configs: [*stack_instance, *stack_profile]
+    relabel_configs: [*stack_instance, *stack_profile, *stack_testid, *stack_ephemeral]
 
   - job_name: load-testing
     scheme: https
@@ -187,6 +218,8 @@ scrape_configs:
         target_label: instance
         replacement: '${1}:443'
       - *stack_profile
+      - *stack_testid
+      - *stack_ephemeral
       - source_labels: [__address__]
         regex: '(.+):\d+'
         target_label: __address__
