@@ -12,9 +12,12 @@ scenarios.
 - Install [gcx](https://grafana.com/docs/grafana/latest/as-code/observability-as-code/grafana-cli/gcx/installation/)
 
 - Declare the hosts to scrape. Prometheus discovers EC2 instances tagged
-  `LoadRole` (`wazo` or `edge`) and `Fqdn` in `eu-west-1`, which needs AWS
-  credentials: an instance profile on AWS, or exported in the shell that
-  starts the containers:
+  `LoadRole` (`wazo` or `edge`) in `eu-west-1`, and labels their series with
+  their `Fqdn` tag as `instance` and, for a stack, its `LoadProfile` tag as
+  `profile`. A stack created for one run is tagged `LoadTestId` instead of
+  `Fqdn`: its series get that id as `testid`, and `ephemeral` as
+  `instance`. Discovery needs AWS credentials: an instance profile on AWS,
+  or exported in the shell that starts the containers:
 
   ```sh
   eval "$(aws configure export-credentials --format env)"
