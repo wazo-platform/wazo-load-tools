@@ -65,7 +65,8 @@ It reads trend metrics as native histograms, so the k6 runners must push with
 The dashboards about a load run, tagged `load-run`, link to each other
 through a **Load run** dropdown that keeps the time range and the Test ID:
 pick the run once, then move between them from there, since opening a
-dashboard from the search resets both.
+dashboard from the search resets both. **Load runs** lists the runs of the
+time range, and opens one on the window of its stack's life.
 
 ## Edit Dashboards
 
