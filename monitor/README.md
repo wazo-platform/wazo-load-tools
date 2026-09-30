@@ -62,6 +62,11 @@ The `Load Tests` folder holds the k6 dashboard
 It reads trend metrics as native histograms, so the k6 runners must push with
 `K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM=true`.
 
+The dashboards about a load run, tagged `load-run`, link to each other
+through a **Load run** dropdown that keeps the time range and the Test ID:
+pick the run once, then move between them from there, since opening a
+dashboard from the search resets both.
+
 ## Edit Dashboards
 
 - Edit dashboard in grafana

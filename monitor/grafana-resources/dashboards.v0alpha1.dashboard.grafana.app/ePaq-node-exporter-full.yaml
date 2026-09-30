@@ -40,6 +40,15 @@ spec:
     title: Grafana
     type: link
     url: https://grafana.com/grafana/dashboards/1860
+  - asDropdown: true
+    icon: external link
+    includeVars: true
+    keepTime: true
+    tags:
+    - load-run
+    targetBlank: false
+    title: Load run
+    type: dashboards
   panels:
   - collapsed: false
     gridPos:
@@ -14080,6 +14089,7 @@ spec:
   schemaVersion: 41
   tags:
   - linux
+  - load-run
   templating:
     list:
     - includeAll: false

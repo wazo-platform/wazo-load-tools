@@ -27,7 +27,16 @@ spec:
   editable: true
   fiscalYearStartMonth: 0
   graphTooltip: 1
-  links: []
+  links:
+  - asDropdown: true
+    icon: external link
+    includeVars: true
+    keepTime: true
+    tags:
+    - load-run
+    targetBlank: false
+    title: Load run
+    type: dashboards
   panels:
   - collapsed: true
     gridPos:
@@ -1581,6 +1590,7 @@ spec:
   schemaVersion: 41
   tags:
   - rabbitmq
+  - load-run
   templating:
     list:
     - includeAll: false
