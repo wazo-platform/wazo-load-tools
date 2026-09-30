@@ -214,7 +214,7 @@ spec:
     - datasource:
         uid: ${DS_PROMETHEUS}
       expr: sum (rate(namedprocess_namegroup_cpu_seconds_total{instance="$instance",testid=~"$testid"}[$__rate_interval])
-        )without (mode) > 0
+        )without (mode)
       format: time_series
       intervalFactor: 2
       legendFormat: '{{groupname}}'
