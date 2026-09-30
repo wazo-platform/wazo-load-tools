@@ -27,7 +27,16 @@ spec:
   editable: true
   fiscalYearStartMonth: 0
   graphTooltip: 0
-  links: []
+  links:
+  - asDropdown: true
+    icon: external link
+    includeVars: true
+    keepTime: true
+    tags:
+    - load-run
+    targetBlank: false
+    title: Load run
+    type: dashboards
   panels:
   - collapsed: false
     gridPos:
@@ -367,6 +376,7 @@ spec:
   schemaVersion: 41
   tags:
   - nginx
+  - load-run
   templating:
     list:
     - includeAll: false
