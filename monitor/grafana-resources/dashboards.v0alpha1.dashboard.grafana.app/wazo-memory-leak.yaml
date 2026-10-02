@@ -29,7 +29,7 @@ spec:
     gridPos: {h: 8, w: 12, x: 0, "y": 0}
     id: 1
     targets:
-    - expr: asterisk_calls_count{instance="$instance",testid=~"$testid"}
+    - expr: max without (eid) (asterisk_calls_count{instance="$instance",testid=~"$testid"})
       legendFormat: calls
       refId: A
     title: Simultaneous calls
@@ -43,7 +43,7 @@ spec:
     gridPos: {h: 8, w: 12, x: 12, "y": 0}
     id: 2
     targets:
-    - expr: increase(asterisk_calls_sum{instance="$instance",testid=~"$testid"}[$__rate_interval])
+    - expr: sum without (eid) (increase(asterisk_calls_sum{instance="$instance",testid=~"$testid"}[$__rate_interval]))
       legendFormat: calls
       refId: A
     title: Calls processed
@@ -156,10 +156,10 @@ spec:
     gridPos: {h: 8, w: 12, x: 12, "y": 24}
     id: 8
     targets:
-    - expr: rabbitmq_node_mem_used{instance="$instance",testid=~"$testid"}
+    - expr: max without (cluster) (rabbitmq_node_mem_used{instance="$instance",testid=~"$testid"})
       legendFormat: used
       refId: A
-    - expr: rabbitmq_node_mem_limit{instance="$instance",testid=~"$testid"}
+    - expr: max without (cluster) (rabbitmq_node_mem_limit{instance="$instance",testid=~"$testid"})
       legendFormat: limit
       refId: B
     title: RabbitMQ memory
