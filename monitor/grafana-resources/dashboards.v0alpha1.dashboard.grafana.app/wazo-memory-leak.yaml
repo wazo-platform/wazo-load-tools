@@ -1,0 +1,253 @@
+apiVersion: dashboard.grafana.app/v0alpha1
+kind: Dashboard
+metadata:
+  annotations:
+    grafana.app/folder: wazo
+  labels: {}
+  name: wazo-memory-leak
+  namespace: default
+spec:
+  description: The graphs checked at each release for a memory leak under a long load
+  editable: true
+  links:
+  - asDropdown: true
+    icon: external link
+    includeVars: true
+    keepTime: true
+    tags:
+    - load-run
+    targetBlank: false
+    title: Load run
+    type: dashboards
+  panels:
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        unit: none
+    gridPos: {h: 8, w: 12, x: 0, "y": 0}
+    id: 1
+    targets:
+    - expr: asterisk_calls_count{instance="$instance",testid=~"$testid"}
+      legendFormat: calls
+      refId: A
+    title: Simultaneous calls
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        unit: none
+    gridPos: {h: 8, w: 12, x: 12, "y": 0}
+    id: 2
+    targets:
+    - expr: increase(asterisk_calls_sum{instance="$instance",testid=~"$testid"}[$__rate_interval])
+      legendFormat: calls
+      refId: A
+    title: Calls processed
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        unit: none
+    gridPos: {h: 8, w: 12, x: 0, "y": 8}
+    id: 3
+    targets:
+    - expr: namedprocess_namegroup_open_filedesc{instance="$instance",testid=~"$testid",groupname="asterisk"}
+      legendFormat: open
+      refId: A
+    title: Asterisk file descriptors
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        min: 0
+        unit: bytes
+    gridPos: {h: 8, w: 12, x: 12, "y": 8}
+    id: 4
+    targets:
+    - expr: namedprocess_namegroup_memory_bytes{instance="$instance",testid=~"$testid",groupname="asterisk",memtype=~"resident|virtual"}
+      legendFormat: '{{memtype}}'
+      refId: A
+    title: Asterisk memory
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    description: The sum over every postgres process, so resident counts the shared buffers once per process
+    fieldConfig:
+      defaults:
+        min: 0
+        unit: bytes
+    gridPos: {h: 8, w: 12, x: 0, "y": 16}
+    id: 5
+    targets:
+    - expr: namedprocess_namegroup_memory_bytes{instance="$instance",testid=~"$testid",groupname="postgres",memtype=~"resident|proportionalResident"}
+      legendFormat: '{{memtype}}'
+      refId: A
+    title: PostgreSQL memory
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        custom:
+          fillOpacity: 30
+          stacking:
+            mode: normal
+        min: 0
+        unit: bytes
+    gridPos: {h: 8, w: 12, x: 12, "y": 16}
+    id: 6
+    targets:
+    - expr: |
+        node_memory_MemTotal_bytes{instance="$instance",testid=~"$testid"}
+        - node_memory_MemFree_bytes{instance="$instance",testid=~"$testid"}
+        - node_memory_Buffers_bytes{instance="$instance",testid=~"$testid"}
+        - node_memory_Cached_bytes{instance="$instance",testid=~"$testid"}
+      legendFormat: used
+      refId: A
+    - expr: node_memory_Buffers_bytes{instance="$instance",testid=~"$testid"}
+      legendFormat: buffers
+      refId: B
+    - expr: node_memory_Cached_bytes{instance="$instance",testid=~"$testid"}
+      legendFormat: cached
+      refId: C
+    - expr: node_memory_MemFree_bytes{instance="$instance",testid=~"$testid"}
+      legendFormat: free
+      refId: D
+    title: General memory usage
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        min: 0
+        unit: none
+    gridPos: {h: 8, w: 12, x: 0, "y": 24}
+    id: 7
+    targets:
+    - expr: node_load1{instance="$instance",testid=~"$testid"}
+      legendFormat: 1m
+      refId: A
+    - expr: node_load5{instance="$instance",testid=~"$testid"}
+      legendFormat: 5m
+      refId: B
+    - expr: node_load15{instance="$instance",testid=~"$testid"}
+      legendFormat: 15m
+      refId: C
+    title: Load average
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        min: 0
+        unit: bytes
+    gridPos: {h: 8, w: 12, x: 12, "y": 24}
+    id: 8
+    targets:
+    - expr: rabbitmq_node_mem_used{instance="$instance",testid=~"$testid"}
+      legendFormat: used
+      refId: A
+    - expr: rabbitmq_node_mem_limit{instance="$instance",testid=~"$testid"}
+      legendFormat: limit
+      refId: B
+    title: RabbitMQ memory
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        min: 0
+        unit: none
+    gridPos: {h: 8, w: 12, x: 0, "y": 32}
+    id: 9
+    targets:
+    - expr: sum by (datname) (pg_stat_activity_count{instance="$instance",testid=~"$testid"})
+      legendFormat: '{{datname}}'
+      refId: A
+    title: PostgreSQL connections
+    type: timeseries
+  - datasource:
+      type: prometheus
+      uid: ${DS_PROMETHEUS}
+    fieldConfig:
+      defaults:
+        min: 0
+        unit: bytes
+    gridPos: {h: 8, w: 12, x: 12, "y": 32}
+    id: 10
+    targets:
+    - expr: process_resident_memory_bytes{instance="$instance",testid=~"$testid",service=~"wazo-.*"}
+      legendFormat: '{{service}}'
+      refId: A
+    title: Wazo services memory
+    type: timeseries
+  refresh: 1m
+  schemaVersion: 41
+  tags:
+  - wazo
+  - load-run
+  templating:
+    list:
+    - includeAll: false
+      label: datasource
+      name: DS_PROMETHEUS
+      options: []
+      query: prometheus
+      refresh: 1
+      regex: ""
+      type: datasource
+    - allValue: ".*"
+      current:
+        text: All
+        value: $__all
+      datasource:
+        type: prometheus
+        uid: ${DS_PROMETHEUS}
+      definition: label_values(up{job="node"}, testid)
+      description: Run of a stack created for it; All also shows the stacks that outlive runs
+      includeAll: true
+      label: Test ID
+      name: testid
+      options: []
+      query:
+        query: label_values(up{job="node"}, testid)
+        refId: PrometheusVariableQueryEditor-VariableQuery
+      refresh: 2
+      regex: ""
+      sort: 2
+      type: query
+    - current:
+        text: noproxy-wazo-rolling-dev.load.internal.it.wazo.cloud:6387
+        value: noproxy-wazo-rolling-dev.load.internal.it.wazo.cloud:6387
+      datasource:
+        type: prometheus
+        uid: ${DS_PROMETHEUS}
+      definition: label_values(up{job="node",testid=~"$testid"}, instance)
+      includeAll: false
+      name: instance
+      options: []
+      query:
+        query: label_values(up{job="node",testid=~"$testid"}, instance)
+        refId: StandardVariableQuery
+      refresh: 2
+      regex: ""
+      type: query
+  time:
+    from: now-24h
+    to: now
+  timepicker: {}
+  timezone: ""
+  title: Wazo - Memory Leak
