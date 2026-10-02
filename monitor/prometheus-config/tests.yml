@@ -108,7 +108,7 @@ tests:
               job: postgres
             exp_annotations:
               summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-              description: "Instance **localhost**, Exporter postgres, Memory 18.16MiB"
+              description: "Instance **localhost**, Job postgres, Memory 18.16MiB"
       - eval_time: 31m
         alertname: MemoryLeakFromRabbitMQ
         exp_alerts:

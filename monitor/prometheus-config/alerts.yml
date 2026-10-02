@@ -25,7 +25,7 @@ groups:
       summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
       description: >-
         Instance **{{ $labels.instance }}**,
-        Exporter {{ $labels.job }},
+        Job {{ $labels.job }},
         Memory {{ with printf "process_resident_memory_bytes{instance='%s',job='%s'}" .Labels.instance .Labels.job | query }}{{ . | first | value | humanize1024 }}{{ end }}B
 
   - alert: MemoryLeakFromRabbitMQ
