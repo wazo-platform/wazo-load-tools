@@ -153,6 +153,7 @@ def main():
         'type': 'internal',
         'user_ranges': [{'start': '10000', 'end': '19999'}],
         'group_ranges': [{'start': '20000', 'end': '29999'}],
+        'queue_ranges': [{'start': '30000', 'end': '39999'}],
     }
     internal_context = confd_client.contexts.create(body)
 
@@ -215,6 +216,25 @@ def main():
     extension = confd_client.extensions.create(body)
     confd_client.incalls(incall['id']).add_extension(extension)
 
+    body = {
+        'name': 'callees',
+        'label': 'callees',
+        # ringing until an agent answers: answering first adds a silent second
+        'ring_on_hold': True,
+        'options': [['strategy', 'rrmemory'], ['ringinuse', 'no']],
+    }
+    queue = confd_client.queues.create(body)
+    body = {'exten': '30000', 'context': internal_context['name']}
+    extension = confd_client.extensions.create(body)
+    confd_client.queues(queue['id']).add_extension(extension)
+
+    body = {'destination': {'queue_id': queue['id'], 'type': 'queue'}}
+    incall = confd_client.incalls.create(body)
+
+    body = {'exten': '30000', 'context': incall_context['name']}
+    extension = confd_client.extensions.create(body)
+    confd_client.incalls(incall['id']).add_extension(extension)
+
     user_generator_config = {
         'tenant_uuid': tenant['uuid'],
         'global_sip_template_uuid': global_sip_tpl_uuid,  # only to support format: json
@@ -222,6 +242,7 @@ def main():
         'incall_context': incall_context['name'],
         'incall_prefix': incall_prefix,
         'group_uuid': group['uuid'],
+        'queue_id': queue['id'],
     }
 
     with _open_output_file(config['output']) as output_file:
