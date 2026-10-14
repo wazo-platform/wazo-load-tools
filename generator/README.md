@@ -45,7 +45,9 @@ Provision the generated users onto the Wazo server:
 
 For a stack called through the callees queue (extension 30000) rather than
 the group, create an agent for each created user, numbered after its
-extension, as member of the queue (logged off):
+extension and linked to the user, as member of the queue (logged off).
+Wazo expects a queue's agents to belong to users: an answered queue call
+looks up the user of the agent.
 
 ```shell
 ./users/create-agents.py -s <wazo-ip> -p <password> -u users/created-users.json -c users/config.yml

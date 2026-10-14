@@ -35,7 +35,8 @@ def parse_cli_args(argv):
     parser = argparse.ArgumentParser(
         description=(
             'Create an agent for each user created from a CSV import, numbered'
-            ' after the user extension, as member of the callees queue'
+            ' after the user extension and linked to the user, as member of the'
+            ' callees queue'
         )
     )
     parser.add_argument(
@@ -118,6 +119,7 @@ def main():
     for user in users:
         exten = extens[user['user_uuid']]
         agent = confd_client.agents.create({'number': exten})
+        confd_client.users(user['user_uuid']).add_agent(agent)
         confd_client.queues(queue_id).add_agent_member(agent)
 
 
