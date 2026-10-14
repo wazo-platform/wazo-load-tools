@@ -3,8 +3,8 @@
 This directory provides a suite of scripts designed to create and manage test
 users on a Wazo Platform server. These tools facilitate the bulk generation of
 user accounts, their provisioning on the server, and their organization into
-groups, streamlining the process of setting up test environments for load
-testing and development purposes.
+groups or agents of the callees queue, streamlining the process of setting up
+test environments for load testing and development purposes.
 
 ## Usage
 
@@ -22,6 +22,7 @@ internal_context: ctx-loadG3IDVQ-internal-7e6207f2-d1f7-49d4-a976-b6ff7aea79c6
 incall_context: ctx-loadG3IDVQ-incall-543bccd5-31ba-4e86-9201-81e64e3d375e
 incall_prefix: '123'
 group_uuid: f72d2ffb-65ae-41e3-8421-9a509242757b
+queue_id: 1
 ```
 
 #### Generate Users
@@ -38,4 +39,14 @@ Provision the generated users onto the Wazo server:
 
 ```shell
 ./users/create-users.py -s <wazo-ip> -p <password> -u users/users.csv -f csv -c users/config.yml
+```
+
+#### Create Agents
+
+For a stack called through the callees queue (extension 30000) rather than
+the group, create an agent for each created user, numbered after its
+extension, as member of the queue (logged off):
+
+```shell
+./users/create-agents.py -s <wazo-ip> -p <password> -u users/created-users.json -c users/config.yml
 ```

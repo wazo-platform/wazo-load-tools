@@ -17,7 +17,8 @@ role:
 - `initiator`: Scripts for bootstrapping a Wazo server, including system setup
   and basic API configuration.
 - `generator`: Tools for defining, generating, and creating test users. Supports
-  CSV and JSON output formats and includes helpers for group assignment.
+  CSV and JSON output formats and includes helpers for group assignment and
+  for the agents of the callees queue.
 - `monitor`: Environment to collect performance metrics during high-load
   scenarios.
 
@@ -63,3 +64,10 @@ how output from one step feeds into the next.
   ```
 
 `--number` is optional: without it, every created user joins the group.
+
+Extension 20000 rings the callees group, and extension 30000 the callees
+queue. To call the queue, run `generator/users/create-agents.py` (same
+arguments, `--number <#agents>`) in place of `add-users-to-group.py`. Its
+agents are created logged off: the load test logs in the agents of the lines
+it registers, and the queue only rings logged-in agents whose line is
+reachable.
