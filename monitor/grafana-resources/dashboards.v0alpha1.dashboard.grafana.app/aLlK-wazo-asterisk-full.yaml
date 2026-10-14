@@ -499,7 +499,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max_over_time(asterisk_calls_count{instance="$instance",testid=~"$testid"}[1d])
+      expr: max_over_time(asterisk_calls_count{instance="$instance",testid=~"$testid"}[1d]) and on (instance, eid) asterisk_calls_count{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -602,7 +602,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max_over_time(asterisk_channels_count{instance="$instance",testid=~"$testid"}[1d])
+      expr: max_over_time(asterisk_channels_count{instance="$instance",testid=~"$testid"}[1d]) and on (instance, eid) asterisk_channels_count{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -701,7 +701,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max_over_time(asterisk_bridges_count{instance="$instance",testid=~"$testid"}[1d])
+      expr: max_over_time(asterisk_bridges_count{instance="$instance",testid=~"$testid"}[1d]) and on (instance, eid) asterisk_bridges_count{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -802,7 +802,7 @@ spec:
         type: prometheus
         uid: ${DS_PROMETHEUS}
       exemplar: true
-      expr: max_over_time(count(asterisk_endpoints_state{instance="$instance",testid=~"$testid"}==2)[1d:10m])
+      expr: max_over_time(count by (instance, eid) (asterisk_endpoints_state{instance="$instance",testid=~"$testid"}==2)[1d:10m]) and on (instance, eid) asterisk_core_uptime_seconds{instance="$instance",testid=~"$testid"}
       interval: ""
       legendFormat: ""
       refId: A
@@ -1451,7 +1451,7 @@ spec:
           type: prometheus
           uid: ${DS_PROMETHEUS}
         exemplar: true
-        expr: max_over_time(asterisk_calls_count{instance="$instance",testid=~"$testid"}[1y])
+        expr: max without (eid) (max_over_time(asterisk_calls_count{instance="$instance",testid=~"$testid"}[1y]))
         interval: ""
         legendFormat: ""
         refId: A
