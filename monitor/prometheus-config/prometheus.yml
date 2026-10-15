@@ -236,28 +236,6 @@ scrape_configs:
     file_sd_configs: *stack_file
     relabel_configs: [*stack_instance, *stack_profile, *stack_testid, *stack_ephemeral, *target, *load]
 
-  - job_name: load-testing
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
-    metrics_path: /api/load-testing/metrics
-    ec2_sd_configs: *stack_ec2
-    file_sd_configs: *stack_file
-    relabel_configs:
-      - source_labels: [__meta_ec2_tag_Fqdn]
-        regex: '(.+)'
-        target_label: instance
-        replacement: '${1}:443'
-      - *stack_profile
-      - *stack_testid
-      - *stack_ephemeral
-      - *target
-      - *load
-      - source_labels: [__address__]
-        regex: '(.+):\d+'
-        target_label: __address__
-        replacement: '${1}:443'
-
   - job_name: edge-kamailio
     metrics_path: /kamailio/metrics
     ec2_sd_configs: &edge_ec2
