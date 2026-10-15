@@ -59,6 +59,64 @@ tests:
         alertname: CriticalRAMUsage
         exp_alerts: []
 
+  - name: disk filling up within a day
+    interval: 5m
+    input_series:
+      # 8GiB free, losing 0.5GiB/h: 44739243 per 5m
+      - series: 'node_filesystem_avail_bytes{instance="stack:6387", target="stack", load="continuous", mountpoint="/"}'
+        values: '8589934592-44739243x30'
+    alert_rule_test:
+      - eval_time: 1h
+        alertname: DiskWillFillUp
+        exp_alerts: []
+      - eval_time: 2h
+        alertname: DiskWillFillUp
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              instance: stack:6387
+              target: stack
+              load: continuous
+              mountpoint: /
+            exp_annotations:
+              summary: "Root disk will be full within a day at the rate of the last 6 hours"
+              description: "Instance **stack:6387**, 7GiB free"
+
+  - name: disk filling up over more than a day
+    interval: 5m
+    input_series:
+      # 30GiB free, losing 0.2GiB/h: 17895697 per 5m
+      - series: 'node_filesystem_avail_bytes{instance="stack:6387", target="stack", load="continuous", mountpoint="/"}'
+        values: '32212254720-17895697x30'
+    alert_rule_test:
+      - eval_time: 2h
+        alertname: DiskWillFillUp
+        exp_alerts: []
+
+  - name: disk with less than 10% free
+    interval: 1m
+    input_series:
+      - series: 'node_filesystem_avail_bytes{instance="stack:6387", target="stack", load="continuous", mountpoint="/"}'
+        values: '3221225472+0x15'
+      - series: 'node_filesystem_size_bytes{instance="stack:6387", target="stack", load="continuous", mountpoint="/"}'
+        values: '42949672960+0x15'
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: CriticalDiskUsage
+        exp_alerts: []
+      - eval_time: 15m
+        alertname: CriticalDiskUsage
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              instance: stack:6387
+              target: stack
+              load: continuous
+              mountpoint: /
+            exp_annotations:
+              summary: "Root disk has had less than 10% free for more than 10 minutes"
+              description: "Instance **stack:6387**, 3GiB free"
+
   - name: when cpu load average firing more than 10m
     interval: 1m
     input_series:

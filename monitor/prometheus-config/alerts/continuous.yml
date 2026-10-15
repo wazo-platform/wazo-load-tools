@@ -44,6 +44,28 @@ groups:
       summary: "Memory usage has been above 90% for more than 10 minutes"
       description: "Instance **{{ $labels.instance }}**"
 
+  - alert: DiskWillFillUp
+    expr: predict_linear(node_filesystem_avail_bytes{mountpoint="/", load="continuous"}[6h], 86400) < 0
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      summary: "Root disk will be full within a day at the rate of the last 6 hours"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        {{ with printf "node_filesystem_avail_bytes{instance='%s',mountpoint='/'}" .Labels.instance | query }}{{ . | first | value | humanize1024 }}{{ end }}B free
+
+  - alert: CriticalDiskUsage
+    expr: node_filesystem_avail_bytes{mountpoint="/", load="continuous"} / node_filesystem_size_bytes < 0.10
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Root disk has had less than 10% free for more than 10 minutes"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        {{ with printf "node_filesystem_avail_bytes{instance='%s',mountpoint='/'}" .Labels.instance | query }}{{ . | first | value | humanize1024 }}{{ end }}B free
+
   - alert: CriticalCPULoad
     expr: >-
       (1 - avg by (instance, target, load) (rate(node_cpu_seconds_total{mode="idle", load="continuous"}[5m])))
