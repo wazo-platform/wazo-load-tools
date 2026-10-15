@@ -87,18 +87,19 @@ tests:
         alertname: CriticalCPULoad
         exp_alerts: []
 
-  - name: when memory increase linearly
-    interval: 1m
+  - name: memory growing day over day
+    interval: 5m
     input_series:
-        # 10KiB/s (10*1024) * seconds from interval (60) + 1 (to exceed threshold) = 614401
-      - series: 'process_resident_memory_bytes{job="postgres", instance="stack:6387", target="stack", load="continuous"}'
-        values: '0+614401x31'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="stack:6387", target="stack", load="continuous"}'
-        values: '0+614401x31'
-      - series: 'rabbitmq_node_mem_used{instance="stack:6387", target="stack", load="continuous"}'
-        values: '0+614401x31'
+      # 500MiB, then 20MiB/h: 1747627 per 5m
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", instance="stack:6387", target="stack", load="continuous", memtype="proportionalResident"}'
+        values: '524288000+1747627x900'
+      - series: 'namedprocess_namegroup_oldest_start_time_seconds{groupname="postgres", instance="stack:6387", target="stack", load="continuous"}'
+        values: '0+0x900'
     alert_rule_test:
-      - eval_time: 31m
+      - eval_time: 48h
+        alertname: MemoryLeak
+        exp_alerts: []
+      - eval_time: 50h
         alertname: MemoryLeak
         exp_alerts:
           - exp_labels:
@@ -107,111 +108,55 @@ tests:
               target: stack
               load: continuous
               groupname: postgres
-              memtype: resident
+              memtype: proportionalResident
             exp_annotations:
-              summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-              description: "Instance **stack:6387**, Service postgres, Memory 18.16MiB"
-      - eval_time: 31m
-        alertname: MemoryLeakFromExporter
-        exp_alerts:
-          - exp_labels:
-              severity: warning
-              instance: stack:6387
-              target: stack
-              load: continuous
-              job: postgres
-            exp_annotations:
-              summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-              description: "Instance **stack:6387**, Job postgres, Memory 18.16MiB"
-      - eval_time: 31m
-        alertname: MemoryLeakFromRabbitMQ
-        exp_alerts:
-          - exp_labels:
-              severity: warning
-              instance: stack:6387
-              target: stack
-              load: continuous
-            exp_annotations:
-              summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-              description: "Instance **stack:6387**, Service RabbitMQ, Memory 18.16MiB"
+              summary: "Memory usage has grown by more than 100MiB and 20% in a day"
+              description: "Instance **stack:6387**, Service postgres, +480MiB in a day, now 1.465GiB"
 
-  - name: when memory increase by big step
-    interval: 1m
+  - name: memory warming up then steady
+    interval: 5m
     input_series:
-      - series: 'process_resident_memory_bytes{job="postgres", instance="stack:6387", target="stack", load="continuous"}'
-        values: '0 6144010+0x30'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="stack:6387", target="stack", load="continuous"}'
-        values: '0 6144010+0x30'
-      - series: 'rabbitmq_node_mem_used{instance="stack:6387", target="stack", load="continuous"}'
-        values: '0 6144010+0x30'
+      # 1GiB in the first 12h: 7456540 per 5m
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", instance="stack:6387", target="stack", load="continuous", memtype="proportionalResident"}'
+        values: '0+7456540x144 1073741760+0x756'
+      - series: 'namedprocess_namegroup_oldest_start_time_seconds{groupname="postgres", instance="stack:6387", target="stack", load="continuous"}'
+        values: '0+0x900'
     alert_rule_test:
-      - eval_time: 1m
+      # a day after the start, the day before is still warming up
+      - eval_time: 30h
         alertname: MemoryLeak
         exp_alerts: []
-      - eval_time: 31m
+      - eval_time: 50h
         alertname: MemoryLeak
         exp_alerts: []
-      - eval_time: 1m
-        alertname: MemoryLeakFromExporter
-        exp_alerts: []
-      - eval_time: 31m
-        alertname: MemoryLeakFromExporter
-        exp_alerts: []
-      - eval_time: 1m
-        alertname: MemoryLeakFromRabbitMQ
-        exp_alerts: []
-      - eval_time: 31m
-        alertname: MemoryLeakFromRabbitMQ
+      - eval_time: 70h
+        alertname: MemoryLeak
         exp_alerts: []
 
-  - name: when memory increase by spike
-    interval: 1m
+  - name: memory growing in a process younger than 2 days
+    interval: 5m
     input_series:
-      - series: 'process_resident_memory_bytes{job="postgres", instance="stack:6387", target="stack", load="continuous"}'
-        values: '0 6144010 0+0x29'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="stack:6387", target="stack", load="continuous"}'
-        values: '0 6144010 0+0x29'
-      - series: 'rabbitmq_node_mem_used{instance="stack:6387", target="stack", load="continuous"}'
-        values: '0 6144010 0+0x29'
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", instance="stack:6387", target="stack", load="continuous", memtype="proportionalResident"}'
+        values: '524288000+1747627x900'
+      # restarted at 48h
+      - series: 'namedprocess_namegroup_oldest_start_time_seconds{groupname="postgres", instance="stack:6387", target="stack", load="continuous"}'
+        values: '172800+0x900'
     alert_rule_test:
-      - eval_time: 1m
+      - eval_time: 60h
         alertname: MemoryLeak
-        exp_alerts: []
-      - eval_time: 31m
-        alertname: MemoryLeak
-        exp_alerts: []
-      - eval_time: 1m
-        alertname: MemoryLeakFromExporter
-        exp_alerts: []
-      - eval_time: 31m
-        alertname: MemoryLeakFromExporter
-        exp_alerts: []
-      - eval_time: 1m
-        alertname: MemoryLeakFromRabbitMQ
-        exp_alerts: []
-      - eval_time: 31m
-        alertname: MemoryLeakFromRabbitMQ
         exp_alerts: []
 
-  - name: when memory decrease linearly
-    interval: 1m
+  - name: memory growing by less than 20% in a day
+    interval: 5m
     input_series:
-      # to have value 0 after 31 min: 614401 * 31 = 19046431
-      - series: 'process_resident_memory_bytes{job="postgres", instance="stack:6387", target="stack", load="continuous"}'
-        values: '19046431-614401x31'
-      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", memtype="resident", instance="stack:6387", target="stack", load="continuous"}'
-        values: '19046431-614401x31'
-      - series: 'rabbitmq_node_mem_used{instance="stack:6387", target="stack", load="continuous"}'
-        values: '19046431-614401x31'
+      # 10GiB, then 150MiB a day: 546133 per 5m
+      - series: 'namedprocess_namegroup_memory_bytes{groupname="postgres", instance="stack:6387", target="stack", load="continuous", memtype="proportionalResident"}'
+        values: '10737418240+546133x900'
+      - series: 'namedprocess_namegroup_oldest_start_time_seconds{groupname="postgres", instance="stack:6387", target="stack", load="continuous"}'
+        values: '0+0x900'
     alert_rule_test:
-      - eval_time: 31m
+      - eval_time: 60h
         alertname: MemoryLeak
-        exp_alerts: []
-      - eval_time: 31m
-        alertname: MemoryLeakFromExporter
-        exp_alerts: []
-      - eval_time: 31m
-        alertname: MemoryLeakFromRabbitMQ
         exp_alerts: []
 
   - name: simultaneous calls
