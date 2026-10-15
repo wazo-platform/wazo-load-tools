@@ -8,40 +8,32 @@ groups:
 - name: Continuous Load Rules
   rules:
   - alert: MemoryLeak
-    expr: deriv(namedprocess_namegroup_memory_bytes{memtype="resident", load="continuous"}[10m]) > 10 * 1024
-    for: 30m # taking at least one time of the window from the expr to remove "spike" and "big step"
+    # Under load, memory keeps warming up for more than half a day: compare a
+    # day with the one before, once both are past the start. Proportional memory
+    # counts the pages a group's processes share only once.
+    expr: >-
+      (
+        namedprocess_namegroup_memory_bytes{memtype="proportionalResident", load="continuous"}
+        - namedprocess_namegroup_memory_bytes{memtype="proportionalResident", load="continuous"} offset 1d
+        > 100 * 2^20
+      )
+      and
+      (
+        namedprocess_namegroup_memory_bytes{memtype="proportionalResident", load="continuous"}
+        > 1.2 * namedprocess_namegroup_memory_bytes{memtype="proportionalResident", load="continuous"} offset 1d
+      )
+      and on(instance, groupname)
+      (time() - namedprocess_namegroup_oldest_start_time_seconds{load="continuous"}) > 2 * 86400
+    for: 1h
     labels:
       severity: warning
     annotations:
-      summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
+      summary: "Memory usage has grown by more than 100MiB and 20% in a day"
       description: >-
         Instance **{{ $labels.instance }}**,
         Service {{ $labels.groupname }},
-        Memory {{ with printf "namedprocess_namegroup_memory_bytes{instance='%s',memtype='resident',groupname='%s'}" .Labels.instance .Labels.groupname | query }}{{ . | first | value | humanize1024 }}{{ end }}B
-
-  - alert: MemoryLeakFromExporter
-    expr: deriv(process_resident_memory_bytes{load="continuous"}[10m]) > 10 * 1024
-    for: 30m
-    labels:
-      severity: warning
-    annotations:
-      summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-      description: >-
-        Instance **{{ $labels.instance }}**,
-        Job {{ $labels.job }},
-        Memory {{ with printf "process_resident_memory_bytes{instance='%s',job='%s'}" .Labels.instance .Labels.job | query }}{{ . | first | value | humanize1024 }}{{ end }}B
-
-  - alert: MemoryLeakFromRabbitMQ
-    expr: deriv(rabbitmq_node_mem_used{load="continuous"}[10m]) > 10 * 1024
-    for: 30m
-    labels:
-      severity: warning
-    annotations:
-      summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
-      description: >-
-        Instance **{{ $labels.instance }}**,
-        Service RabbitMQ,
-        Memory {{ with printf "rabbitmq_node_mem_used{instance='%s'}" .Labels.instance | query }}{{ . | first | value | humanize1024 }}{{ end }}B
+        +{{ $value | humanize1024 }}B in a day,
+        now {{ with printf "namedprocess_namegroup_memory_bytes{instance='%s',memtype='proportionalResident',groupname='%s'}" .Labels.instance .Labels.groupname | query }}{{ . | first | value | humanize1024 }}{{ end }}B
 
   - alert: CriticalRAMUsage
     expr: (1 - node_memory_MemAvailable_bytes{load="continuous"} / node_memory_MemTotal_bytes) * 100 > 90
