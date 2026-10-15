@@ -16,8 +16,12 @@ scenarios.
   their `Fqdn` tag as `instance` and, for a stack, its `LoadProfile` tag as
   `profile`. A stack created for one run is tagged `LoadTestId` instead of
   `Fqdn`: its series get that id as `testid`, and `ephemeral` as
-  `instance`. Discovery needs AWS credentials: an instance profile on AWS,
-  or exported in the shell that starts the containers:
+  `instance`. A host's `LoadMode` tag (`continuous` or `ephemeral`) becomes
+  `load`, which the alerting rules select (`continuous` only), and its
+  `LoadTarget` tag, the host its load enters through, becomes `target`,
+  which the k6 run loading it is tagged with. Discovery needs AWS
+  credentials: an instance profile on AWS, or exported in the shell that
+  starts the containers:
 
   ```sh
   eval "$(aws configure export-credentials --format env)"
