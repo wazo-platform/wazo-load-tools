@@ -37,13 +37,16 @@ spec:
   - datasource:
       type: prometheus
       uid: ${DS_PROMETHEUS}
+    description: Asterisk counts each channel that runs the dialplan, so a queue call counts
+      twice (caller and agent Local channel); halved like the legacy load monitor. Only valid
+      for scenarios with exactly two dialplan channels per call.
     fieldConfig:
       defaults:
         unit: none
     gridPos: {h: 8, w: 12, x: 12, "y": 0}
     id: 2
     targets:
-    - expr: max without (eid) (asterisk_calls_sum{instance="$instance",testid=~"$testid"})
+    - expr: max without (eid) (asterisk_calls_sum{instance="$instance",testid=~"$testid"}) / 2
       legendFormat: since Asterisk start
       refId: A
     title: Calls processed
