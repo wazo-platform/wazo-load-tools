@@ -1,0 +1,143 @@
+# NOTE:
+# - ${value}: result from the last evaluation of the "for"
+# - Aggregations keep `load`, which Alertmanager routes on, and `target`, which
+#   stopping a continuous load silences
+# - k6 series carry no `instance`: join them with a host's series on `target`
+
+groups:
+- name: Continuous Load Rules
+  rules:
+  - alert: MemoryLeak
+    expr: deriv(namedprocess_namegroup_memory_bytes{memtype="resident", load="continuous"}[10m]) > 10 * 1024
+    for: 30m # taking at least one time of the window from the expr to remove "spike" and "big step"
+    labels:
+      severity: warning
+    annotations:
+      summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        Service {{ $labels.groupname }},
+        Memory {{ with printf "namedprocess_namegroup_memory_bytes{instance='%s',memtype='resident',groupname='%s'}" .Labels.instance .Labels.groupname | query }}{{ . | first | value | humanize1024 }}{{ end }}B
+
+  - alert: MemoryLeakFromExporter
+    expr: deriv(process_resident_memory_bytes{load="continuous"}[10m]) > 10 * 1024
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        Job {{ $labels.job }},
+        Memory {{ with printf "process_resident_memory_bytes{instance='%s',job='%s'}" .Labels.instance .Labels.job | query }}{{ . | first | value | humanize1024 }}{{ end }}B
+
+  - alert: MemoryLeakFromRabbitMQ
+    expr: deriv(rabbitmq_node_mem_used{load="continuous"}[10m]) > 10 * 1024
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Memory usage has increased by 10KiB/s for more than 30 minutes"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        Service RabbitMQ,
+        Memory {{ with printf "rabbitmq_node_mem_used{instance='%s'}" .Labels.instance | query }}{{ . | first | value | humanize1024 }}{{ end }}B
+
+  - alert: CriticalRAMUsage
+    expr: (1 - node_memory_MemAvailable_bytes{load="continuous"} / node_memory_MemTotal_bytes) * 100 > 90
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Memory usage has been above 90% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: CriticalCPULoad
+    expr: >-
+      (1 - avg by (instance, target, load) (rate(node_cpu_seconds_total{mode="idle", load="continuous"}[5m])))
+      * 100 > 96
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "CPU load average has been above 96% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: AsteriskTotalCalls
+    # Allow 10m without call
+    expr: increase(asterisk_calls_sum{load="continuous"}[10m]) == 0.0
+    labels:
+      severity: warning
+    annotations:
+      summary: "Total calls are not increasing"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: AsteriskSimultCalls
+    # The expected calls are the mean of a Poisson load: 3 deviations cover its peak
+    expr: >-
+      asterisk_calls_count{load="continuous"}
+      > on(target) group_left()
+      (
+        max by (target) (k6_expected_calls{load="continuous"})
+        + 3 * sqrt(max by (target) (k6_expected_calls{load="continuous"}))
+      )
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Simultaneous calls are higher than the expected peak"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        Calls {{ $value }}, {{ with printf "max(k6_expected_calls{target='%s'})" .Labels.target | query }}{{ . | first | value | printf "%.0f" }}{{ end }} expected on average
+
+  - alert: PGConnectionUsage
+    expr: sum by (instance, target, load) (pg_stat_activity_count{load="continuous"}) / sum by (instance, target, load) (pg_settings_max_connections{load="continuous"}) * 100 > 90
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "PostgreSQL connections usage has been above 90% for more than 10 minutes"
+      description: "Instance **{{ $labels.instance }}**"
+
+  - alert: FileDescriptorsUsage
+    expr: namedprocess_namegroup_worst_fd_ratio{load="continuous"} > 0.9
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "File descriptors usage has been above 90% for more than 5 minutes"
+      description: "Instance **{{ $labels.instance }}**, Service {{ $labels.groupname }}, {{ $value | humanizePercentage }}"
+
+  - alert: CallsNotAnswered
+    expr: >-
+      sum by (testid, target, load) (rate(k6_sip_calls_total{answered="false", load="continuous"}[10m]))
+      / sum by (testid, target, load) (rate(k6_sip_calls_total{load="continuous"}[10m]))
+      > 0.05
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "More than 5% of calls have not been answered for more than 10 minutes"
+      description: "Run **{{ $labels.testid }}**, {{ $value | humanizePercentage }} not answered"
+
+  - alert: TargetDown
+    expr: up{load="continuous"} == 0
+    for: 15m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Target has not been scraped for more than 15 minutes"
+      description: "Instance **{{ $labels.instance }}**, Job {{ $labels.job }}"
+
+  - alert: LoadNotRunning
+    # Stopping a continuous load silences its target: this catches a crashed one
+    expr: >-
+      count by (target, load) (up{load="continuous"})
+      unless on(target)
+      k6_expected_calls{load="continuous"}
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Continuous load has not been running for more than 10 minutes"
+      description: "Target **{{ $labels.target }}**"

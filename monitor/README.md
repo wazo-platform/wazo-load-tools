@@ -121,7 +121,7 @@ terraform apply -var-file=<file> -replace=aws_instance.monitor
 To debug, write or test alerting rules, use `promtool`:
 
 ```shell
-docker exec prometheus sh -c "promtool test rules /etc/prometheus/tests.yml"
+docker exec prometheus sh -c "promtool test rules /etc/prometheus/tests/continuous.yml"
 ```
 
 - Use `--run <test-name>` to execute specific test
