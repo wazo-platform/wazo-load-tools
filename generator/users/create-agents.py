@@ -29,6 +29,7 @@ _DEFAULT_CONFIG = {
         'verify_certificate': False,
     },
 }
+_LINES_PAGE_SIZE = 500
 
 
 def parse_cli_args(argv):
@@ -97,6 +98,16 @@ def load_config(args):
     return _DEFAULT_CONFIG | cli_config
 
 
+def list_lines(confd_client):
+    offset = 0
+    while True:
+        lines = confd_client.lines.list(limit=_LINES_PAGE_SIZE, offset=offset)['items']
+        yield from lines
+        if len(lines) < _LINES_PAGE_SIZE:
+            return
+        offset += _LINES_PAGE_SIZE
+
+
 def main():
     config = load_config(sys.argv[1:])
     auth_client = AuthClient(**config['auth'])
@@ -112,7 +123,7 @@ def main():
 
     extens = {
         line_user['uuid']: line['extensions'][0]['exten']
-        for line in confd_client.lines.list()['items']
+        for line in list_lines(confd_client)
         for line_user in line['users']
     }
     queue_id = config['queue_id']
