@@ -132,7 +132,7 @@ tests:
               target: stack
               load: continuous
             exp_annotations:
-              summary: "CPU load average has been above 96% for more than 10 minutes"
+              summary: "CPU usage has been above 96% for more than 10 minutes"
               description: 'Instance **stack:6387**'
 
   - name: when cpu load average firing less than 10m
