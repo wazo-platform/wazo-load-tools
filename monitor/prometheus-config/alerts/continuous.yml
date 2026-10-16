@@ -1,5 +1,5 @@
 # NOTE:
-# - ${value}: result from the last evaluation of the "for"
+# - {{ $value }}: the value of the expression at its last evaluation
 # - Aggregations keep `load`, which Alertmanager routes on, and `target`, which
 #   stopping a continuous load silences
 # - k6 series carry no `instance`: join them with a host's series on `target`
@@ -9,13 +9,15 @@ groups:
   rules:
   - alert: MemoryLeak
     # Under load, memory keeps warming up for more than half a day: compare a
-    # day with the one before, once both are past the start. Proportional memory
-    # counts the pages a group's processes share only once.
+    # day with the one before, once the process is 2 days old.
+    # The growth must exceed 100MiB so small daemons don't fire, and 20% so
+    # large ones don't. Proportional memory counts the pages a group's processes
+    # share only once.
     expr: >-
       (
         namedprocess_namegroup_memory_bytes{memtype="proportionalResident", load="continuous"}
         - namedprocess_namegroup_memory_bytes{memtype="proportionalResident", load="continuous"} offset 1d
-        > 100 * 2^20
+        > 100 * 1024 * 1024
       )
       and
       (
@@ -23,7 +25,7 @@ groups:
         > 1.2 * namedprocess_namegroup_memory_bytes{memtype="proportionalResident", load="continuous"} offset 1d
       )
       and on(instance, groupname)
-      (time() - namedprocess_namegroup_oldest_start_time_seconds{load="continuous"}) > 2 * 86400
+      (time() - namedprocess_namegroup_oldest_start_time_seconds{load="continuous"}) > 2 * 24 * 60 * 60
     for: 1h
     labels:
       severity: warning
@@ -36,7 +38,7 @@ groups:
         now {{ with printf "namedprocess_namegroup_memory_bytes{instance='%s',memtype='proportionalResident',groupname='%s'}" .Labels.instance .Labels.groupname | query }}{{ . | first | value | humanize1024 }}{{ end }}B
 
   - alert: CriticalRAMUsage
-    expr: (1 - node_memory_MemAvailable_bytes{load="continuous"} / node_memory_MemTotal_bytes) * 100 > 90
+    expr: 1 - node_memory_MemAvailable_bytes{load="continuous"} / node_memory_MemTotal_bytes > 0.90
     for: 10m
     labels:
       severity: critical
@@ -44,19 +46,42 @@ groups:
       summary: "Memory usage has been above 90% for more than 10 minutes"
       description: "Instance **{{ $labels.instance }}**"
 
-  - alert: CriticalCPULoad
-    expr: >-
-      (1 - avg by (instance, target, load) (rate(node_cpu_seconds_total{mode="idle", load="continuous"}[5m])))
-      * 100 > 96
+  - alert: DiskWillFillUp
+    expr: predict_linear(node_filesystem_avail_bytes{mountpoint="/", load="continuous"}[6h], 24 * 60 * 60) < 0
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      summary: "Root disk will be full within a day at the rate of the last 6 hours"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        {{ with printf "node_filesystem_avail_bytes{instance='%s',mountpoint='/'}" .Labels.instance | query }}{{ . | first | value | humanize1024 }}{{ end }}B free
+
+  - alert: CriticalDiskUsage
+    expr: node_filesystem_avail_bytes{mountpoint="/", load="continuous"} / node_filesystem_size_bytes < 0.10
     for: 10m
     labels:
       severity: critical
     annotations:
-      summary: "CPU load average has been above 96% for more than 10 minutes"
+      summary: "Root disk has had less than 10% free for more than 10 minutes"
+      description: >-
+        Instance **{{ $labels.instance }}**,
+        {{ with printf "node_filesystem_avail_bytes{instance='%s',mountpoint='/'}" .Labels.instance | query }}{{ . | first | value | humanize1024 }}{{ end }}B free
+
+  - alert: CriticalCPULoad
+    # The continuous load alone peaks around 85% CPU
+    expr: >-
+      1 - avg by (instance, target, load) (rate(node_cpu_seconds_total{mode="idle", load="continuous"}[5m]))
+      > 0.96
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "CPU usage has been above 96% for more than 10 minutes"
       description: "Instance **{{ $labels.instance }}**"
 
   - alert: AsteriskTotalCalls
-    # Allow 10m without call
+    # The load places at least one call a minute
     expr: increase(asterisk_calls_sum{load="continuous"}[10m]) == 0.0
     labels:
       severity: warning
@@ -83,7 +108,7 @@ groups:
         Calls {{ $value }}, {{ with printf "max(k6_expected_calls{target='%s'})" .Labels.target | query }}{{ . | first | value | printf "%.0f" }}{{ end }} expected on average
 
   - alert: PGConnectionUsage
-    expr: sum by (instance, target, load) (pg_stat_activity_count{load="continuous"}) / sum by (instance, target, load) (pg_settings_max_connections{load="continuous"}) * 100 > 90
+    expr: sum by (instance, target, load) (pg_stat_activity_count{load="continuous"}) / sum by (instance, target, load) (pg_settings_max_connections{load="continuous"}) > 0.90
     for: 10m
     labels:
       severity: critical
@@ -92,6 +117,7 @@ groups:
       description: "Instance **{{ $labels.instance }}**"
 
   - alert: FileDescriptorsUsage
+    # A service out of file descriptors fails right away: react sooner than the others
     expr: namedprocess_namegroup_worst_fd_ratio{load="continuous"} > 0.9
     for: 5m
     labels:
@@ -101,6 +127,7 @@ groups:
       description: "Instance **{{ $labels.instance }}**, Service {{ $labels.groupname }}, {{ $value | humanizePercentage }}"
 
   - alert: CallsNotAnswered
+    # A healthy run answers every call
     expr: >-
       sum by (testid, target, load) (rate(k6_sip_calls_total{answered="false", load="continuous"}[10m]))
       / sum by (testid, target, load) (rate(k6_sip_calls_total{load="continuous"}[10m]))
@@ -113,6 +140,7 @@ groups:
       description: "Run **{{ $labels.testid }}**, {{ $value | humanizePercentage }} not answered"
 
   - alert: TargetDown
+    # Longer than a service restart
     expr: up{load="continuous"} == 0
     for: 15m
     labels:
