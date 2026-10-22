@@ -23,10 +23,11 @@ _DEFAULT_CONFIG = {
     'incall_prefix': '1234',
     'global_sip_template_uuid': None,
     'email': 'dev@wazo.io',
+    'webrtc_number': 0,
 }
 
 
-def generate_user(config, index):
+def generate_user(config, index, webrtc=False):
     context = config['internal_context']
     incall_context = config['incall_context']
     incall_prefix = config['incall_prefix']
@@ -34,6 +35,8 @@ def generate_user(config, index):
     email_user, email_domain = config['email'].split('@', 1)
     exten = f'{config["users_range_start"] + index}'
     email = f'{email_user}+user{index}@{email_domain}'
+    # a web app logs in like a SIP device registers: with its extension
+    username, password = (exten, exten) if webrtc else (email, 'secret')
     return {
         'firstname': 'User',
         'lastname': f'{index}',
@@ -41,8 +44,8 @@ def generate_user(config, index):
         'subscription_type': 1,
         'email': email,
         'auth': {
-            'username': email,
-            'password': 'secret',
+            'username': username,
+            'password': password,
         },
         'incalls': [
             {
@@ -108,8 +111,10 @@ def generate_users_csv(config, number, output_file):
     ]
     writer = csv.DictWriter(output_file, fieldnames=fieldnames)
     writer.writeheader()
+    first_webrtc_index = number - config['webrtc_number']
     for index in range(0, number):
-        user = generate_user(config, index)
+        webrtc = index >= first_webrtc_index
+        user = generate_user(config, index, webrtc)
         sip_auth_options = user['lines'][0]['endpoint_sip']['auth_section_options']
         row = {
             'firstname': user['firstname'],
@@ -120,7 +125,7 @@ def generate_users_csv(config, number, output_file):
             'subscription_type': user['subscription_type'],
             'exten': user['lines'][0]['extensions'][0]['exten'],
             'context': user['lines'][0]['context'],
-            'line_protocol': 'sip',
+            'line_protocol': 'webrtc' if webrtc else 'sip',
             'sip_username': sip_auth_options[0][1],
             'sip_secret': sip_auth_options[1][1],
             'incall_exten': user['incalls'][0]['extensions'][0]['exten'],
@@ -151,6 +156,12 @@ def parse_cli_args(argv):
         help='The number of user to generate',
     )
     parser.add_argument(
+        '-w',
+        '--webrtc-number',
+        type=int,
+        help='How many of the users, the last ones, get a WebRTC line (CSV only)',
+    )
+    parser.add_argument(
         '-o',
         '--output',
         help='Output file to write. Default: stdout',
@@ -167,6 +178,8 @@ def parse_cli_args(argv):
         result['format'] = parsed_args.format
     if parsed_args.number:
         result['number'] = parsed_args.number
+    if parsed_args.webrtc_number:
+        result['webrtc_number'] = parsed_args.webrtc_number
     if parsed_args.output:
         result['output'] = parsed_args.output
     if parsed_args.extra_config:
@@ -196,6 +209,11 @@ def _open_output_file(output):
 
 def main():
     config = load_config(sys.argv[1:])
+    if config['webrtc_number'] > config['number']:
+        raise ValueError('--webrtc-number cannot exceed --number')
+    # a JSON user carries its line's templates, and the WebRTC one is not in the config
+    if config['webrtc_number'] and config['format'] != 'csv':
+        raise ValueError('--webrtc-number needs --format csv')
     with _open_output_file(config['output']) as output_file:
         if config['format'] == 'json':
             generate_users_json(config, config['number'], output_file)
