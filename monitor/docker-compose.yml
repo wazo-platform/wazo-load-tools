@@ -59,7 +59,17 @@ services:
       timeout: 1s
       retries: 5
 
+  pyroscope:
+    image: grafana/pyroscope:latest
+    container_name: pyroscope
+    restart: unless-stopped
+    ports:
+      - "4040:4040"
+    volumes:
+      - pyroscope-data:/data:rw
+
 volumes:
   prometheus-data:
   grafana-data:
   alertmanager-data:
+  pyroscope-data:
