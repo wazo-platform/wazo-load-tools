@@ -79,5 +79,16 @@ resource "aws_volume_attachment" "prometheus" {
 
 resource "aws_ebs_volume" "prometheus" {
   availability_zone = data.aws_subnet.monitor.availability_zone
-  size              = var.volume_size
+  size              = var.prometheus_volume_size
+}
+
+resource "aws_volume_attachment" "pyroscope" {
+  device_name = "/dev/sdc"
+  instance_id = aws_instance.monitor.id
+  volume_id   = aws_ebs_volume.pyroscope.id
+}
+
+resource "aws_ebs_volume" "pyroscope" {
+  availability_zone = data.aws_subnet.monitor.availability_zone
+  size              = var.pyroscope_volume_size
 }

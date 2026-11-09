@@ -1,0 +1,12 @@
+apiVersion: grafana-pyroscope-datasource.datasource.grafana.app/v0alpha1
+kind: DataSource
+metadata:
+  annotations: null
+  labels: null
+  name: bg3sqep2tyh34d
+  namespace: default
+spec:
+  access: proxy
+  title: Pyroscope
+  type: grafana-pyroscope-datasource
+  url: http://pyroscope:4040

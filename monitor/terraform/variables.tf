@@ -53,8 +53,14 @@ variable "security_group_ids" {
   default     = []
 }
 
-variable "volume_size" {
+variable "prometheus_volume_size" {
   description = "EBS volume size to use for prometheus data"
+  type        = number
+  default     = 20
+}
+
+variable "pyroscope_volume_size" {
+  description = "EBS volume size to use for pyroscope data"
   type        = number
   default     = 20
 }

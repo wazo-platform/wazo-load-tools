@@ -72,6 +72,12 @@ pick the run once, then move between them from there, since opening a
 dashboard from the search resets both. **Load runs** lists the runs of the
 time range, and opens one on the window of its stack's life.
 
+[Pyroscope](https://grafana.com/docs/pyroscope/latest/) stores the CPU
+profiles that [Grafana Alloy](https://grafana.com/docs/alloy/latest/) pushes
+on port 4040 from the profiled stacks, labelled like their Prometheus series
+(`instance`, `testid`). Browse them in Grafana with **Explore** on the
+**Pyroscope** datasource, or from **Drilldown > Profiles**.
+
 ## Edit Dashboards
 
 - Edit dashboard in grafana
