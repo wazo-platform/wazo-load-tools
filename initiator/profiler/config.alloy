@@ -1,0 +1,76 @@
+discovery.process "all" { }
+
+// Same service names as the process-exporter groups of the stack
+discovery.relabel "processes" {
+	targets = discovery.process.all.targets
+
+	rule {
+		source_labels = ["__meta_process_exe"]
+		regex         = `.*/([^/]+)`
+		target_label  = "service_name"
+	}
+
+	rule {
+		source_labels = ["__meta_process_exe"]
+		regex         = `.*/beam\.smp`
+		target_label  = "service_name"
+		replacement   = "rabbitmq"
+	}
+
+	rule {
+		source_labels = ["__meta_process_commandline"]
+		regex         = `\S*python[0-9.]*\s+(?:\S*/)?(wazo-[^/\s]+)(?:\s.*)?`
+		target_label  = "service_name"
+	}
+
+	rule {
+		source_labels = ["__meta_process_commandline"]
+		regex         = `.*twistd3 .* wazo-provd\s*`
+		target_label  = "service_name"
+		replacement   = "wazo-provd"
+	}
+
+	rule {
+		source_labels = ["__meta_process_commandline"]
+		regex         = `.*twistd3 .*--python=\S*/wazo-confgend(?:\s.*)?`
+		target_label  = "service_name"
+		replacement   = "wazo-confgend"
+	}
+
+	rule {
+		source_labels = ["__meta_process_commandline"]
+		regex         = `gunicorn: .* \[sysconfd(?:-api)?\].*`
+		target_label  = "service_name"
+		replacement   = "wazo-sysconfd"
+	}
+
+	// Same labels as Prometheus derives from the Fqdn and LoadTestId EC2 tags
+	rule {
+		target_label = "instance"
+		replacement  = coalesce(sys.env("FQDN"), constants.hostname)
+	}
+
+	// An empty value drops the label
+	rule {
+		target_label = "testid"
+		replacement  = sys.env("LOAD_TEST_ID")
+	}
+
+	rule {
+		source_labels = ["testid"]
+		regex         = `.+`
+		target_label  = "instance"
+		replacement   = "ephemeral"
+	}
+}
+
+pyroscope.ebpf "default" {
+	targets    = discovery.relabel.processes.output
+	forward_to = [pyroscope.write.monitor.receiver]
+}
+
+pyroscope.write "monitor" {
+	endpoint {
+		url = "http://monitor.load.internal.it.wazo.cloud:4040"
+	}
+}
