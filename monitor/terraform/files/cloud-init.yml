@@ -1,19 +1,21 @@
 #cloud-config
-# nofail is required: the EBS volume may not be attached yet at boot time.
-# runcmd waits for the device and calls mount -a to complete the mount.
+# nofail is required: the EBS volumes may not be attached yet at boot time.
+# runcmd waits for the devices and calls mount -a to complete the mounts.
 mounts:
   - [ /dev/sdb, /mnt/prometheus, auto, "defaults,nofail" ]
+  - [ /dev/sdc, /mnt/pyroscope, auto, "defaults,nofail" ]
 
 runcmd:
-  - echo 'Waiting for Prometheus EBS volume to be attached...'
-  - while [ ! -b /dev/sdb ]; do sleep 2; done
-  - echo 'Formating volume if needed...'
+  - echo 'Waiting for Prometheus and Pyroscope EBS volumes to be attached...'
+  - while [ ! -b /dev/sdb ] || [ ! -b /dev/sdc ]; do sleep 2; done
+  - echo 'Formating volumes if needed...'
   - lsblk -n -o FSTYPE /dev/sdb | grep -q ext4 || mkfs.ext4 -L prometheus /dev/sdb
+  - lsblk -n -o FSTYPE /dev/sdc | grep -q ext4 || mkfs.ext4 -L pyroscope /dev/sdc
 
   - echo 'Fix mount permissions...'
-  - mkdir /mnt/prometheus
+  - mkdir /mnt/prometheus /mnt/pyroscope
   - mount -a
-  - chmod 777 /mnt/prometheus
+  - chmod 777 /mnt/prometheus /mnt/pyroscope
 
   - echo 'Installing docker...'
   - apt-get update

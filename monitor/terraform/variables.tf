@@ -59,6 +59,12 @@ variable "volume_size" {
   default     = 20
 }
 
+variable "pyroscope_volume_size" {
+  description = "EBS volume size to use for pyroscope data"
+  type        = number
+  default     = 20
+}
+
 variable "cloud_config_files" {
   type        = list(string)
   description = "cloud-config files to append to monitor instance cloud-config."
