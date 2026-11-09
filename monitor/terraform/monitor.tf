@@ -79,7 +79,7 @@ resource "aws_volume_attachment" "prometheus" {
 
 resource "aws_ebs_volume" "prometheus" {
   availability_zone = data.aws_subnet.monitor.availability_zone
-  size              = var.volume_size
+  size              = var.prometheus_volume_size
 }
 
 resource "aws_volume_attachment" "pyroscope" {
