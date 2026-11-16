@@ -43,7 +43,10 @@ scenarios.
 
 ## Run Environment
 
-- Start containers: `docker compose up -d`
+- Start containers: `docker compose up -d`. Grafana builds the links it
+  shares from `GRAFANA_ROOT_URL`, by default
+  `http://monitor.load.internal.it.wazo.cloud/`. On another host, set it to the
+  URL that users open: `GRAFANA_ROOT_URL=http://localhost:3000/ docker compose up -d`
 - Give `gcx` a token. Anonymous access is admin, so no login is needed to
   create one. The token lives in the grafana volume: create it again after a
   `docker compose down -v`.
