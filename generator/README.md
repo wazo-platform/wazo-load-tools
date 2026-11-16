@@ -33,6 +33,10 @@ Create a file with the desired number of test users:
 ./users/generate-users.py -n10 -f csv -c users/config.yml -o users/users.csv
 ```
 
+`-w <#webrtc>` gives the last users of the range a WebRTC line instead of a SIP
+one, for a browser app; each logs in with its extension as username and
+password, as a SIP line registers. CSV only.
+
 #### Create Users
 
 Provision the generated users onto the Wazo server:
